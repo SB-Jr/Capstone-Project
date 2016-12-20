@@ -11,16 +11,16 @@ import java.util.ArrayList;
  * https://api.themoviedb.org/3/movie/upcoming?api_key="KEY"&language=en-US&page="PAGE_NO"
  */
 
-public class UpcomingResponse {
+public class MovieResponse {
 
     private int page;
     private ArrayList<MovieModel> results;
     private int total_pages;
 
-    public UpcomingResponse() {
+    public MovieResponse() {
     }
 
-    public UpcomingResponse(int page, ArrayList<MovieModel> results, int total_pages) {
+    public MovieResponse(int page, ArrayList<MovieModel> results, int total_pages) {
         this.page = page;
         this.results = results;
         this.total_pages = total_pages;

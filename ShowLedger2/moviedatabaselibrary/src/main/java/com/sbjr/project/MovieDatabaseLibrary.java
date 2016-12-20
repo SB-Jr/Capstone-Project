@@ -3,7 +3,7 @@ package com.sbjr.project;
 import com.sbjr.project.fetch.MoviesFetch;
 import com.sbjr.project.fetch.TvShowFetch;
 import com.sbjr.project.model.MovieModel;
-import com.sbjr.project.response.UpcomingResponse;
+import com.sbjr.project.response.MovieResponse;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -16,7 +16,7 @@ import retrofit2.Retrofit;
 /**
  * Created by sbjr on 19/12/16.
  *
- * Access class to all the movie and tv show apis
+ * Access class to all the Movie and tv show apis
  */
 
 public class MovieDatabaseLibrary {
@@ -24,10 +24,9 @@ public class MovieDatabaseLibrary {
     private static final String BASE_URL="https://api.themoviedb.org/3/";
 
     private String apiKey;
-
     private Retrofit retrofit;
-
-    private TvShowFetch tvShowFetch;
+    
+    public Movie Movie;
 
     public MovieDatabaseLibrary() {
         initApiKey();
@@ -72,25 +71,60 @@ public class MovieDatabaseLibrary {
         }
     }
 
-    public class Movie{
+    public Movie initMovie(){
+        Movie = new Movie();
+        return Movie;
+    }
+
+    private class Movie{
 
         private MoviesFetch moviesFetch;
 
+        public Movie() {
+            if (retrofit == null) {
+                buildClient();
+                moviesFetch = retrofit.create(MoviesFetch.class);
+            } else if (moviesFetch==null) {
+                moviesFetch = retrofit.create(MoviesFetch.class);
+            }
+        }
+
+        /**
+         * get the upcoming movie list
+         * */
         public ArrayList<MovieModel> getUpcomingMovies(){
             if(apiKey==null||!apiKey.isEmpty()){
                 return new ArrayList<MovieModel>();
             }
             else {
-                if (retrofit == null) {
-                    buildClient();
-                    moviesFetch = retrofit.create(MoviesFetch.class);
-                } else if (moviesFetch==null) {
-                    moviesFetch = retrofit.create(MoviesFetch.class);
-                }
-                UpcomingResponse ur = moviesFetch.getUpcomingMovies(apiKey, 1);
+                MovieResponse ur = moviesFetch.getUpcomingMovies(apiKey, 1);
                 return ur.getResults();
             }
         }
+
+        /**
+         * get the movie detail
+         * */
+
+        public MovieModel getMovieDetails(int movieId){
+            return moviesFetch.getMovieDetailsById(apiKey,movieId);
+        }
+
+        /**
+         * get the movies matching a search keyword
+         * */
+        public ArrayList<MovieModel> getMovieBySearch(String query){
+            MovieResponse movieResponse = moviesFetch.getMoviesBySearch(apiKey,query);
+            return movieResponse.getResults();
+        }
+
+    }
+
+    private class TvShow{
+
+        private TvShowFetch tvShowFetch;
+
+
 
     }
 

@@ -1,7 +1,7 @@
 package com.sbjr.project.model;
 
 /**
- * Model class to map movie object to java object;
+ * Model class to map Movie object to java object;
  * */
 
 public class MovieModel {

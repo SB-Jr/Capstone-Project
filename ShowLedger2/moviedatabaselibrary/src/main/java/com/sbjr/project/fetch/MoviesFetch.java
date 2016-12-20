@@ -1,10 +1,10 @@
 package com.sbjr.project.fetch;
 
-import com.sbjr.project.response.UpcomingResponse;
-
-import java.util.ArrayList;
+import com.sbjr.project.model.MovieModel;
+import com.sbjr.project.response.MovieResponse;
 
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 /**
@@ -15,9 +15,13 @@ import retrofit2.http.Query;
 
 public interface MoviesFetch {
 
-    @GET("movie/upcoming")
-    UpcomingResponse getUpcomingMovies(@Query("api_key") String apiKey,@Query("page") int page);
+    @GET("Movie/upcoming")
+    MovieResponse getUpcomingMovies(@Query("api_key") String apiKey, @Query("page") int page);
 
+    @GET("movie/{movieid}")
+    MovieModel getMovieDetailsById(@Query("api_key") String apiKey, @Path("{movieid") int movieid);
 
+    @GET("search/movie")
+    MovieResponse getMoviesBySearch(@Query("api_key")String apiKey,@Query(value = "query",encoded = true)String query);
 
 }
