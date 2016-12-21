@@ -11,7 +11,11 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by sbjr on 19/12/16.
@@ -39,15 +43,14 @@ public class MovieDatabaseLibrary {
             try {
                 FileReader fr = new FileReader(f);
                 BufferedReader br = new BufferedReader(fr);
-                String s;
-                while ((s=br.readLine())!=null){
-                    apiKey=s;
-                }
+                apiKey = br.readLine();
+                apiKey = apiKey.trim();
                 br.close();
                 fr.close();
             } catch (IOException e) {
                 apiKey=null;
                 e.printStackTrace();
+                System.out.println(e.toString());
             }
         }
         else{
@@ -67,6 +70,7 @@ public class MovieDatabaseLibrary {
         if(apiKey!=null||!apiKey.isEmpty()){
             retrofit = new Retrofit.Builder()
                     .baseUrl(BASE_URL)
+                    .addConverterFactory(GsonConverterFactory.create())
                     .build();
         }
     }
@@ -76,7 +80,7 @@ public class MovieDatabaseLibrary {
         return Movie;
     }
 
-    private class Movie{
+    public class Movie{
 
         private MoviesFetch moviesFetch;
 
@@ -93,29 +97,75 @@ public class MovieDatabaseLibrary {
          * get the upcoming movie list
          * */
         public ArrayList<MovieModel> getUpcomingMovies(){
-            if(apiKey==null||!apiKey.isEmpty()){
+            if(apiKey==null||apiKey.length()==0){
                 return new ArrayList<MovieModel>();
             }
             else {
-                MovieResponse ur = moviesFetch.getUpcomingMovies(apiKey, 1);
-                return ur.getResults();
+                Call<MovieResponse> call = moviesFetch.getUpcomingMovies(apiKey, 1);
+                final MovieResponse mr = new MovieResponse();
+                call.enqueue(new Callback<MovieResponse>() {
+                    @Override
+                    public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
+                        mr.setResults(response.body().getResults());
+                    }
+
+                    @Override
+                    public void onFailure(Call<MovieResponse> call, Throwable t) {
+                        mr.setResults(null);
+                    }
+                });
+                return mr.getResults();
             }
         }
 
         /**
          * get the movie detail
          * */
-
         public MovieModel getMovieDetails(int movieId){
-            return moviesFetch.getMovieDetailsById(apiKey,movieId);
+            if(apiKey==null||apiKey.length()==0){
+                return null;
+            }
+            else {
+                Call<MovieModel> call = moviesFetch.getMovieDetailsById(apiKey, movieId);
+                final MovieModel[] movieModel = new MovieModel[1];
+                call.enqueue(new Callback<MovieModel>() {
+                    @Override
+                    public void onResponse(Call<MovieModel> call, Response<MovieModel> response) {
+                        movieModel[0] = response.body();
+                    }
+
+                    @Override
+                    public void onFailure(Call<MovieModel> call, Throwable t) {
+                        movieModel[0] = null;
+                    }
+                });
+                return movieModel[0];
+            }
         }
 
         /**
          * get the movies matching a search keyword
          * */
         public ArrayList<MovieModel> getMovieBySearch(String query){
-            MovieResponse movieResponse = moviesFetch.getMoviesBySearch(apiKey,query);
-            return movieResponse.getResults();
+            if(apiKey==null||apiKey.length()==0){
+                return new ArrayList<MovieModel>();
+            }
+            else {
+                Call<MovieResponse> call = moviesFetch.getMoviesBySearch(apiKey, query);
+                final MovieResponse mr = new MovieResponse();
+                call.enqueue(new Callback<MovieResponse>() {
+                    @Override
+                    public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
+                        mr.setResults(response.body().getResults());
+                    }
+
+                    @Override
+                    public void onFailure(Call<MovieResponse> call, Throwable t) {
+                        mr.setResults(null);
+                    }
+                });
+                return mr.getResults();
+            }
         }
 
     }
@@ -124,7 +174,7 @@ public class MovieDatabaseLibrary {
 
         private TvShowFetch tvShowFetch;
 
-
+        
 
     }
 
