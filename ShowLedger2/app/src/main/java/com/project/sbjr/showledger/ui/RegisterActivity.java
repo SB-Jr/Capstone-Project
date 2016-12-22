@@ -2,6 +2,7 @@ package com.project.sbjr.showledger.ui;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,7 +17,15 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.project.sbjr.showledger.R;
+
+import static com.project.sbjr.showledger.Utill.checkInternet;
+import static com.project.sbjr.showledger.Utill.setUserNameInSharedPreference;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -30,16 +39,14 @@ public class RegisterActivity extends AppCompatActivity {
     private TextInputLayout mRetypePasswordTextInputLaout;
     private Button mRegisterButton;
     private ProgressBar mProgressBar;
+    private CoordinatorLayout mCoordinatorLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        /**
-         * Todo: check internet and show snackbar if it is not present
-         * */
-
+        mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinator_layout);
         mUserNameEditText = (EditText) findViewById(R.id.user_name);
         mEmailIdEditText = (EditText) findViewById(R.id.user_id);
         mPasswordEditText = (EditText) findViewById(R.id.password);
@@ -57,11 +64,14 @@ public class RegisterActivity extends AppCompatActivity {
         mRetypePasswordTextInputLaout.setErrorEnabled(true);
 
 
+        checkInternet(this,mCoordinatorLayout);
+
+
         mRegisterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                String userid = mEmailIdEditText.getText().toString();
+                final String userid = mEmailIdEditText.getText().toString();
                 String pass = mPasswordEditText.getText().toString();
 
                 if(!checkCred()){
@@ -70,17 +80,28 @@ public class RegisterActivity extends AppCompatActivity {
 
                 mProgressBar.setVisibility(View.VISIBLE);
 
-                FirebaseAuth auth = FirebaseAuth.getInstance();
+                final FirebaseAuth auth = FirebaseAuth.getInstance();
                 auth.createUserWithEmailAndPassword(userid, pass)
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
-                                /**
-                                 * Todo: add the user details to firebase and change sharedpref data
-                                 * */
-                                mProgressBar.setVisibility(View.GONE);
-                                Intent intent = new Intent(RegisterActivity.this,ShowActivity.class);
-                                startActivity(intent);
+                                String userUid = auth.getCurrentUser().getUid();
+                                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                                final DatabaseReference reference = database.getReference().child("user").child(userUid);
+                                reference.child("userid").setValue(userid, new DatabaseReference.CompletionListener() {
+                                    @Override
+                                    public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                                        reference.child("username").setValue(mUserNameEditText.getText().toString(), new DatabaseReference.CompletionListener() {
+                                            @Override
+                                            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                                                mProgressBar.setVisibility(View.GONE);
+                                                setUserNameInSharedPreference(RegisterActivity.this,mUserNameEditText.getText().toString());
+                                                Intent intent = new Intent(RegisterActivity.this,ShowActivity.class);
+                                                startActivity(intent);
+                                            }
+                                        });
+                                    }
+                                });
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
@@ -98,6 +119,11 @@ public class RegisterActivity extends AppCompatActivity {
 
     public boolean checkCred(){
         boolean success = true;
+
+        mUserNameTextInputLaout.setErrorEnabled(false);
+        mEmailIdTextInputLaout.setErrorEnabled(false);
+        mPasswordTextInputLaout.setErrorEnabled(false);
+        mRetypePasswordTextInputLaout.setErrorEnabled(false);
 
         String userid = mEmailIdEditText.getText().toString();
         String pass = mPasswordEditText.getText().toString();

@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Show Ledger</string>
 
+    <string name="no_internet">Internet not connected!!</string>
+
     <!-- login and register related strings -->
     <string name="user_id">Email Id</string>
     <string name="password">Password</string>
@@ -13,6 +15,7 @@
     <string name="user_id_error_invalid">Please enter a valid User ID</string>
     <string name="password_error_length">Please enter at least 6 characters</string>
     <string name="invalid_credentials">Invalid Credentials</string>
-    <string name="user_name_error_empty">User Name can't be empty</string>
-    <string name="retype_password_error_not_match">Passwords don't match</string>
+    <string name="user_name_error_empty">User Name can\'t be empty</string>
+    <string name="retype_password_error_not_match">Passwords don\'t match</string>
+    <string name="signin_error">There was a problem signing you in!! Please retry later..</string>
 </resources>
