@@ -14,11 +14,11 @@ import java.util.concurrent.ThreadFactory;
 
 public class MovieTest {
 
-    @Test
+    /*@Test
     public void testUpcomingMovies() {
         MovieDatabaseLibrary.Movie movie = new MovieDatabaseLibrary().initMovie();
         ArrayList<MovieModel> movieModels =movie.getUpcomingMovies();
         assertNotNull(movieModels);
         assertTrue(!movieModels.isEmpty());
-    }
+    }*/
 }

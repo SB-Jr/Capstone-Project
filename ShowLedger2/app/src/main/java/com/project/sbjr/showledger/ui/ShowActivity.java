@@ -1,13 +1,15 @@
-package com.project.sbjr.showledger;
+package com.project.sbjr.showledger.ui;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class SignInActivity extends AppCompatActivity {
+import com.project.sbjr.showledger.R;
+
+public class ShowActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign_in);
+        setContentView(R.layout.activity_show);
     }
 }

@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "72618608352",
+    "firebase_url": "https://show-ledger.firebaseio.com",
+    "project_id": "show-ledger",
+    "storage_bucket": "show-ledger.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:72618608352:android:048d88acdd1ec51d",
+        "android_client_info": {
+          "package_name": "com.project.sbjr.showledger"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "72618608352-sn7udqlvqdg326ep278kscba21utj6an.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmOEJd6yWVEwbazeFd-GhJKv45g3BFr98"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
