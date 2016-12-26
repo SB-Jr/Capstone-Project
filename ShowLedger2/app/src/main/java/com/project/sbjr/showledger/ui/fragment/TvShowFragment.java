@@ -10,25 +10,22 @@ import android.view.ViewGroup;
 
 import com.project.sbjr.showledger.R;
 
-public class WishListFragment extends Fragment {
+public class TvShowFragment extends Fragment {
     private static final String USER_UID = "user_uid";
-    private static final String SHOW_TYPE = "show_type";
 
     private String userUid;
-    private String showType;
 
-    private OnFragmentInteractionListener mListener;
+    private OnTvShowFragmentInteractionListener mListener;
 
-    public WishListFragment() {
+    public TvShowFragment() {
         // Required empty public constructor
     }
 
 
-    public static WishListFragment newInstance(String useruid, String showtype) {
-        WishListFragment fragment = new WishListFragment();
+    public static TvShowFragment newInstance(String param1) {
+        TvShowFragment fragment = new TvShowFragment();
         Bundle args = new Bundle();
-        args.putString(USER_UID, useruid);
-        args.putString(SHOW_TYPE, showtype);
+        args.putString(USER_UID, param1);
         fragment.setArguments(args);
         return fragment;
     }
@@ -38,7 +35,6 @@ public class WishListFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             userUid = getArguments().getString(USER_UID);
-            showType = getArguments().getString(SHOW_TYPE);
         }
     }
 
@@ -46,14 +42,21 @@ public class WishListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_wish_list, container, false);
+        return inflater.inflate(R.layout.fragment_tv_show, container, false);
+    }
+
+    // TODO: Rename method, update argument and hook method into UI event
+    public void onButtonPressed(Uri uri) {
+        if (mListener != null) {
+            mListener.onTvShowSelectedInteraction(uri);
+        }
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+        if (context instanceof OnTvShowFragmentInteractionListener) {
+            mListener = (OnTvShowFragmentInteractionListener) context;
         } /*else {
             throw new RuntimeException(context.toString()
                     + " must implement OnNavigationDrawerFragmentListener");
@@ -66,18 +69,7 @@ public class WishListFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+    public interface OnTvShowFragmentInteractionListener {
+        void onTvShowSelectedInteraction(Uri uri);
     }
 }

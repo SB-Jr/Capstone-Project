@@ -13,7 +13,7 @@ import static android.content.Context.MODE_PRIVATE;
  * Created by sbjr on 22/12/16.
  */
 
-public class Utill {
+public class Util {
 
 
     public static void checkInternet(Context context, CoordinatorLayout coordinatorLayout){
@@ -48,10 +48,25 @@ public class Utill {
         return null;
     }
 
+    public static String useruidFromSharedPreference(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("ShowLedger", MODE_PRIVATE);
+        if (sharedPreferences.contains("user") && sharedPreferences.getString("user", "").length() > 0) {
+            return sharedPreferences.getString("useruid", null);
+        }
+        return null;
+    }
+
     public static void setUserNameInSharedPreference(Context context,String user){
         SharedPreferences sharedPreferences = context.getSharedPreferences("ShowLedger", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("user",user);
+        editor.commit();
+    }
+
+    public static void setUserUIDInSharedPreference(Context context,String useruid){
+        SharedPreferences sharedPreferences = context.getSharedPreferences("ShowLedger", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("useruid",useruid);
         editor.commit();
     }
 

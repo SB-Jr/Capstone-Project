@@ -26,9 +26,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.project.sbjr.showledger.R;
 
-import static com.project.sbjr.showledger.Utill.checkInternet;
-import static com.project.sbjr.showledger.Utill.isUserDataPresent;
-import static com.project.sbjr.showledger.Utill.setUserNameInSharedPreference;
+import static com.project.sbjr.showledger.Util.checkInternet;
+import static com.project.sbjr.showledger.Util.isUserDataPresent;
+import static com.project.sbjr.showledger.Util.setUserNameInSharedPreference;
+import static com.project.sbjr.showledger.Util.setUserUIDInSharedPreference;
 
 public class SignInActivity extends AppCompatActivity {
 
@@ -56,7 +57,11 @@ public class SignInActivity extends AppCompatActivity {
         if(isUserDataPresent(this)){
             Intent intent = new Intent(SignInActivity.this,ShowActivity.class);
             startActivity(intent);
-        }else{
+        }
+        /**
+         * todo: delete this later
+         * */
+        else{
             setUserNameInSharedPreference(SignInActivity.this,"user1");
             Intent intent = new Intent(SignInActivity.this,ShowActivity.class);
             startActivity(intent);
@@ -104,7 +109,7 @@ public class SignInActivity extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
 
-                                String userUid = firebaseAuth.getCurrentUser().getUid();
+                                final String userUid = firebaseAuth.getCurrentUser().getUid();
                                 final FirebaseDatabase database = FirebaseDatabase.getInstance();
                                 DatabaseReference reference = database.getReference().child("user").child(userUid).child("username");
                                 reference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -113,6 +118,7 @@ public class SignInActivity extends AppCompatActivity {
                                         mProgressBar.setVisibility(View.GONE);
                                         String username = dataSnapshot.getValue(String.class);
                                         setUserNameInSharedPreference(SignInActivity.this,username);
+                                        setUserUIDInSharedPreference(SignInActivity.this,userUid);
                                         Intent intent = new Intent(SignInActivity.this,ShowActivity.class);
                                         startActivity(intent);
                                     }
@@ -130,6 +136,7 @@ public class SignInActivity extends AppCompatActivity {
                         .addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
+                                mProgressBar.setVisibility(View.GONE);
                                 Log.d(TAG,e.getMessage());
                                 mUserIdTextInputLayout.setError(getString(R.string.invalid_credentials));
                             }

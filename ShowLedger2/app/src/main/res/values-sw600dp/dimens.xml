@@ -4,4 +4,17 @@
          would include 7" and 10" devices in landscape (~960dp and ~1280dp respectively). -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <!--Navigation drawer-->
+    <dimen name="header_height">150dp</dimen>
+    <dimen name="title_height">48dp</dimen>
+    <dimen name="icon_start_margin">16dp</dimen>
+    <dimen name="title_start_margin">72dp</dimen>
+
+    <!--Show details-->
+    <dimen name="show_details_horizontal_margin">48dp</dimen>
+
+    <!--card view-->
+    <dimen name="card_view_movie_title">24sp</dimen>
+    <dimen name="card_view_movie_subtitle">14sp</dimen>
 </resources>

@@ -22,8 +22,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.project.sbjr.showledger.R;
 
-import static com.project.sbjr.showledger.Utill.checkInternet;
-import static com.project.sbjr.showledger.Utill.setUserNameInSharedPreference;
+import static com.project.sbjr.showledger.Util.checkInternet;
+import static com.project.sbjr.showledger.Util.setUserNameInSharedPreference;
 
 public class RegisterActivity extends AppCompatActivity {
 

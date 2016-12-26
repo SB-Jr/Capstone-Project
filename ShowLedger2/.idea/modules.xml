@@ -2,9 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/HighOnShow/HighOnShow.iml" filepath="$PROJECT_DIR$/HighOnShow/HighOnShow.iml" />
       <module fileurl="file://$PROJECT_DIR$/ShowLedger2.iml" filepath="$PROJECT_DIR$/ShowLedger2.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/moviedatabaselibrary/moviedatabaselibrary.iml" filepath="$PROJECT_DIR$/moviedatabaselibrary/moviedatabaselibrary.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mylibrary/mylibrary.iml" filepath="$PROJECT_DIR$/mylibrary/mylibrary.iml" />
     </modules>
   </component>
 </project>

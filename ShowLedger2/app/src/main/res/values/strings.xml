@@ -24,6 +24,24 @@
 
 
     <!--Descriptions-->
-    <string name="description_naigation_draawer_close">Close Navigation Drawer</string>
-    <string name="description_naigation_draawer_open">Open Navigation Drawer</string>
+    <string name="description_navigation_drawer_close">Close Navigation Drawer</string>
+    <string name="description_navigation_drawer_open">Open Navigation Drawer</string>
+
+
+    <!--Navigation Drawer-->
+    <string name="navigation_movies">Movies</string>
+    <string name="navigation_tvshows">TV Shows</string>
+    <string name="navigation_signout">Sign Out</string>
+
+
+    <!--Show View pager-->
+    <string name="show_movie">Upcoming</string>
+    <string name="show_tvshow">OnAir</string>
+    <string name="show_watched">Watched List</string>
+    <string name="show_wish">Wish List</string>
+    <string name="show_incomplete">Incomplete List</string>
+    <string name="show_favourite">Favourite List</string>
+
+    <!--error-->
+    <string name="connection_error">Oops!!Some Error Occurred!! Please try again!!</string>
 </resources>
