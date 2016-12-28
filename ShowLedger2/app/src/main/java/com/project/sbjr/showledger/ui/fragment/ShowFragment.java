@@ -1,6 +1,5 @@
 package com.project.sbjr.showledger.ui.fragment;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -11,14 +10,22 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.project.sbjr.showinfodatabase.handler.MovieHandler;
+import com.project.sbjr.showinfodatabase.response.MovieResponse;
+import com.project.sbjr.showledger.R;
+
 import com.project.sbjr.showinfodatabase.HighOnShow;
 import com.project.sbjr.showinfodatabase.model.MovieModel;
-import com.project.sbjr.showledger.R;
-import com.project.sbjr.showledger.adapter.ShowItemAdapter;
+import com.project.sbjr.showledger.adapter.ShowMovieItemAdapter;
 
 import java.util.ArrayList;
 
-public class ShowFragment extends Fragment implements ShowItemAdapter.ShowItemInteractionListener{
+/**
+ * created by sbjr
+ *
+ * fragment which shows the show grid based on which fragment called it
+ * */
+public class ShowFragment extends Fragment implements ShowMovieItemAdapter.ShowMovieItemAdapterInteractionListener {
     private static final String USER_UID = "user_uid";
     private static final String SHOW_TYPE = "show_type";
 
@@ -56,30 +63,47 @@ public class ShowFragment extends Fragment implements ShowItemAdapter.ShowItemIn
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_show, container, false);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.contents);
         mProgressBar = (ProgressBar) view.findViewById(R.id.progress);
         mErrorTextView = (TextView) view.findViewById(R.id.error_text);
 
-        HighOnShow.Movie movie = new HighOnShow().initMovie();
-        ArrayList<MovieModel> movieModels = movie.getUpcomingMovies(mRecyclerView,mProgressBar,mErrorTextView);
 
-        ShowItemAdapter adapter = new ShowItemAdapter(movieModels,this);
-        mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
-        mRecyclerView.setAdapter(adapter);
+        new HighOnShow(getString(R.string.api_key)).initMovie().getUpcomingMovies(mRecyclerView, mProgressBar, mErrorTextView, new MovieHandler<MovieResponse>() {
+            @Override
+            public void onResult(MovieResponse result) {
+                ArrayList<MovieModel> movieModels = result.getResults();
+                ShowMovieItemAdapter adapter = new ShowMovieItemAdapter(movieModels,ShowFragment.this);
+                mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+                mRecyclerView.setAdapter(adapter);
+            }
+
+            @Override
+            public void onFailure() {
+                //Todo: add a snackbar for failure and try again later
+            }
+        });
         return view;
     }
 
 
-    @Override
+    /*@Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnShowFragmentInteractionListener) {
             mListener = (OnShowFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnNavigationDrawerFragmentListener");
+                    + " must implement OnShowFragmentInteractionListener");
+        }
+    }*/
+
+    public void initListener(Fragment fragment){
+        if (fragment instanceof OnShowFragmentInteractionListener) {
+            mListener = (OnShowFragmentInteractionListener) fragment;
+        } else {
+            throw new RuntimeException(fragment.toString()
+                    + " must implement OnShowFragmentInteractionListener");
         }
     }
 
@@ -90,11 +114,11 @@ public class ShowFragment extends Fragment implements ShowItemAdapter.ShowItemIn
     }
 
     public interface OnShowFragmentInteractionListener {
-        void onShowFragmentItemSelectListener(MovieModel movieModel);
+        void onMovieShowFragmentItemSelectListener(MovieModel movieModel);
     }
 
     @Override
-    public void ShowItemClickListener(MovieModel movieModel) {
-        mListener.onShowFragmentItemSelectListener(movieModel);
+    public void ShowMovieItemClickListener(MovieModel movieModel) {
+        mListener.onMovieShowFragmentItemSelectListener(movieModel);
     }
 }

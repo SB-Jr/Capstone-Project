@@ -17,13 +17,13 @@ import java.util.ArrayList;
  * Created by sbjr on 26/12/16.
  */
 
-public class ShowItemAdapter extends RecyclerView.Adapter<ShowItemAdapter.ShowItemViewHolder>{
+public class ShowMovieItemAdapter extends RecyclerView.Adapter<ShowMovieItemAdapter.ShowItemViewHolder>{
 
     private ArrayList<MovieModel> mMovieList = new ArrayList<>();
 
-    private ShowItemInteractionListener mListener;
+    private ShowMovieItemAdapterInteractionListener mListener;
 
-    public ShowItemAdapter(ArrayList<MovieModel> mMovieList, ShowItemInteractionListener mListener) {
+    public ShowMovieItemAdapter(ArrayList<MovieModel> mMovieList, ShowMovieItemAdapterInteractionListener mListener) {
         this.mMovieList = mMovieList;
         this.mListener = mListener;
     }
@@ -49,10 +49,10 @@ public class ShowItemAdapter extends RecyclerView.Adapter<ShowItemAdapter.ShowIt
 
         private TextView mTitleTextView,mRatingTextView;
         private ImageView mImageView;
-        private ShowItemInteractionListener mListener;
+        private ShowMovieItemAdapterInteractionListener mListener;
         MovieModel mMovie;
 
-        public ShowItemViewHolder(View itemView,ShowItemInteractionListener listener) {
+        public ShowItemViewHolder(View itemView,ShowMovieItemAdapterInteractionListener listener) {
             super(itemView);
             mTitleTextView = (TextView) itemView.findViewById(R.id.title);
             mRatingTextView = (TextView) itemView.findViewById(R.id.rating);
@@ -69,11 +69,11 @@ public class ShowItemAdapter extends RecyclerView.Adapter<ShowItemAdapter.ShowIt
 
         @Override
         public void onClick(View v) {
-            mListener.ShowItemClickListener(mMovie);
+            mListener.ShowMovieItemClickListener(mMovie);
         }
     }
 
-    public interface ShowItemInteractionListener{
-        void ShowItemClickListener(MovieModel movie);
+    public interface ShowMovieItemAdapterInteractionListener {
+        void ShowMovieItemClickListener(MovieModel movie);
     }
 }

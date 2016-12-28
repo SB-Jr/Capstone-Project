@@ -2,7 +2,7 @@
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/card_view"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -21,11 +21,21 @@
             android:textSize="@dimen/card_view_movie_title" />
 
         <TextView
-            android:id="@+id/rating"
+            android:id="@+id/episode"
+            android:visibility="gone"
             android:layout_below="@id/title"
             android:textSize="@dimen/card_view_movie_subtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/rating"
+            android:layout_below="@id/title"
+            android:layout_toEndOf="@id/episode"
+            android:textSize="@dimen/card_view_movie_subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
 
         <ImageView
             android:src="@drawable/ic_star"

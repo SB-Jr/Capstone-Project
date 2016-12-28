@@ -21,7 +21,11 @@ import com.project.sbjr.showledger.ui.fragment.TvShowFragment;
 
 public class ShowActivity extends AppCompatActivity implements NavigationDrawerFragment.OnNavigationDrawerFragmentListener,MovieFragment.OnMovieFragmentInteractionListener {
 
+    public final static String MOVIE_NAME="com.project.sbjr.MOVIE";
+
+
     private final String TAG = ShowActivity.class.getName();
+
 
     private final String DETAILS_FRAG_TAG = "details";
     private final String PRESENT_FRAG_TAG = "details";
@@ -123,7 +127,7 @@ public class ShowActivity extends AppCompatActivity implements NavigationDrawerF
         else{
             Intent intent = new Intent(this,DetailsActivity.class);
             //todo: add the data to the intent
-            // intent.putExtra();
+            intent.putExtra(MOVIE_NAME,movieModel);
             startActivity(intent);
         }
     }

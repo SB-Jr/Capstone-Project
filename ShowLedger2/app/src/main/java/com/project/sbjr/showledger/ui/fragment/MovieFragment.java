@@ -64,7 +64,7 @@ public class MovieFragment extends Fragment implements ShowFragment.OnShowFragme
             mListener = (OnMovieFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnNavigationDrawerFragmentListener");
+                    + " must implement OnMovieFragmentInteractionListener");
         }
     }
 
@@ -74,10 +74,13 @@ public class MovieFragment extends Fragment implements ShowFragment.OnShowFragme
         mListener = null;
     }
 
-    public interface OnMovieFragmentInteractionListener {
-        void onMovieSelectedInteraction(MovieModel movieModel);
+    @Override
+    public void onAttachFragment(Fragment childFragment) {
+        super.onAttachFragment(childFragment);
+        if (childFragment instanceof ShowFragment){
+            ((ShowFragment) childFragment).initListener(this);
+        }
     }
-
 
     public void initViewPager(){
         ShowViewPagerAdapter adapter = new ShowViewPagerAdapter(getChildFragmentManager());
@@ -87,8 +90,12 @@ public class MovieFragment extends Fragment implements ShowFragment.OnShowFragme
         mViewPager.setAdapter(adapter);
     }
 
+    public interface OnMovieFragmentInteractionListener {
+        void onMovieSelectedInteraction(MovieModel movieModel);
+    }
+
     @Override
-    public void onShowFragmentItemSelectListener(MovieModel movieModel) {
+    public void onMovieShowFragmentItemSelectListener(MovieModel movieModel) {
         mListener.onMovieSelectedInteraction(movieModel);
     }
 }
