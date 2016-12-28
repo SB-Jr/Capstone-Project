@@ -11,6 +11,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.project.sbjr.showinfodatabase.handler.MovieHandler;
+import com.project.sbjr.showinfodatabase.model.TvShowModel;
 import com.project.sbjr.showinfodatabase.response.MovieResponse;
 import com.project.sbjr.showledger.R;
 
@@ -32,7 +33,8 @@ public class ShowFragment extends Fragment implements ShowMovieItemAdapter.ShowM
     private String userUid;
     private String showType;
 
-    private OnShowFragmentInteractionListener mListener;
+    private OnMovieShowFragmentInteractionListener mMovieListener;
+    private onTvShowFragmentInteractionListener mTvListener;
 
     private RecyclerView mRecyclerView;
     private ProgressBar mProgressBar;
@@ -69,56 +71,63 @@ public class ShowFragment extends Fragment implements ShowMovieItemAdapter.ShowM
         mErrorTextView = (TextView) view.findViewById(R.id.error_text);
 
 
-        new HighOnShow(getString(R.string.api_key)).initMovie().getUpcomingMovies(mRecyclerView, mProgressBar, mErrorTextView, new MovieHandler<MovieResponse>() {
-            @Override
-            public void onResult(MovieResponse result) {
-                ArrayList<MovieModel> movieModels = result.getResults();
-                ShowMovieItemAdapter adapter = new ShowMovieItemAdapter(movieModels,ShowFragment.this);
-                mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
-                mRecyclerView.setAdapter(adapter);
-            }
+        if(showType.equalsIgnoreCase(MovieFragmentMovie.MOVIE_TAG)) {
+            new HighOnShow(getString(R.string.api_key)).initMovie().getUpcomingMovies(mRecyclerView, mProgressBar, mErrorTextView, new MovieHandler<MovieResponse>() {
+                @Override
+                public void onResult(MovieResponse result) {
+                    ArrayList<MovieModel> movieModels = result.getResults();
+                    ShowMovieItemAdapter adapter = new ShowMovieItemAdapter(movieModels, ShowFragment.this);
+                    mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+                    mRecyclerView.setAdapter(adapter);
+                }
 
-            @Override
-            public void onFailure() {
-                //Todo: add a snackbar for failure and try again later
-            }
-        });
+                @Override
+                public void onFailure() {
+                    //Todo: add a snackbar for failure and try again later
+                }
+            });
+        }
+        else{
+
+        }
         return view;
     }
 
-
-    /*@Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnShowFragmentInteractionListener) {
-            mListener = (OnShowFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnShowFragmentInteractionListener");
-        }
-    }*/
-
     public void initListener(Fragment fragment){
-        if (fragment instanceof OnShowFragmentInteractionListener) {
-            mListener = (OnShowFragmentInteractionListener) fragment;
-        } else {
-            throw new RuntimeException(fragment.toString()
-                    + " must implement OnShowFragmentInteractionListener");
+        if(showType.equalsIgnoreCase(MovieFragmentMovie.MOVIE_TAG)) {
+            if (fragment instanceof OnMovieShowFragmentInteractionListener) {
+                mMovieListener = (OnMovieShowFragmentInteractionListener) fragment;
+            } else {
+                throw new RuntimeException(fragment.toString()
+                        + " must implement OnMovieShowFragmentInteractionListener");
+            }
+        }
+        else{
+            if (fragment instanceof TvShowFragment.OnTvShowFragmentInteractionListener) {
+                mTvListener = (onTvShowFragmentInteractionListener) fragment;
+            } else {
+                throw new RuntimeException(fragment.toString()
+                        + " must implement OnMovieShowFragmentInteractionListener");
+            }
         }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+        mMovieListener = null;
     }
 
-    public interface OnShowFragmentInteractionListener {
+    public interface OnMovieShowFragmentInteractionListener {
         void onMovieShowFragmentItemSelectListener(MovieModel movieModel);
+    }
+
+    public interface onTvShowFragmentInteractionListener{
+        void onTvShowFragmentItemSelectListener(TvShowModel tvShowModel);
     }
 
     @Override
     public void ShowMovieItemClickListener(MovieModel movieModel) {
-        mListener.onMovieShowFragmentItemSelectListener(movieModel);
+        mMovieListener.onMovieShowFragmentItemSelectListener(movieModel);
     }
 }

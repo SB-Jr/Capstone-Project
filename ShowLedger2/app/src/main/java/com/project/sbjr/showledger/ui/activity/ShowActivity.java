@@ -15,11 +15,11 @@ import android.widget.FrameLayout;
 import com.project.sbjr.showinfodatabase.model.MovieModel;
 import com.project.sbjr.showledger.R;
 import com.project.sbjr.showledger.Util;
-import com.project.sbjr.showledger.ui.fragment.MovieFragment;
+import com.project.sbjr.showledger.ui.fragment.MovieFragmentMovie;
 import com.project.sbjr.showledger.ui.fragment.NavigationDrawerFragment;
 import com.project.sbjr.showledger.ui.fragment.TvShowFragment;
 
-public class ShowActivity extends AppCompatActivity implements NavigationDrawerFragment.OnNavigationDrawerFragmentListener,MovieFragment.OnMovieFragmentInteractionListener {
+public class ShowActivity extends AppCompatActivity implements NavigationDrawerFragment.OnNavigationDrawerFragmentListener,MovieFragmentMovie.OnMovieFragmentInteractionListener {
 
     public final static String MOVIE_NAME="com.project.sbjr.MOVIE";
 
@@ -37,7 +37,7 @@ public class ShowActivity extends AppCompatActivity implements NavigationDrawerF
     private DrawerLayout mDrawerLayout;
     private FrameLayout mContainerFrameLayout;
 
-    private MovieFragment mMovieFragment;
+    private MovieFragmentMovie mMovieFragment;
     private TvShowFragment mTvShowFragment;
 
 
@@ -57,7 +57,7 @@ public class ShowActivity extends AppCompatActivity implements NavigationDrawerF
         setupToolbar();
         setupNavigationBar();
         mContainerFrameLayout = (FrameLayout) findViewById(R.id.fragment_content_holder);
-        mMovieFragment = MovieFragment.newInstance(Util.useruidFromSharedPreference(this));
+        mMovieFragment = MovieFragmentMovie.newInstance(Util.useruidFromSharedPreference(this));
         mTvShowFragment = TvShowFragment.newInstance(Util.useruidFromSharedPreference(this));
         changeShowFragment(mMovieFragment);
     }

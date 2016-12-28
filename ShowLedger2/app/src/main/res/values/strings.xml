@@ -44,4 +44,13 @@
 
     <!--error-->
     <string name="connection_error">Oops!!Some Error Occurred!! Please try again!!</string>
+
+    <!--Details fragment/activity-->
+    <string name="detail_director">Director</string>
+    <string name="detail_music">Music</string>
+    <string name="detail_produced">Produced By</string>
+    <string name="detail_cast">Cast</string>
+    <string name="detail_overview">Overview</string>
+    <string name="detail_rating">Rating:</string>
+    <string name="detail_release_date">Release Date:</string>
 </resources>
