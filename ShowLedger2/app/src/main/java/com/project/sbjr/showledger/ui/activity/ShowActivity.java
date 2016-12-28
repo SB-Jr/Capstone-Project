@@ -13,15 +13,18 @@ import android.util.Log;
 import android.widget.FrameLayout;
 
 import com.project.sbjr.showinfodatabase.model.MovieModel;
+import com.project.sbjr.showinfodatabase.model.TvShowModel;
 import com.project.sbjr.showledger.R;
 import com.project.sbjr.showledger.Util;
-import com.project.sbjr.showledger.ui.fragment.MovieFragmentMovie;
+import com.project.sbjr.showledger.ui.fragment.MovieFragment;
 import com.project.sbjr.showledger.ui.fragment.NavigationDrawerFragment;
+import com.project.sbjr.showledger.ui.fragment.ShowFragment;
 import com.project.sbjr.showledger.ui.fragment.TvShowFragment;
 
-public class ShowActivity extends AppCompatActivity implements NavigationDrawerFragment.OnNavigationDrawerFragmentListener,MovieFragmentMovie.OnMovieFragmentInteractionListener {
+public class ShowActivity extends AppCompatActivity implements NavigationDrawerFragment.OnNavigationDrawerFragmentListener,MovieFragment.OnMovieFragmentInteractionListener,TvShowFragment.OnTvShowFragmentInteractionListener {
 
     public final static String MOVIE_NAME="com.project.sbjr.MOVIE";
+    public final static String TVSHOW_NAME="com.project.sbjr.TVSHOW";
 
 
     private final String TAG = ShowActivity.class.getName();
@@ -37,7 +40,7 @@ public class ShowActivity extends AppCompatActivity implements NavigationDrawerF
     private DrawerLayout mDrawerLayout;
     private FrameLayout mContainerFrameLayout;
 
-    private MovieFragmentMovie mMovieFragment;
+    private MovieFragment mMovieFragment;
     private TvShowFragment mTvShowFragment;
 
 
@@ -57,7 +60,7 @@ public class ShowActivity extends AppCompatActivity implements NavigationDrawerF
         setupToolbar();
         setupNavigationBar();
         mContainerFrameLayout = (FrameLayout) findViewById(R.id.fragment_content_holder);
-        mMovieFragment = MovieFragmentMovie.newInstance(Util.useruidFromSharedPreference(this));
+        mMovieFragment = MovieFragment.newInstance(Util.useruidFromSharedPreference(this));
         mTvShowFragment = TvShowFragment.newInstance(Util.useruidFromSharedPreference(this));
         changeShowFragment(mMovieFragment);
     }
@@ -128,6 +131,23 @@ public class ShowActivity extends AppCompatActivity implements NavigationDrawerF
             Intent intent = new Intent(this,DetailsActivity.class);
             //todo: add the data to the intent
             intent.putExtra(MOVIE_NAME,movieModel);
+            startActivity(intent);
+        }
+    }
+
+    @Override
+    public void onTvShowSelectedInteraction(TvShowModel tvShowModel) {
+        if(mTwoPane){
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            //todo: add details fragment
+            fragmentTransaction.replace(R.id.details_layout,null,DETAILS_FRAG_TAG);
+            fragmentTransaction.commit();
+        }
+        else{
+            Intent intent = new Intent(this,DetailsActivity.class);
+            //todo: add the data to the intent
+            intent.putExtra(TVSHOW_NAME,tvShowModel);
             startActivity(intent);
         }
     }

@@ -95,11 +95,11 @@ public class TvShowFragment extends Fragment implements ShowFragment.onTvShowFra
     }
 
     public interface OnTvShowFragmentInteractionListener {
-        void onTvShowSelectedInteraction();
+        void onTvShowSelectedInteraction(TvShowModel tvShowModel);
     }
 
     @Override
     public void onTvShowFragmentItemSelectListener(TvShowModel tvShowModel) {
-        mListener.onTvShowSelectedInteraction();
+        mListener.onTvShowSelectedInteraction(tvShowModel);
     }
 }

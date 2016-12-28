@@ -18,6 +18,7 @@ import com.project.sbjr.showledger.R;
 import com.project.sbjr.showinfodatabase.HighOnShow;
 import com.project.sbjr.showinfodatabase.model.MovieModel;
 import com.project.sbjr.showledger.adapter.ShowMovieItemAdapter;
+import com.project.sbjr.showledger.adapter.ShowTvItemAdapter;
 
 import java.util.ArrayList;
 
@@ -26,7 +27,7 @@ import java.util.ArrayList;
  *
  * fragment which shows the show grid based on which fragment called it
  * */
-public class ShowFragment extends Fragment implements ShowMovieItemAdapter.ShowMovieItemAdapterInteractionListener {
+public class ShowFragment extends Fragment implements ShowMovieItemAdapter.ShowMovieItemAdapterInteractionListener,ShowTvItemAdapter.ShowTvItemAdapterInteractionListener {
     private static final String USER_UID = "user_uid";
     private static final String SHOW_TYPE = "show_type";
 
@@ -71,7 +72,7 @@ public class ShowFragment extends Fragment implements ShowMovieItemAdapter.ShowM
         mErrorTextView = (TextView) view.findViewById(R.id.error_text);
 
 
-        if(showType.equalsIgnoreCase(MovieFragmentMovie.MOVIE_TAG)) {
+        if(showType.equalsIgnoreCase(MovieFragment.MOVIE_TAG)) {
             new HighOnShow(getString(R.string.api_key)).initMovie().getUpcomingMovies(mRecyclerView, mProgressBar, mErrorTextView, new MovieHandler<MovieResponse>() {
                 @Override
                 public void onResult(MovieResponse result) {
@@ -94,7 +95,7 @@ public class ShowFragment extends Fragment implements ShowMovieItemAdapter.ShowM
     }
 
     public void initListener(Fragment fragment){
-        if(showType.equalsIgnoreCase(MovieFragmentMovie.MOVIE_TAG)) {
+        if(showType.equalsIgnoreCase(MovieFragment.MOVIE_TAG)) {
             if (fragment instanceof OnMovieShowFragmentInteractionListener) {
                 mMovieListener = (OnMovieShowFragmentInteractionListener) fragment;
             } else {
@@ -129,5 +130,10 @@ public class ShowFragment extends Fragment implements ShowMovieItemAdapter.ShowM
     @Override
     public void ShowMovieItemClickListener(MovieModel movieModel) {
         mMovieListener.onMovieShowFragmentItemSelectListener(movieModel);
+    }
+
+    @Override
+    public void tvShowItemClickListener(TvShowModel tvShowModel) {
+        mTvListener.onTvShowFragmentItemSelectListener(tvShowModel);
     }
 }

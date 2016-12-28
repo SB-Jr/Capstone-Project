@@ -13,7 +13,7 @@ import com.project.sbjr.showinfodatabase.model.MovieModel;
 import com.project.sbjr.showledger.R;
 import com.project.sbjr.showledger.adapter.ShowViewPagerAdapter;
 
-public class MovieFragmentMovie extends Fragment implements ShowFragment.OnMovieShowFragmentInteractionListener {
+public class MovieFragment extends Fragment implements ShowFragment.OnMovieShowFragmentInteractionListener {
     public static final String MOVIE_TAG = "movie";
 
     private static final String USER_UID = "user_uid";
@@ -25,12 +25,12 @@ public class MovieFragmentMovie extends Fragment implements ShowFragment.OnMovie
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
 
-    public MovieFragmentMovie() {
+    public MovieFragment() {
         // Required empty public constructor
     }
 
-    public static MovieFragmentMovie newInstance(String useruid) {
-        MovieFragmentMovie fragment = new MovieFragmentMovie();
+    public static MovieFragment newInstance(String useruid) {
+        MovieFragment fragment = new MovieFragment();
         Bundle args = new Bundle();
         args.putString(USER_UID, useruid);
         fragment.setArguments(args);
