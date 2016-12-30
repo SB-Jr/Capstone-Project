@@ -18,7 +18,6 @@ import com.project.sbjr.showledger.R;
 import com.project.sbjr.showledger.Util;
 import com.project.sbjr.showledger.ui.fragment.MovieFragment;
 import com.project.sbjr.showledger.ui.fragment.NavigationDrawerFragment;
-import com.project.sbjr.showledger.ui.fragment.ShowFragment;
 import com.project.sbjr.showledger.ui.fragment.TvShowFragment;
 
 public class ShowActivity extends AppCompatActivity implements NavigationDrawerFragment.OnNavigationDrawerFragmentListener,MovieFragment.OnMovieFragmentInteractionListener,TvShowFragment.OnTvShowFragmentInteractionListener {
@@ -60,8 +59,8 @@ public class ShowActivity extends AppCompatActivity implements NavigationDrawerF
         setupToolbar();
         setupNavigationBar();
         mContainerFrameLayout = (FrameLayout) findViewById(R.id.fragment_content_holder);
-        mMovieFragment = MovieFragment.newInstance(Util.useruidFromSharedPreference(this));
-        mTvShowFragment = TvShowFragment.newInstance(Util.useruidFromSharedPreference(this));
+        mMovieFragment = MovieFragment.newInstance(Util.getUserUidFromSharedPreference(this));
+        mTvShowFragment = TvShowFragment.newInstance(Util.getUserUidFromSharedPreference(this));
         changeShowFragment(mMovieFragment);
     }
 
@@ -128,7 +127,7 @@ public class ShowActivity extends AppCompatActivity implements NavigationDrawerF
             fragmentTransaction.commit();
         }
         else{
-            Intent intent = new Intent(this,DetailsActivity.class);
+            Intent intent = new Intent(this,MovieDetailsActivity.class);
             //todo: add the data to the intent
             intent.putExtra(MOVIE_NAME,movieModel);
             startActivity(intent);
@@ -145,7 +144,7 @@ public class ShowActivity extends AppCompatActivity implements NavigationDrawerF
             fragmentTransaction.commit();
         }
         else{
-            Intent intent = new Intent(this,DetailsActivity.class);
+            Intent intent = new Intent(this,MovieDetailsActivity.class);
             //todo: add the data to the intent
             intent.putExtra(TVSHOW_NAME,tvShowModel);
             startActivity(intent);

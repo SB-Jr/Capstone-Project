@@ -10,9 +10,10 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.project.sbjr.showinfodatabase.handler.MovieHandler;
+import com.project.sbjr.showinfodatabase.handler.ShowHandler;
 import com.project.sbjr.showinfodatabase.model.TvShowModel;
 import com.project.sbjr.showinfodatabase.response.MovieResponse;
+import com.project.sbjr.showinfodatabase.response.TvOnAirResponse;
 import com.project.sbjr.showledger.R;
 
 import com.project.sbjr.showinfodatabase.HighOnShow;
@@ -48,6 +49,8 @@ public class ShowFragment extends Fragment implements ShowMovieItemAdapter.ShowM
     public static ShowFragment newInstance(String useruid, String showtype) {
         ShowFragment fragment = new ShowFragment();
         Bundle args = new Bundle();
+        fragment.userUid = useruid;
+        fragment.showType = showtype;
         args.putString(USER_UID, useruid);
         args.putString(SHOW_TYPE, showtype);
         fragment.setArguments(args);
@@ -73,7 +76,7 @@ public class ShowFragment extends Fragment implements ShowMovieItemAdapter.ShowM
 
 
         if(showType.equalsIgnoreCase(MovieFragment.MOVIE_TAG)) {
-            new HighOnShow(getString(R.string.api_key)).initMovie().getUpcomingMovies(mRecyclerView, mProgressBar, mErrorTextView, new MovieHandler<MovieResponse>() {
+            new HighOnShow(getString(R.string.api_key)).initMovie().getUpcomingMovies(mRecyclerView, mProgressBar, mErrorTextView, new ShowHandler<MovieResponse>() {
                 @Override
                 public void onResult(MovieResponse result) {
                     ArrayList<MovieModel> movieModels = result.getResults();
@@ -89,12 +92,26 @@ public class ShowFragment extends Fragment implements ShowMovieItemAdapter.ShowM
             });
         }
         else{
+            new HighOnShow(getString(R.string.api_key)).initTvShow().getTvShowOnAir(mRecyclerView, mProgressBar, mErrorTextView, new ShowHandler<TvOnAirResponse>() {
+                @Override
+                public void onResult(TvOnAirResponse result) {
+                    ArrayList<TvShowModel> tvShowModels = result.getResults();
+                    ShowTvItemAdapter adapter = new ShowTvItemAdapter(tvShowModels,ShowFragment.this);
+                    mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(),2));
+                    mRecyclerView.setAdapter(adapter);
+                }
 
+                @Override
+                public void onFailure() {
+                    //Todo: add a snackbar for failure and try again later
+                }
+            });
         }
         return view;
     }
 
     public void initListener(Fragment fragment){
+
         if(showType.equalsIgnoreCase(MovieFragment.MOVIE_TAG)) {
             if (fragment instanceof OnMovieShowFragmentInteractionListener) {
                 mMovieListener = (OnMovieShowFragmentInteractionListener) fragment;
@@ -104,11 +121,11 @@ public class ShowFragment extends Fragment implements ShowMovieItemAdapter.ShowM
             }
         }
         else{
-            if (fragment instanceof TvShowFragment.OnTvShowFragmentInteractionListener) {
+            if (fragment instanceof onTvShowFragmentInteractionListener) {
                 mTvListener = (onTvShowFragmentInteractionListener) fragment;
             } else {
                 throw new RuntimeException(fragment.toString()
-                        + " must implement OnMovieShowFragmentInteractionListener");
+                        + " must implement onTvShowFragmentInteractionListener");
             }
         }
     }

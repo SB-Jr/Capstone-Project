@@ -34,13 +34,13 @@ public class Util {
     }
 
     public static boolean isUserDataPresent(Context context){
-        if(usernameFromSharedPreference(context)!=null){
+        if(getUserIdFromSharedPreference(context)!=null){
             return true;
         }
         return false;
     }
 
-    public static String usernameFromSharedPreference(Context context) {
+    public static String getUsernameFromSharedPreference(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences("ShowLedger", MODE_PRIVATE);
         if (sharedPreferences.contains("user") && sharedPreferences.getString("user", "").length() > 0) {
             return sharedPreferences.getString("user", null);
@@ -48,10 +48,26 @@ public class Util {
         return null;
     }
 
-    public static String useruidFromSharedPreference(Context context) {
+    public static String getUserPassFromSharedPreference(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("ShowLedger", MODE_PRIVATE);
+        if (sharedPreferences.contains("pass") && sharedPreferences.getString("pass", "").length() > 0) {
+            return sharedPreferences.getString("pass", null);
+        }
+        return null;
+    }
+
+    public static String getUserUidFromSharedPreference(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences("ShowLedger", MODE_PRIVATE);
         if (sharedPreferences.contains("user") && sharedPreferences.getString("user", "").length() > 0) {
             return sharedPreferences.getString("useruid", null);
+        }
+        return null;
+    }
+
+    public static String getUserIdFromSharedPreference(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("ShowLedger", MODE_PRIVATE);
+        if (sharedPreferences.contains("userid") && sharedPreferences.getString("userid", "").length() > 0) {
+            return sharedPreferences.getString("userid", null);
         }
         return null;
     }
@@ -60,6 +76,20 @@ public class Util {
         SharedPreferences sharedPreferences = context.getSharedPreferences("ShowLedger", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("user",user);
+        editor.commit();
+    }
+
+    public static void setUserIdInSharedPreference(Context context,String userid){
+        SharedPreferences sharedPreferences = context.getSharedPreferences("ShowLedger", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("userid",userid);
+        editor.commit();
+    }
+
+    public static void setUserPassInSharedPreference(Context context,String pass){
+        SharedPreferences sharedPreferences = context.getSharedPreferences("ShowLedger", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("pass",pass);
         editor.commit();
     }
 

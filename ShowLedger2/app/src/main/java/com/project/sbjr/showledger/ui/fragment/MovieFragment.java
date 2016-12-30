@@ -32,6 +32,7 @@ public class MovieFragment extends Fragment implements ShowFragment.OnMovieShowF
     public static MovieFragment newInstance(String useruid) {
         MovieFragment fragment = new MovieFragment();
         Bundle args = new Bundle();
+        fragment.userUid = useruid;
         args.putString(USER_UID, useruid);
         fragment.setArguments(args);
         return fragment;

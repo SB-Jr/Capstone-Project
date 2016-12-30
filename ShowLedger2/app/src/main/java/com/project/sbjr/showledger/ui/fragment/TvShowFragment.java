@@ -35,6 +35,7 @@ public class TvShowFragment extends Fragment implements ShowFragment.onTvShowFra
     public static TvShowFragment newInstance(String param1) {
         TvShowFragment fragment = new TvShowFragment();
         Bundle args = new Bundle();
+        fragment.userUid = param1;
         args.putString(USER_UID, param1);
         fragment.setArguments(args);
         return fragment;

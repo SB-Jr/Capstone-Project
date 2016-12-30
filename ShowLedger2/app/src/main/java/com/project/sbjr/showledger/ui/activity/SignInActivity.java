@@ -27,8 +27,13 @@ import com.google.firebase.database.ValueEventListener;
 import com.project.sbjr.showledger.R;
 
 import static com.project.sbjr.showledger.Util.checkInternet;
+import static com.project.sbjr.showledger.Util.getUserIdFromSharedPreference;
+import static com.project.sbjr.showledger.Util.getUserPassFromSharedPreference;
+import static com.project.sbjr.showledger.Util.getUsernameFromSharedPreference;
 import static com.project.sbjr.showledger.Util.isUserDataPresent;
+import static com.project.sbjr.showledger.Util.setUserIdInSharedPreference;
 import static com.project.sbjr.showledger.Util.setUserNameInSharedPreference;
+import static com.project.sbjr.showledger.Util.setUserPassInSharedPreference;
 import static com.project.sbjr.showledger.Util.setUserUIDInSharedPreference;
 
 public class SignInActivity extends AppCompatActivity {
@@ -55,17 +60,19 @@ public class SignInActivity extends AppCompatActivity {
          * or whether user is new or logged out
          * */
         if(isUserDataPresent(this)){
+            FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+            firebaseAuth.signInWithEmailAndPassword(getUserIdFromSharedPreference(this),getUserPassFromSharedPreference(this));
             Intent intent = new Intent(SignInActivity.this,ShowActivity.class);
             startActivity(intent);
         }
         /**
          * todo: delete this later
-         * */
+         *
         else{
             setUserNameInSharedPreference(SignInActivity.this,"user1");
             Intent intent = new Intent(SignInActivity.this,ShowActivity.class);
             startActivity(intent);
-        }
+        }*/
 
         mUseridEditText = (EditText) findViewById(R.id.user_id);
         mPasswordEditText = (EditText) findViewById(R.id.password);
@@ -97,7 +104,7 @@ public class SignInActivity extends AppCompatActivity {
                 checkInternet(SignInActivity.this,mCoordinatorLayout);
 
                 final String userid = mUseridEditText.getText().toString();
-                String pass = mPasswordEditText.getText().toString();
+                final String pass = mPasswordEditText.getText().toString();
                 if(!checkEntry()){
                     return;
                 }
@@ -118,7 +125,9 @@ public class SignInActivity extends AppCompatActivity {
                                         mProgressBar.setVisibility(View.GONE);
                                         String username = dataSnapshot.getValue(String.class);
                                         setUserNameInSharedPreference(SignInActivity.this,username);
+                                        setUserIdInSharedPreference(SignInActivity.this,userid);
                                         setUserUIDInSharedPreference(SignInActivity.this,userUid);
+                                        setUserPassInSharedPreference(SignInActivity.this,pass);
                                         Intent intent = new Intent(SignInActivity.this,ShowActivity.class);
                                         startActivity(intent);
                                     }
