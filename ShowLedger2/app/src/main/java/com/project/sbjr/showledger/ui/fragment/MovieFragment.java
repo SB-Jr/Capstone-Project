@@ -13,7 +13,7 @@ import com.project.sbjr.showinfodatabase.model.MovieModel;
 import com.project.sbjr.showledger.R;
 import com.project.sbjr.showledger.adapter.ShowViewPagerAdapter;
 
-public class MovieFragment extends Fragment implements ShowFragment.OnMovieShowFragmentInteractionListener {
+public class MovieFragment extends Fragment implements ShowFragment.OnMovieShowFragmentInteractionListener,WatchedListFragment.OnMovieWatchedFragmentInteractionListener,WishListFragment.OnMovieWishListFragmentInteractionListener {
     public static final String MOVIE_TAG = "movie";
 
     private static final String USER_UID = "user_uid";
@@ -97,6 +97,16 @@ public class MovieFragment extends Fragment implements ShowFragment.OnMovieShowF
 
     @Override
     public void onMovieShowFragmentItemSelectListener(MovieModel movieModel) {
+        mListener.onMovieSelectedInteraction(movieModel);
+    }
+
+    @Override
+    public void onWatchedFragmentMovieItemOnClickListener(MovieModel movieModel) {
+        mListener.onMovieSelectedInteraction(movieModel);
+    }
+
+    @Override
+    public void onWishListFragmentMovieItemOnClickListener(MovieModel movieModel) {
         mListener.onMovieSelectedInteraction(movieModel);
     }
 }

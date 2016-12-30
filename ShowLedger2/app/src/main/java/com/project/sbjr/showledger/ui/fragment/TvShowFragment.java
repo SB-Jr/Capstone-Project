@@ -10,11 +10,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.project.sbjr.showinfodatabase.model.MovieModel;
 import com.project.sbjr.showinfodatabase.model.TvShowModel;
 import com.project.sbjr.showledger.R;
 import com.project.sbjr.showledger.adapter.ShowViewPagerAdapter;
 
-public class TvShowFragment extends Fragment implements ShowFragment.onTvShowFragmentInteractionListener{
+public class TvShowFragment extends Fragment implements ShowFragment.onTvShowFragmentInteractionListener,WatchedListFragment.OnTvShowWatchedFragmentInteractionListener,WishListFragment.OnTvShowWishListFragmentInteractionListener,IncompleteListFragment.OnIncompleteFragmentInteractionListener{
 
     public static final String TVSHOW_TAG = "tv_show";
 
@@ -101,6 +102,21 @@ public class TvShowFragment extends Fragment implements ShowFragment.onTvShowFra
 
     @Override
     public void onTvShowFragmentItemSelectListener(TvShowModel tvShowModel) {
+        mListener.onTvShowSelectedInteraction(tvShowModel);
+    }
+
+    @Override
+    public void onIncompleteFragmentItemClickListener(TvShowModel tvShowModel) {
+        mListener.onTvShowSelectedInteraction(tvShowModel);
+    }
+
+    @Override
+    public void onWatchedFragmentTvShowItemOnClickListener(TvShowModel tvShowModel) {
+        mListener.onTvShowSelectedInteraction(tvShowModel);
+    }
+
+    @Override
+    public void onWishListFragmentTvShowItemOnClickListener(TvShowModel tvShowModel) {
         mListener.onTvShowSelectedInteraction(tvShowModel);
     }
 }

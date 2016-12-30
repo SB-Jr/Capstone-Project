@@ -12,6 +12,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.NativeExpressAdView;
 import com.project.sbjr.showledger.R;
 import com.project.sbjr.showledger.adapter.NavigationDrawerAdapter;
 
@@ -53,6 +56,12 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
 
+        NativeExpressAdView mAdView = (NativeExpressAdView) view.findViewById(R.id.ad_nav);
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice(getString(R.string.ad_bottom))
+                .build();
+        mAdView.loadAd(adRequest);
+
         mRecyclerView = (RecyclerView) view.findViewById(R.id.contents);
         NavigationDrawerAdapter adapter = new NavigationDrawerAdapter(getContext(),this);
         mRecyclerView.setAdapter(adapter);
@@ -64,6 +73,9 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+
+
+
         if (context instanceof OnNavigationDrawerFragmentListener) {
             mListener = (OnNavigationDrawerFragmentListener) context;
         } else {

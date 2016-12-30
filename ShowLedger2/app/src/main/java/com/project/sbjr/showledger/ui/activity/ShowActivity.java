@@ -10,8 +10,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.FrameLayout;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.project.sbjr.showinfodatabase.model.MovieModel;
 import com.project.sbjr.showinfodatabase.model.TvShowModel;
 import com.project.sbjr.showledger.R;
@@ -48,6 +52,13 @@ public class ShowActivity extends AppCompatActivity implements NavigationDrawerF
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show);
 
+
+        AdView mAdView = (AdView) findViewById(R.id.ad_bottom);
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice(getString(R.string.ad_bottom))
+                .build();
+        mAdView.loadAd(adRequest);
+
         mDetailsFrameLayout = (FrameLayout) findViewById(R.id.details_layout);
         if(mDetailsFrameLayout!=null){
             mTwoPane = true;
@@ -62,6 +73,20 @@ public class ShowActivity extends AppCompatActivity implements NavigationDrawerF
         mMovieFragment = MovieFragment.newInstance(Util.getUserUidFromSharedPreference(this));
         mTvShowFragment = TvShowFragment.newInstance(Util.getUserUidFromSharedPreference(this));
         changeShowFragment(mMovieFragment);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_show_activity,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId()==R.id.search){
+            startActivity(new Intent(this,SearchActivity.class));
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void setupToolbar(){
@@ -144,7 +169,7 @@ public class ShowActivity extends AppCompatActivity implements NavigationDrawerF
             fragmentTransaction.commit();
         }
         else{
-            Intent intent = new Intent(this,MovieDetailsActivity.class);
+            Intent intent = new Intent(this,TvShowDetailActivity.class);
             //todo: add the data to the intent
             intent.putExtra(TVSHOW_NAME,tvShowModel);
             startActivity(intent);

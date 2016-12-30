@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -54,6 +55,12 @@ public class SignInActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
+
+
+        MobileAds.initialize(getApplicationContext(), getString(R.string.ad_bottom));
+        MobileAds.initialize(getApplicationContext(), getString(R.string.ad_nav));
+
+
 
         /**
          * Check if user is already used the app before and using it again

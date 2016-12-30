@@ -1,5 +1,6 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
     android:id="@+id/coordinator_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -197,9 +198,17 @@
                 android:text="@string/connection_error"
                 android:visibility="gone" />
 
+
         </FrameLayout>
 
     </android.support.v4.widget.NestedScrollView>
 
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/ad_bottom"
+        android:layout_gravity="bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        ads:adSize="BANNER"
+        ads:adUnitId="@string/ad_bottom"/>
 
 </android.support.design.widget.CoordinatorLayout>

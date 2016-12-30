@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -48,6 +50,12 @@ public class MovieDetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_details);
+
+        AdView mAdView = (AdView) findViewById(R.id.ad_bottom);
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice(getString(R.string.ad_bottom))
+                .build();
+        mAdView.loadAd(adRequest);
 
         mMovieModel = getIntent().getParcelableExtra(ShowActivity.MOVIE_NAME);
         userUid = Util.getUserUidFromSharedPreference(this);
