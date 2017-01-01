@@ -57,10 +57,10 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
         View view = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
 
         NativeExpressAdView mAdView = (NativeExpressAdView) view.findViewById(R.id.ad_nav);
-        AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice(getString(R.string.ad_bottom))
+        /*AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice("D26C335A1E231CBAA6BF6FCF0777F14B")
                 .build();
-        mAdView.loadAd(adRequest);
+        mAdView.loadAd(adRequest);*/
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.contents);
         NavigationDrawerAdapter adapter = new NavigationDrawerAdapter(getContext(),this);

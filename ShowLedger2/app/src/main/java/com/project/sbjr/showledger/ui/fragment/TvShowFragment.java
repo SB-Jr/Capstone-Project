@@ -88,6 +88,7 @@ public class TvShowFragment extends Fragment implements ShowFragment.onTvShowFra
         adapter.addFragment(WatchedListFragment.newInstance(userUid, TVSHOW_TAG),getString(R.string.show_watched));
         adapter.addFragment(IncompleteListFragment.newInstance(userUid,TVSHOW_TAG),getString(R.string.show_incomplete));
         mViewPager.setAdapter(adapter);
+        mViewPager.setOffscreenPageLimit(3);
     }
 
     @Override

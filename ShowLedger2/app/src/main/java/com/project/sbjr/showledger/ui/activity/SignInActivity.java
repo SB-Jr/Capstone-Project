@@ -57,11 +57,6 @@ public class SignInActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sign_in);
 
 
-        MobileAds.initialize(getApplicationContext(), getString(R.string.ad_bottom));
-        MobileAds.initialize(getApplicationContext(), getString(R.string.ad_nav));
-
-
-
         /**
          * Check if user is already used the app before and using it again
          * or whether user is new or logged out
@@ -70,6 +65,10 @@ public class SignInActivity extends AppCompatActivity {
             FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
             firebaseAuth.signInWithEmailAndPassword(getUserIdFromSharedPreference(this),getUserPassFromSharedPreference(this));
             Intent intent = new Intent(SignInActivity.this,ShowActivity.class);
+
+            MobileAds.initialize(getApplicationContext(), getString(R.string.ad_bottom));
+            MobileAds.initialize(getApplicationContext(), getString(R.string.ad_nav));
+
             startActivity(intent);
         }
         /**
@@ -136,6 +135,10 @@ public class SignInActivity extends AppCompatActivity {
                                         setUserUIDInSharedPreference(SignInActivity.this,userUid);
                                         setUserPassInSharedPreference(SignInActivity.this,pass);
                                         Intent intent = new Intent(SignInActivity.this,ShowActivity.class);
+
+                                        MobileAds.initialize(getApplicationContext(), getString(R.string.ad_bottom));
+                                        MobileAds.initialize(getApplicationContext(), getString(R.string.ad_nav));
+
                                         startActivity(intent);
                                     }
 

@@ -4,10 +4,18 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.project.sbjr.showinfodatabase.model.TvShowModel;
 import com.project.sbjr.showledger.R;
 
@@ -21,6 +29,10 @@ public class IncompleteListFragment extends Fragment {
     private String showType;
 
     private OnIncompleteFragmentInteractionListener mListener;
+
+    private RecyclerView mRecyclerView;
+    private ProgressBar mProgressBar;
+    private TextView mErrorTextView;
 
     public IncompleteListFragment() {
         // Required empty public constructor
@@ -50,16 +62,35 @@ public class IncompleteListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_incomplete_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_incomplete_list, container, false);
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.contents);
+        mProgressBar = (ProgressBar) view.findViewById(R.id.progress);
+        mErrorTextView = (TextView) view.findViewById(R.id.error_text);
+
+
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("user").child(userUid).child("tvshows").child("incomplete");
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        return view;
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnIncompleteFragmentInteractionListener) {
-            mListener = (OnIncompleteFragmentInteractionListener) context;
+    public void initListener(Fragment fragment) {
+        if (fragment instanceof OnIncompleteFragmentInteractionListener) {
+            mListener = (OnIncompleteFragmentInteractionListener) fragment;
         } else {
-            throw new RuntimeException(context.toString()
+            throw new RuntimeException(fragment.toString()
                     + " must implement OnIncompleteFragmentInteractionListener");
         }
     }

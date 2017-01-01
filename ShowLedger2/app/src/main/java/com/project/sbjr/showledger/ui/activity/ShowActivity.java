@@ -55,7 +55,7 @@ public class ShowActivity extends AppCompatActivity implements NavigationDrawerF
 
         AdView mAdView = (AdView) findViewById(R.id.ad_bottom);
         AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice(getString(R.string.ad_bottom))
+                .addTestDevice("D26C335A1E231CBAA6BF6FCF0777F14B")
                 .build();
         mAdView.loadAd(adRequest);
 

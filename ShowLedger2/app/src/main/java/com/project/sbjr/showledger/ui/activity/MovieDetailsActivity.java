@@ -53,7 +53,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
         AdView mAdView = (AdView) findViewById(R.id.ad_bottom);
         AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice(getString(R.string.ad_bottom))
+                .addTestDevice("D26C335A1E231CBAA6BF6FCF0777F14B")
                 .build();
         mAdView.loadAd(adRequest);
 
@@ -166,7 +166,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
     }
 
     private void addMovieToWatchedList() {
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("user").child(userUid).child("watched");
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("user").child(userUid).child("movies").child("watched");
         reference.child(mMovieModel.getId() + "").setValue(mMovieModel.getId(), new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
@@ -176,7 +176,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
     }
 
     private void addMovieToWatchLaterList(){
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("user").child(userUid).child("watchLater");
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("user").child(userUid).child("movies").child("watchLater");
         reference.child(mMovieModel.getId() + "").setValue(mMovieModel.getId(), new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {

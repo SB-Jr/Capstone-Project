@@ -2,17 +2,32 @@ package com.project.sbjr.showledger.ui.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.IntegerRes;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.project.sbjr.showinfodatabase.model.MovieModel;
 import com.project.sbjr.showinfodatabase.model.TvShowModel;
 import com.project.sbjr.showledger.R;
+import com.project.sbjr.showledger.adapter.UserListMovieAdapter;
+import com.project.sbjr.showledger.ui.activity.ShowActivity;
+
+import java.util.ArrayList;
 
 
-public class WatchedListFragment extends Fragment {
+public class WatchedListFragment extends Fragment implements UserListMovieAdapter.UserListMovieAdapterInteraction{
     private static final String USER_UID = "user_uid";
     private static final String SHOW_TYPE = "show_type";
 
@@ -21,6 +36,10 @@ public class WatchedListFragment extends Fragment {
 
     private OnMovieWatchedFragmentInteractionListener mMovieListener;
     private OnTvShowWatchedFragmentInteractionListener mTvListener;
+
+    private RecyclerView mRecyclerView;
+    private ProgressBar mProgressBar;
+    private TextView mErrorTextView;
 
     public WatchedListFragment() {
         // Required empty public constructor
@@ -50,25 +69,67 @@ public class WatchedListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_watched_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_watched_list, container, false);
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.contents);
+        mProgressBar = (ProgressBar) view.findViewById(R.id.progress);
+        mErrorTextView = (TextView) view.findViewById(R.id.error_text);
+
+        if(showType.equalsIgnoreCase(MovieFragment.MOVIE_TAG)){
+            final ArrayList<Integer> movies = new ArrayList<>();
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("user").child(userUid).child("movies").child("watched");
+            databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for(DataSnapshot snapshot: dataSnapshot.getChildren()){
+                        long l = (long) snapshot.getValue();
+                        movies.add((int)l);
+                    }
+                    UserListMovieAdapter adapter = new UserListMovieAdapter(getContext(),WatchedListFragment.this,movies);
+                    mRecyclerView.setAdapter(adapter);
+                    mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(),2));
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+        else{
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("user").child(userUid).child("tvshows").child("watched");
+            databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for(DataSnapshot snapshot: dataSnapshot.getChildren()){
+
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+
+
+        return view;
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
+    public void initListener(Fragment fragment){
         if(showType.equalsIgnoreCase(MovieFragment.MOVIE_TAG)) {
-            if (context instanceof OnMovieWatchedFragmentInteractionListener) {
-                mMovieListener = (OnMovieWatchedFragmentInteractionListener) context;
+            if (fragment instanceof OnMovieWatchedFragmentInteractionListener) {
+                mMovieListener = (OnMovieWatchedFragmentInteractionListener) fragment;
             } else {
-                throw new RuntimeException(context.toString()
+                throw new RuntimeException(fragment.toString()
                         + " must implement OnMovieWatchedFragmentInteractionListener");
             }
         }
         else {
-            if (context instanceof OnTvShowWatchedFragmentInteractionListener) {
-                mTvListener = (OnTvShowWatchedFragmentInteractionListener) context;
+            if (fragment instanceof OnTvShowWatchedFragmentInteractionListener) {
+                mTvListener = (OnTvShowWatchedFragmentInteractionListener) fragment;
             } else {
-                throw new RuntimeException(context.toString()
+                throw new RuntimeException(fragment.toString()
                         + " must implement OnTvShowWatchedFragmentInteractionListener");
             }
         }
@@ -86,5 +147,10 @@ public class WatchedListFragment extends Fragment {
 
     public interface OnTvShowWatchedFragmentInteractionListener {
         void onWatchedFragmentTvShowItemOnClickListener(TvShowModel tvShowModel);
+    }
+
+    @Override
+    public void userListMovieAdapterItemOnClickLstener(MovieModel movieModel) {
+        mMovieListener.onWatchedFragmentMovieItemOnClickListener(movieModel);
     }
 }

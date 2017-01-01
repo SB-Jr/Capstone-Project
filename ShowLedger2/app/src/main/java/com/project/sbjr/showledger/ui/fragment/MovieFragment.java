@@ -81,6 +81,15 @@ public class MovieFragment extends Fragment implements ShowFragment.OnMovieShowF
         if (childFragment instanceof ShowFragment){
             ((ShowFragment) childFragment).initListener(this);
         }
+        else if(childFragment instanceof WishListFragment){
+            ((WishListFragment) childFragment).initListener(this);
+        }
+        else if(childFragment instanceof WatchedListFragment){
+            ((WatchedListFragment) childFragment).initListener(this);
+        }
+        else if(childFragment instanceof IncompleteListFragment){
+            ((IncompleteListFragment) childFragment).initListener(this);
+        }
     }
 
     public void initViewPager(){
@@ -89,6 +98,7 @@ public class MovieFragment extends Fragment implements ShowFragment.OnMovieShowF
         adapter.addFragment(WishListFragment.newInstance(userUid,MOVIE_TAG),getString(R.string.show_wish));
         adapter.addFragment(WatchedListFragment.newInstance(userUid,MOVIE_TAG),getString(R.string.show_watched));
         mViewPager.setAdapter(adapter);
+        mViewPager.setOffscreenPageLimit(3);
     }
 
     public interface OnMovieFragmentInteractionListener {
