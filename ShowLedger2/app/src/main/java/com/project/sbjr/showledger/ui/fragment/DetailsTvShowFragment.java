@@ -1,19 +1,20 @@
-package com.project.sbjr.showledger.ui.activity;
+package com.project.sbjr.showledger.ui.fragment;
+
 
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
+import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -29,69 +30,83 @@ import com.project.sbjr.showledger.Util;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class TvShowDetailActivity extends AppCompatActivity {
+public class DetailsTvShowFragment extends Fragment {
 
-    private String userUid;
+    private static final String USER_UID = "user_uid";
+    private static final String TV_SHOW_MODEL = "tv_show";
+
     private TvShowModel mTvShowModel;
+    private String userUid;
 
     private TextView mCreatedByTextView,
             mGenreTextView,
             mNetworksTextView,
-            /*mProducedTextView,*/
-            mFirstAirDateTextView,
+    /*mProducedTextView,*/
+    mFirstAirDateTextView,
             mRatingTextView,
             mNumberOfSeasonsTextView,
             mOverviewTextView;
 
     private LinearLayout mCreatedByContainer,
             mGenreContainer,
-            /*mProducedContainer,*/
-            mNetworksContainer,
+    /*mProducedContainer,*/
+    mNetworksContainer,
             mRatingContainer,
             mFirstAirDateContainer,
             mNumberOfSeaonsContainer,
             mOverviewContainer;
 
-    private Toolbar mToolbar;
+
+    public DetailsTvShowFragment() {
+        // Required empty public constructor
+    }
+
+    public static DetailsTvShowFragment newInstance(String useruid, TvShowModel tvShowModel) {
+        DetailsTvShowFragment fragment = new DetailsTvShowFragment();
+        Bundle args = new Bundle();
+        fragment.userUid = useruid;
+        fragment.mTvShowModel = tvShowModel;
+        args.putString(USER_UID, useruid);
+        args.putParcelable(TV_SHOW_MODEL,tvShowModel);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tv_show_detail);
+        if (getArguments() != null) {
+            userUid = getArguments().getString(USER_UID);
+            mTvShowModel = getArguments().getParcelable(TV_SHOW_MODEL);
+        }
+    }
 
-        mTvShowModel = getIntent().getParcelableExtra(ShowActivity.TVSHOW_NAME);
-        userUid = Util.getUserUidFromSharedPreference(this);
-        AdView mAdView = (AdView) findViewById(R.id.ad_bottom);
-        AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice("D26C335A1E231CBAA6BF6FCF0777F14B")
-                .build();
-        mAdView.loadAd(adRequest);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view= inflater.inflate(R.layout.fragment_details_tv_show, container, false);
+        setHasOptionsMenu(true);
 
 
+        mCreatedByTextView = (TextView) view.findViewById(R.id.created_by);
+        mGenreTextView = (TextView) view.findViewById(R.id.genre);
+        mNetworksTextView = (TextView) view.findViewById(R.id.network);
+        /*mProducedTextView = (TextView) view.findViewById(R.id.produced);*/
+        mFirstAirDateTextView = (TextView) view.findViewById(R.id.air_date);
+        mRatingTextView = (TextView) view.findViewById(R.id.rating);
+        mNumberOfSeasonsTextView = (TextView) view.findViewById(R.id.number_of_season);
+        mOverviewTextView = (TextView) view.findViewById(R.id.overview);
 
-        mCreatedByTextView = (TextView) findViewById(R.id.created_by);
-        mGenreTextView = (TextView) findViewById(R.id.genre);
-        mNetworksTextView = (TextView) findViewById(R.id.network);
-        /*mProducedTextView = (TextView) findViewById(R.id.produced);*/
-        mFirstAirDateTextView = (TextView) findViewById(R.id.air_date);
-        mRatingTextView = (TextView) findViewById(R.id.rating);
-        mNumberOfSeasonsTextView = (TextView) findViewById(R.id.number_of_season);
-        mOverviewTextView = (TextView) findViewById(R.id.overview);
+        mCreatedByContainer = (LinearLayout) view.findViewById(R.id.container_created_by);
+        mGenreContainer = (LinearLayout) view.findViewById(R.id.container_genre);
+        mNetworksContainer = (LinearLayout) view.findViewById(R.id.container_network);
+        /*mProducedContainer = (LinearLayout) view.findViewById(R.id.container_produced);*/
+        mFirstAirDateContainer = (LinearLayout) view.findViewById(R.id.container_air_date);
+        mRatingContainer = (LinearLayout) view.findViewById(R.id.container_rating);
+        mNumberOfSeaonsContainer = (LinearLayout) view.findViewById(R.id.container_number_of_season);
+        mOverviewContainer = (LinearLayout) view.findViewById(R.id.container_overview);
 
-        mCreatedByContainer = (LinearLayout) findViewById(R.id.container_created_by);
-        mGenreContainer = (LinearLayout) findViewById(R.id.container_genre);
-        mNetworksContainer = (LinearLayout) findViewById(R.id.container_network);
-        /*mProducedContainer = (LinearLayout) findViewById(R.id.container_produced);*/
-        mFirstAirDateContainer = (LinearLayout) findViewById(R.id.container_air_date);
-        mRatingContainer = (LinearLayout) findViewById(R.id.container_rating);
-        mNumberOfSeaonsContainer = (LinearLayout) findViewById(R.id.container_number_of_season);
-        mOverviewContainer = (LinearLayout) findViewById(R.id.container_overview);
-
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(mToolbar);
-        getSupportActionBar().setTitle(mTvShowModel.getName());
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowTitleEnabled(true);
 
         mOverviewTextView.setText(mTvShowModel.getOverview());
         mFirstAirDateTextView.setText(mTvShowModel.getFirst_air_date());
@@ -148,12 +163,13 @@ public class TvShowDetailActivity extends AppCompatActivity {
             }
         });
 
+        return view;
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_tv_show_detail,menu);
-        return super.onCreateOptionsMenu(menu);
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_tv_show_detail,menu);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
@@ -168,7 +184,6 @@ public class TvShowDetailActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
 
     private void addShowToWatchedList(){
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference(Util.FireBaseConstants.USER).child(userUid).child(Util.FireBaseConstants.TVSHOW).child(Util.FireBaseConstants.WATCHED);
@@ -205,7 +220,7 @@ public class TvShowDetailActivity extends AppCompatActivity {
             items[i] = "Season "+seasons.get(i).getSeason_number();
         }
         final ArrayList itemsSelected = new ArrayList();
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("Select Languages you know : ");
         builder.setMultiChoiceItems(items, null,
                 new DialogInterface.OnMultiChoiceClickListener() {

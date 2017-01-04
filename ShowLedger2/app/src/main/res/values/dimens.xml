@@ -16,9 +16,10 @@
     <dimen name="card_view_movie_title">24sp</dimen>
     <dimen name="card_view_movie_subtitle">14sp</dimen>
 
-    <!--
-Refer to App Widget Documentation for margin information
-http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
-    -->
-    <dimen name="widget_margin">8dp</dimen>
+    <!--home screen widget-->
+    <dimen name="widget_margin_horizontal">8dp</dimen>
+    <dimen name="widget_margin_vertical">4dp</dimen>
+    <dimen name="widget_item_height">48dp</dimen>
+    <dimen name="widget_item_divider">1dp</dimen>
+    <dimen name="widget_text_size">25sp</dimen>
 </resources>

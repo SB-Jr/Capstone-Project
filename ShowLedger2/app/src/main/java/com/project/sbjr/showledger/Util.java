@@ -100,4 +100,13 @@ public class Util {
         editor.commit();
     }
 
+    public static class FireBaseConstants{
+        public final static String USER="user";
+        public final static String MOVIE="movies";
+        public final static String TVSHOW="tvshows";
+        public final static String WATCHED ="watched";
+        public final static String WISHLIST = "watchLater";
+        public final static String INCOMPLETE ="incomplete";
+    }
+
 }

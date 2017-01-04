@@ -1,5 +1,7 @@
 package com.project.sbjr.showledger.ui.activity;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -8,6 +10,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -20,6 +23,8 @@ import com.project.sbjr.showinfodatabase.model.MovieModel;
 import com.project.sbjr.showinfodatabase.model.TvShowModel;
 import com.project.sbjr.showledger.R;
 import com.project.sbjr.showledger.Util;
+import com.project.sbjr.showledger.ui.fragment.DetailsMovieFragment;
+import com.project.sbjr.showledger.ui.fragment.DetailsTvShowFragment;
 import com.project.sbjr.showledger.ui.fragment.MovieFragment;
 import com.project.sbjr.showledger.ui.fragment.NavigationDrawerFragment;
 import com.project.sbjr.showledger.ui.fragment.TvShowFragment;
@@ -34,7 +39,7 @@ public class ShowActivity extends AppCompatActivity implements NavigationDrawerF
 
 
     private final String DETAILS_FRAG_TAG = "details";
-    private final String PRESENT_FRAG_TAG = "details";
+    private final String PRESENT_FRAG_TAG = "present_frag";
 
     private boolean mTwoPane=false;
 
@@ -78,13 +83,19 @@ public class ShowActivity extends AppCompatActivity implements NavigationDrawerF
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_show_activity,menu);
-        return super.onCreateOptionsMenu(menu);
+
+        SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+        if(searchView!=null) {
+            searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        }
+        return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId()==R.id.search){
-            startActivity(new Intent(this,SearchActivity.class));
+            //startActivity(new Intent(this,SearchActivity.class));
         }
         return super.onOptionsItemSelected(item);
     }
@@ -147,13 +158,12 @@ public class ShowActivity extends AppCompatActivity implements NavigationDrawerF
         if(mTwoPane){
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            //todo: add details fragment
-            fragmentTransaction.replace(R.id.details_layout,null,DETAILS_FRAG_TAG);
+            DetailsMovieFragment fragment = DetailsMovieFragment.newInstance(Util.getUserUidFromSharedPreference(this),movieModel);
+            fragmentTransaction.replace(R.id.details_layout,fragment,DETAILS_FRAG_TAG);
             fragmentTransaction.commit();
         }
         else{
             Intent intent = new Intent(this,MovieDetailsActivity.class);
-            //todo: add the data to the intent
             intent.putExtra(MOVIE_NAME,movieModel);
             startActivity(intent);
         }
@@ -164,13 +174,12 @@ public class ShowActivity extends AppCompatActivity implements NavigationDrawerF
         if(mTwoPane){
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            //todo: add details fragment
-            fragmentTransaction.replace(R.id.details_layout,null,DETAILS_FRAG_TAG);
+            DetailsTvShowFragment fragment = DetailsTvShowFragment.newInstance(Util.getUserUidFromSharedPreference(this),tvShowModel);
+            fragmentTransaction.replace(R.id.details_layout,fragment,DETAILS_FRAG_TAG);
             fragmentTransaction.commit();
         }
         else{
             Intent intent = new Intent(this,TvShowDetailActivity.class);
-            //todo: add the data to the intent
             intent.putExtra(TVSHOW_NAME,tvShowModel);
             startActivity(intent);
         }

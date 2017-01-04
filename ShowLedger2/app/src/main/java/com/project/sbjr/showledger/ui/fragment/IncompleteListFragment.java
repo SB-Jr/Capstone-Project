@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,9 +19,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.project.sbjr.showinfodatabase.model.TvShowModel;
 import com.project.sbjr.showledger.R;
+import com.project.sbjr.showledger.Util;
+import com.project.sbjr.showledger.adapter.UserListTvShowAdapter;
+
+import java.util.ArrayList;
 
 
-public class IncompleteListFragment extends Fragment {
+public class IncompleteListFragment extends Fragment implements UserListTvShowAdapter.UserListTvShowAdapterInteraction{
     private static final String USER_UID = "user_uid";
     private static final String SHOW_TYPE = "show_type";
 
@@ -67,14 +72,19 @@ public class IncompleteListFragment extends Fragment {
         mProgressBar = (ProgressBar) view.findViewById(R.id.progress);
         mErrorTextView = (TextView) view.findViewById(R.id.error_text);
 
-
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("user").child(userUid).child("tvshows").child("incomplete");
+        final ArrayList<Integer> tvshows = new ArrayList<>();
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(Util.FireBaseConstants.USER).child(userUid).child(Util.FireBaseConstants.TVSHOW).child(Util.FireBaseConstants.INCOMPLETE);
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-
+                    int l = Integer.parseInt(snapshot.getKey());
+                    tvshows.add(l);
                 }
+
+                UserListTvShowAdapter adapter = new UserListTvShowAdapter(getContext(),IncompleteListFragment.this,tvshows);
+                mRecyclerView.setAdapter(adapter);
+                mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(),2));
             }
 
             @Override
@@ -103,5 +113,10 @@ public class IncompleteListFragment extends Fragment {
 
     public interface OnIncompleteFragmentInteractionListener {
         void onIncompleteFragmentItemClickListener(TvShowModel tvShowModel);
+    }
+
+    @Override
+    public void userListTvShowAdapterItemOnClickListener(TvShowModel tvShowModel) {
+        mListener.onIncompleteFragmentItemClickListener(tvShowModel);
     }
 }

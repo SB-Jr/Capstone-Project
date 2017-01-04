@@ -21,13 +21,15 @@ import com.google.firebase.database.ValueEventListener;
 import com.project.sbjr.showinfodatabase.model.MovieModel;
 import com.project.sbjr.showinfodatabase.model.TvShowModel;
 import com.project.sbjr.showledger.R;
+import com.project.sbjr.showledger.Util;
 import com.project.sbjr.showledger.adapter.UserListMovieAdapter;
+import com.project.sbjr.showledger.adapter.UserListTvShowAdapter;
 import com.project.sbjr.showledger.ui.activity.ShowActivity;
 
 import java.util.ArrayList;
 
 
-public class WatchedListFragment extends Fragment implements UserListMovieAdapter.UserListMovieAdapterInteraction{
+public class WatchedListFragment extends Fragment implements UserListMovieAdapter.UserListMovieAdapterInteraction,UserListTvShowAdapter.UserListTvShowAdapterInteraction{
     private static final String USER_UID = "user_uid";
     private static final String SHOW_TYPE = "show_type";
 
@@ -76,7 +78,7 @@ public class WatchedListFragment extends Fragment implements UserListMovieAdapte
 
         if(showType.equalsIgnoreCase(MovieFragment.MOVIE_TAG)){
             final ArrayList<Integer> movies = new ArrayList<>();
-            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("user").child(userUid).child("movies").child("watched");
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(Util.FireBaseConstants.USER).child(userUid).child(Util.FireBaseConstants.MOVIE).child(Util.FireBaseConstants.WATCHED);
             databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -96,13 +98,18 @@ public class WatchedListFragment extends Fragment implements UserListMovieAdapte
             });
         }
         else{
-            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("user").child(userUid).child("tvshows").child("watched");
+            final ArrayList<Integer> tvshows = new ArrayList<>();
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(Util.FireBaseConstants.USER).child(userUid).child(Util.FireBaseConstants.TVSHOW).child(Util.FireBaseConstants.WATCHED);
             databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    for(DataSnapshot snapshot: dataSnapshot.getChildren()){
-
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        long l = (long) snapshot.getValue();
+                        tvshows.add((int)l);
                     }
+                    UserListTvShowAdapter adapter = new UserListTvShowAdapter(getContext(),WatchedListFragment.this,tvshows);
+                    mRecyclerView.setAdapter(adapter);
+                    mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(),2));
                 }
 
                 @Override
@@ -150,7 +157,12 @@ public class WatchedListFragment extends Fragment implements UserListMovieAdapte
     }
 
     @Override
-    public void userListMovieAdapterItemOnClickLstener(MovieModel movieModel) {
+    public void userListMovieAdapterItemOnClickListener(MovieModel movieModel) {
         mMovieListener.onWatchedFragmentMovieItemOnClickListener(movieModel);
+    }
+
+    @Override
+    public void userListTvShowAdapterItemOnClickListener(TvShowModel tvShowModel) {
+        mTvListener.onWatchedFragmentTvShowItemOnClickListener(tvShowModel);
     }
 }

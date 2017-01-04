@@ -53,6 +53,11 @@
     <string name="detail_overview">Overview</string>
     <string name="detail_rating">Rating:</string>
     <string name="detail_release_date">Release Date:</string>
+    <string name="detail_created_by">Created By</string>
+    <string name="detail_genre">Genre</string>
+    <string name="detail_first_air_date">First Air Date:</string>
+    <string name="detail_networks">Networks</string>
+    <string name="detail_number_seasons">Number Of Seasons:</string>
 
     <!--Menu strings and description-->
     <string name="menu_done">Add the item to Watched List</string>
@@ -63,5 +68,9 @@
     <!--Widget-->
     <string name="widget_movie">Movies</string>
     <string name="widget_tv">Tv Shows</string>
+    <string name="widget_text">Latest Shows</string>
     <string name="widget_empty">Loading...</string>
+
+    <!--Search-->
+    <string name="search_hint">Type the Show Name</string>
 </resources>

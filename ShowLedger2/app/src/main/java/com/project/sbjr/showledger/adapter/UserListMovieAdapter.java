@@ -59,7 +59,7 @@ public class UserListMovieAdapter extends RecyclerView.Adapter<UserListMovieAdap
 
         @Override
         public void onClick(View v) {
-            mListener.userListMovieAdapterItemOnClickLstener(movieModel);
+            mListener.userListMovieAdapterItemOnClickListener(movieModel);
         }
     }
 
@@ -103,7 +103,7 @@ public class UserListMovieAdapter extends RecyclerView.Adapter<UserListMovieAdap
     }
 
     public interface UserListMovieAdapterInteraction {
-        void userListMovieAdapterItemOnClickLstener(MovieModel movieModel);
+        void userListMovieAdapterItemOnClickListener(MovieModel movieModel);
     }
 
 }

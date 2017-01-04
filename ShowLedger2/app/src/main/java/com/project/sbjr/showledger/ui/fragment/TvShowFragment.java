@@ -67,10 +67,10 @@ public class TvShowFragment extends Fragment implements ShowFragment.onTvShowFra
         super.onAttach(context);
         if (context instanceof OnTvShowFragmentInteractionListener) {
             mListener = (OnTvShowFragmentInteractionListener) context;
-        } /*else {
+        } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnNavigationDrawerFragmentListener");
-        }*/
+                    + " must implement OnTvShowFragmentInteractionListener");
+        }
     }
 
     @Override
@@ -78,6 +78,15 @@ public class TvShowFragment extends Fragment implements ShowFragment.onTvShowFra
         super.onAttachFragment(childFragment);
         if (childFragment instanceof ShowFragment){
             ((ShowFragment) childFragment).initListener(this);
+        }
+        else if(childFragment instanceof WishListFragment){
+            ((WishListFragment) childFragment).initListener(this);
+        }
+        else if(childFragment instanceof WatchedListFragment){
+            ((WatchedListFragment) childFragment).initListener(this);
+        }
+        else if(childFragment instanceof IncompleteListFragment){
+            ((IncompleteListFragment) childFragment).initListener(this);
         }
     }
 

@@ -1,16 +1,16 @@
-package com.project.sbjr.showledger.ui.activity;
+package com.project.sbjr.showledger.ui.fragment;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -23,69 +23,100 @@ import com.project.sbjr.showinfodatabase.response.CreditResponse;
 import com.project.sbjr.showledger.R;
 import com.project.sbjr.showledger.Util;
 
-public class MovieDetailsActivity extends AppCompatActivity {
+
+public class DetailsMovieFragment extends Fragment {
+
+
+    private static final String USER_UID = "user_uid";
+    private static final String MOVIE_MODEL = "movie_model";
 
     private MovieModel mMovieModel;
     private String userUid;
 
     private TextView mDirectorTextView,
-                     mMusicTextView,
-                     mCastTextView,
-                     mProducedTextView,
-                     mReleaseTextView,
-                     mRatingTextView,
-                     mOverviewTextView;
+            mMusicTextView,
+            mCastTextView,
+            mProducedTextView,
+            mReleaseTextView,
+            mRatingTextView,
+            mOverviewTextView;
 
     private LinearLayout mDirectorContainer,
-                         mMusicContainer,
-                         mProducedContainer,
-                         mCastContainer,
-                         mRatingContainer,
-                         mReleaseContainer,
-                         mOverviewContainer;
+            mMusicContainer,
+            mProducedContainer,
+            mCastContainer,
+            mRatingContainer,
+            mReleaseContainer,
+            mOverviewContainer;
 
-    private Toolbar mToolbar;
+    public DetailsMovieFragment() {
+        // Required empty public constructor
+    }
+
+    public static DetailsMovieFragment newInstance(String useruid,MovieModel movieModel) {
+        DetailsMovieFragment fragment = new DetailsMovieFragment();
+        Bundle args = new Bundle();
+        fragment.userUid = useruid;
+        fragment.mMovieModel = movieModel;
+        args.putString(USER_UID, useruid);
+        args.putParcelable(MOVIE_MODEL,movieModel);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_movie_details);
+        if (getArguments() != null) {
+            userUid = getArguments().getString(USER_UID);
+            mMovieModel = getArguments().getParcelable(MOVIE_MODEL);
+        }
 
-        AdView mAdView = (AdView) findViewById(R.id.ad_bottom);
-        AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice("D26C335A1E231CBAA6BF6FCF0777F14B")
-                .build();
-        mAdView.loadAd(adRequest);
+    }
 
-        mMovieModel = getIntent().getParcelableExtra(ShowActivity.MOVIE_NAME);
-        userUid = Util.getUserUidFromSharedPreference(this);
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_movie_detail,menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
 
-        mDirectorTextView = (TextView) findViewById(R.id.director);
-        mMusicTextView = (TextView) findViewById(R.id.music);
-        mCastTextView = (TextView) findViewById(R.id.cast);
-        mProducedTextView = (TextView) findViewById(R.id.produced);
-        mReleaseTextView = (TextView) findViewById(R.id.release);
-        mRatingTextView = (TextView) findViewById(R.id.rating);
-        mOverviewTextView = (TextView) findViewById(R.id.overview);
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.done:
+                addMovieToWatchedList();
+                break;
+            case R.id.watch_later: addMovieToWatchLaterList();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
-        mDirectorContainer = (LinearLayout) findViewById(R.id.container_director);
-        mMusicContainer = (LinearLayout) findViewById(R.id.container_music);
-        mCastContainer = (LinearLayout) findViewById(R.id.container_cast);
-        mProducedContainer = (LinearLayout) findViewById(R.id.container_produced);
-        mReleaseContainer = (LinearLayout) findViewById(R.id.container_release);
-        mRatingContainer = (LinearLayout) findViewById(R.id.container_rating);
-        mOverviewContainer = (LinearLayout) findViewById(R.id.container_overview);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
+        View view = inflater.inflate(R.layout.fragment_movie_details, container, false);
 
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(mToolbar);
-        getSupportActionBar().setTitle(mMovieModel.getTitle());
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowTitleEnabled(true);
+        mDirectorTextView = (TextView) view.findViewById(R.id.director);
+        mMusicTextView = (TextView) view.findViewById(R.id.music);
+        mCastTextView = (TextView) view.findViewById(R.id.cast);
+        mProducedTextView = (TextView) view.findViewById(R.id.produced);
+        mReleaseTextView = (TextView) view.findViewById(R.id.release);
+        mRatingTextView = (TextView) view.findViewById(R.id.rating);
+        mOverviewTextView = (TextView) view.findViewById(R.id.overview);
+
+        mDirectorContainer = (LinearLayout) view.findViewById(R.id.container_director);
+        mMusicContainer = (LinearLayout) view.findViewById(R.id.container_music);
+        mCastContainer = (LinearLayout) view.findViewById(R.id.container_cast);
+        mProducedContainer = (LinearLayout) view.findViewById(R.id.container_produced);
+        mReleaseContainer = (LinearLayout) view.findViewById(R.id.container_release);
+        mRatingContainer = (LinearLayout) view.findViewById(R.id.container_rating);
+        mOverviewContainer = (LinearLayout) view.findViewById(R.id.container_overview);
 
         mOverviewTextView.setText(mMovieModel.getOverview());
         mReleaseTextView.setText(mMovieModel.getRelease_date());
         mRatingTextView.setText(mMovieModel.getVote_average()+"");
-
 
         HighOnShow.Movie movie = new HighOnShow(getString(R.string.api_key)).initMovie();
         movie.getMovieCredits(mMovieModel.getId(), null, null, null, new ShowHandler<CreditResponse>() {
@@ -144,25 +175,8 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
             }
         });
-    }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_movie_detail,menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        switch (item.getItemId()){
-            case R.id.done:
-                addMovieToWatchedList();
-                break;
-            case R.id.watch_later: addMovieToWatchLaterList();
-                break;
-        }
-        return super.onOptionsItemSelected(item);
+        return view;
     }
 
     private void addMovieToWatchedList() {
@@ -184,5 +198,4 @@ public class MovieDetailsActivity extends AppCompatActivity {
             }
         });
     }
-
 }

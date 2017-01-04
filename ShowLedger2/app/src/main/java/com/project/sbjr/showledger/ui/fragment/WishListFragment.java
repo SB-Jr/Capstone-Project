@@ -22,11 +22,13 @@ import com.google.firebase.database.ValueEventListener;
 import com.project.sbjr.showinfodatabase.model.MovieModel;
 import com.project.sbjr.showinfodatabase.model.TvShowModel;
 import com.project.sbjr.showledger.R;
+import com.project.sbjr.showledger.Util;
 import com.project.sbjr.showledger.adapter.UserListMovieAdapter;
+import com.project.sbjr.showledger.adapter.UserListTvShowAdapter;
 
 import java.util.ArrayList;
 
-public class WishListFragment extends Fragment implements UserListMovieAdapter.UserListMovieAdapterInteraction{
+public class WishListFragment extends Fragment implements UserListMovieAdapter.UserListMovieAdapterInteraction,UserListTvShowAdapter.UserListTvShowAdapterInteraction{
     private static final String USER_UID = "user_uid";
     private static final String SHOW_TYPE = "show_type";
 
@@ -77,7 +79,7 @@ public class WishListFragment extends Fragment implements UserListMovieAdapter.U
 
         if(showType.equalsIgnoreCase(MovieFragment.MOVIE_TAG)){
             final ArrayList<Integer> movies = new ArrayList<>();
-            DatabaseReference database = FirebaseDatabase.getInstance().getReference().child("user").child(userUid).child("movies").child("watchLater");
+            DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Util.FireBaseConstants.USER).child(userUid).child(Util.FireBaseConstants.MOVIE).child(Util.FireBaseConstants.WISHLIST);
             database.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -97,12 +99,19 @@ public class WishListFragment extends Fragment implements UserListMovieAdapter.U
             });
         }
         else {
-            FirebaseDatabase.getInstance().getReference().child("user").child(userUid).child("tvshows").child("watchLater").addListenerForSingleValueEvent(new ValueEventListener() {
+            final ArrayList<Integer> tvshows = new ArrayList<>();
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(Util.FireBaseConstants.USER).child(userUid).child(Util.FireBaseConstants.TVSHOW).child(Util.FireBaseConstants.WISHLIST);
+            databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-
+                        long l = (long) snapshot.getValue();
+                        tvshows.add((int)l);
                     }
+
+                    UserListTvShowAdapter adapter = new UserListTvShowAdapter(getContext(),WishListFragment.this,tvshows);
+                    mRecyclerView.setAdapter(adapter);
+                    mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(),2));
                 }
 
                 @Override
@@ -138,6 +147,7 @@ public class WishListFragment extends Fragment implements UserListMovieAdapter.U
     public void onDetach() {
         super.onDetach();
         mMovieListener = null;
+        mTvListener = null;
     }
 
     public interface OnMovieWishListFragmentInteractionListener {
@@ -149,7 +159,12 @@ public class WishListFragment extends Fragment implements UserListMovieAdapter.U
     }
 
     @Override
-    public void userListMovieAdapterItemOnClickLstener(MovieModel movieModel) {
+    public void userListMovieAdapterItemOnClickListener(MovieModel movieModel) {
         mMovieListener.onWishListFragmentMovieItemOnClickListener(movieModel);
+    }
+
+    @Override
+    public void userListTvShowAdapterItemOnClickListener(TvShowModel tvShowModel) {
+        mTvListener.onWishListFragmentTvShowItemOnClickListener(tvShowModel);
     }
 }
