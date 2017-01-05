@@ -54,7 +54,7 @@ public class UserListMovieAdapter extends RecyclerView.Adapter<UserListMovieAdap
         public void setData(MovieModel movieModel){
             this.movieModel = movieModel;
             mTitleTextView.setText(movieModel.getTitle());
-            mRatingTextView.setText(movieModel.getRelease_date());
+            mRatingTextView.setText(movieModel.getVote_average()+"");
         }
 
         @Override

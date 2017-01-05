@@ -64,7 +64,7 @@ public class ShowMovieItemAdapter extends RecyclerView.Adapter<ShowMovieItemAdap
         public void fillData(MovieModel movieModel){
             mMovie = movieModel;
             mTitleTextView.setText(mMovie.getTitle());
-            mRatingTextView.setText(mMovie.getRelease_date());
+            mRatingTextView.setText(mMovie.getVote_average()+"");
         }
 
         @Override

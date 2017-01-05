@@ -43,6 +43,7 @@ public class NavigationDrawerAdapter  extends RecyclerView.Adapter<NavigationDra
 
             mTitleImageView = (ImageView) itemView.findViewById(R.id.title_image);
             mTitleTextView = (TextView) itemView.findViewById(R.id.title);
+            itemView.setClickable(true);
             itemView.setOnClickListener(this);
             this.listener = listener;
         }
@@ -80,6 +81,7 @@ public class NavigationDrawerAdapter  extends RecyclerView.Adapter<NavigationDra
 
     @Override
     public void onBindViewHolder(NavigationDrawerViewHolder holder, int position) {
+
         holder.onBind(position);
     }
 

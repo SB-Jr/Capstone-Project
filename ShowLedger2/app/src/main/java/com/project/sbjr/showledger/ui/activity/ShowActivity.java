@@ -38,10 +38,14 @@ public class ShowActivity extends AppCompatActivity implements NavigationDrawerF
     private final String TAG = ShowActivity.class.getName();
 
 
-    private final String DETAILS_FRAG_TAG = "details";
-    private final String PRESENT_FRAG_TAG = "present_frag";
+    public final static String DETAILS_FRAG_TAG = "details";
+    public final static String PRESENT_FRAG_TAG = "present_frag";
+
+    private final static String MISMOVIEKEY="com.project.sbjr.ShowActivity.mismovie";
+
 
     private boolean mTwoPane=false;
+    private boolean mIsMovie=true;
 
     private FrameLayout mDetailsFrameLayout;
     private Toolbar mToolbar;
@@ -77,7 +81,19 @@ public class ShowActivity extends AppCompatActivity implements NavigationDrawerF
         mContainerFrameLayout = (FrameLayout) findViewById(R.id.fragment_content_holder);
         mMovieFragment = MovieFragment.newInstance(Util.getUserUidFromSharedPreference(this));
         mTvShowFragment = TvShowFragment.newInstance(Util.getUserUidFromSharedPreference(this));
-        changeShowFragment(mMovieFragment);
+        if(savedInstanceState.getBoolean(MISMOVIEKEY,true)) {
+            mIsMovie = true;
+            changeShowFragment(mMovieFragment);
+        }else{
+            mIsMovie = false;
+            changeShowFragment(mTvShowFragment);
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putBoolean(MISMOVIEKEY,mIsMovie);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -95,7 +111,15 @@ public class ShowActivity extends AppCompatActivity implements NavigationDrawerF
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId()==R.id.search){
-            //startActivity(new Intent(this,SearchActivity.class));
+
+            Intent intent = new Intent(this,SearchActivity.class);
+            if(mIsMovie) {
+                intent.putExtra(MOVIE_NAME, true);
+            }
+            else{
+                intent.putExtra(MOVIE_NAME, false);
+            }
+            startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -114,6 +138,12 @@ public class ShowActivity extends AppCompatActivity implements NavigationDrawerF
         /**
          * using the tag we see if we are replacing any fragment with the same fragment
          * */
+        if(fragment instanceof MovieFragment){
+            mIsMovie = true;
+        }
+        else{
+            mIsMovie = false;
+        }
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         Fragment presFrag = fragmentManager.findFragmentByTag(DETAILS_FRAG_TAG);

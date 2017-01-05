@@ -19,4 +19,10 @@
     <!--home screen widget-->
     <dimen name="widget_margin_horizontal">8dp</dimen>
     <dimen name="widget_margin_vertical">4dp</dimen>
+
+    <!--Register and Signin activity -->
+    <dimen name="frame_layout_backdrop_height">400dp</dimen>
+    <dimen name="content_top_margin">200dp</dimen>
+    <dimen name="signin_content_top_margin">300dp</dimen>
+    <dimen name="content_width">400dp</dimen>
 </resources>

@@ -1,0 +1,7 @@
+<resources>
+    <!--Register and Signin activity -->
+    <dimen name="frame_layout_backdrop_height">200dp</dimen>
+    <dimen name="content_top_margin">50dp</dimen>
+    <dimen name="signin_content_top_margin">150dp</dimen>
+    <dimen name="content_width">400dp</dimen>
+</resources>
