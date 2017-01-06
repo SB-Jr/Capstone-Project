@@ -135,7 +135,7 @@ public class WatchedListFragment extends Fragment implements UserListMovieAdapte
     }
 
     public void initListener(Fragment fragment){
-        if(showType.equalsIgnoreCase(MovieFragment.MOVIE_TAG)) {
+        if(showType!=null&&showType.equalsIgnoreCase(MovieFragment.MOVIE_TAG)) {
             if (fragment instanceof OnMovieWatchedFragmentInteractionListener) {
                 mMovieListener = (OnMovieWatchedFragmentInteractionListener) fragment;
             } else {

@@ -123,6 +123,14 @@ public class TvShowFragment extends Fragment implements ShowFragment.onTvShowFra
         }
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        mWishListFragment.onStop();
+        mWatchedListFragment.onStop();
+        mIncompleteListFragment.onStop();
+    }
+
     public void initViewPager(){
         ShowViewPagerAdapter adapter = new ShowViewPagerAdapter(getChildFragmentManager());
         adapter.addFragment(mShowFragment,getString(R.string.show_tvshow));

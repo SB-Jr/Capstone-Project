@@ -1,11 +1,14 @@
 package com.project.sbjr.showledger.ui.activity;
 
+import android.graphics.Color;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -23,6 +26,7 @@ import com.project.sbjr.showinfodatabase.model.MovieModel;
 import com.project.sbjr.showinfodatabase.response.CreditResponse;
 import com.project.sbjr.showledger.R;
 import com.project.sbjr.showledger.Util;
+import com.squareup.picasso.Picasso;
 
 public class MovieDetailsActivity extends AppCompatActivity {
 
@@ -46,11 +50,13 @@ public class MovieDetailsActivity extends AppCompatActivity {
                          mRatingContainer,
                          mReleaseContainer,
                          mOverviewContainer;
+    private ImageView mImageView;
 
     private Toolbar mToolbar;
     private ProgressBar mProgressBar;
     private TextView mErrorTextView;
     private LinearLayout mContainerLinearLayout;
+    private CollapsingToolbarLayout mCollapsingToolbarLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +89,8 @@ public class MovieDetailsActivity extends AppCompatActivity {
         mProgressBar = (ProgressBar) findViewById(R.id.progress);
         mErrorTextView = (TextView) findViewById(R.id.error_text);
         mContainerLinearLayout = (LinearLayout) findViewById(R.id.container);
+        mImageView = (ImageView) findViewById(R.id.movie_image);
+        mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
 
         mDirectorContainer = (LinearLayout) findViewById(R.id.container_director);
         mMusicContainer = (LinearLayout) findViewById(R.id.container_music);
@@ -94,14 +102,27 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setTitle(mMovieModel.getTitle());
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
+        getSupportActionBar().setTitle(mMovieModel.getTitle());
+        mCollapsingToolbarLayout.setTitleEnabled(true);
+        mCollapsingToolbarLayout.setTitle(mMovieModel.getTitle());
+        mCollapsingToolbarLayout.setCollapsedTitleTextColor(Color.WHITE);
+        mCollapsingToolbarLayout.setExpandedTitleColor(Color.WHITE);
+
 
         mOverviewTextView.setText(mMovieModel.getOverview());
         mReleaseTextView.setText(mMovieModel.getRelease_date());
         mRatingTextView.setText(mMovieModel.getVote_average()+"");
+
+
+        Picasso.with(MovieDetailsActivity.this)
+                .load("https://image.tmdb.org/t/p/w300"+mMovieModel.getBackdrop_path())
+                .placeholder(Util.getRandomColor())
+                .fit()
+                .placeholder(Util.getRandomColor())
+                .into(mImageView);
 
         HighOnShow.Movie movie = new HighOnShow(getString(R.string.api_key)).initMovie();
         movie.getMovieCredits(mMovieModel.getId(), mContainerLinearLayout, mProgressBar, mErrorTextView, new ShowHandler<CreditResponse>() {
@@ -182,6 +203,9 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 addMovieToWatchedList();
                 break;
             case R.id.watch_later: addMovieToWatchLaterList();
+                break;
+            case R.id.home:
+                onBackPressed();
                 break;
         }
         return super.onOptionsItemSelected(item);

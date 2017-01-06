@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import com.project.sbjr.showinfodatabase.model.TvShowModel;
 import com.project.sbjr.showledger.R;
+import com.project.sbjr.showledger.Util;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -32,7 +34,7 @@ public class ShowTvItemAdapter extends RecyclerView.Adapter<ShowTvItemAdapter.Sh
     public ShowItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         View view = LayoutInflater.from(context).inflate(R.layout.show_detail_list_item,parent,false);
-        return new ShowItemViewHolder(view,mListener);
+        return new ShowItemViewHolder(context,view,mListener);
     }
 
     @Override
@@ -52,9 +54,11 @@ public class ShowTvItemAdapter extends RecyclerView.Adapter<ShowTvItemAdapter.Sh
         private ImageView mImageView;
         private ShowTvItemAdapterInteractionListener mListener;
         TvShowModel mTvShow;
+        private Context mContext;
 
-        public ShowItemViewHolder(View itemView,ShowTvItemAdapterInteractionListener listener) {
+        public ShowItemViewHolder(Context context,View itemView,ShowTvItemAdapterInteractionListener listener) {
             super(itemView);
+            mContext = context;
             mTitleTextView = (TextView) itemView.findViewById(R.id.title);
             mRatingTextView = (TextView) itemView.findViewById(R.id.rating);
             mImageView = (ImageView) itemView.findViewById(R.id.image_view);
@@ -66,6 +70,11 @@ public class ShowTvItemAdapter extends RecyclerView.Adapter<ShowTvItemAdapter.Sh
             mTvShow = tvShowModel;
             mTitleTextView.setText(mTvShow.getName());
             mRatingTextView.setText(mTvShow.getVote_average()+"");
+            Picasso.with(mContext)
+                    .load("https://image.tmdb.org/t/p/w185"+mTvShow.getPoster_path())
+                    .placeholder(Util.getRandomColor())
+                    .fit()
+                    .into(mImageView);
         }
 
         @Override

@@ -2,6 +2,7 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="appbar_elevation">4dp</dimen>
 
     <!--Navigation drawer-->
     <dimen name="header_height">150dp</dimen>
@@ -11,10 +12,15 @@
 
     <!--Show details-->
     <dimen name="show_details_horizontal_margin">32dp</dimen>
+    <dimen name="show_details_image_height">250dp</dimen>
 
     <!--card view-->
     <dimen name="card_view_movie_title">24sp</dimen>
     <dimen name="card_view_movie_subtitle">14sp</dimen>
+    <dimen name="card_view_elevation">14sp</dimen>
+    <dimen name="card_view_corner_radius">2dp</dimen>
+    <dimen name="card_view_margin_horizontal">3dp</dimen>
+    <dimen name="card_view_margin_vertical">6dp</dimen>
 
     <!--home screen widget-->
     <dimen name="widget_margin_horizontal">8dp</dimen>

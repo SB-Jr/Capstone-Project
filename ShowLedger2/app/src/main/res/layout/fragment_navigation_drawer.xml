@@ -9,17 +9,19 @@
     android:weightSum="1">
 
     <!-- TODO: Update blank fragment layout -->
-    <LinearLayout
+    <FrameLayout
         android:id="@+id/header"
+        android:background="@drawable/navigation_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/header_height"
-        android:orientation="vertical">
+        android:orientation="horizontal">
 
-    </LinearLayout>
+    </FrameLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/contents"
         android:layout_width="match_parent"
+        android:layout_marginTop="@dimen/card_view_margin_vertical"
         android:layout_height="wrap_content"/>
 
 

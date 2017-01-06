@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import com.project.sbjr.showinfodatabase.model.MovieModel;
 import com.project.sbjr.showledger.R;
+import com.project.sbjr.showledger.Util;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -32,7 +34,7 @@ public class ShowMovieItemAdapter extends RecyclerView.Adapter<ShowMovieItemAdap
     public ShowItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         View view = LayoutInflater.from(context).inflate(R.layout.show_detail_list_item,parent,false);
-        return new ShowItemViewHolder(view,mListener);
+        return new ShowItemViewHolder(context,view,mListener);
     }
 
     @Override
@@ -51,9 +53,11 @@ public class ShowMovieItemAdapter extends RecyclerView.Adapter<ShowMovieItemAdap
         private ImageView mImageView;
         private ShowMovieItemAdapterInteractionListener mListener;
         MovieModel mMovie;
+        private Context mContext;
 
-        public ShowItemViewHolder(View itemView,ShowMovieItemAdapterInteractionListener listener) {
+        public ShowItemViewHolder(Context context,View itemView,ShowMovieItemAdapterInteractionListener listener) {
             super(itemView);
+            mContext = context;
             mTitleTextView = (TextView) itemView.findViewById(R.id.title);
             mRatingTextView = (TextView) itemView.findViewById(R.id.rating);
             mImageView = (ImageView) itemView.findViewById(R.id.image_view);
@@ -65,6 +69,11 @@ public class ShowMovieItemAdapter extends RecyclerView.Adapter<ShowMovieItemAdap
             mMovie = movieModel;
             mTitleTextView.setText(mMovie.getTitle());
             mRatingTextView.setText(mMovie.getVote_average()+"");
+            Picasso.with(mContext)
+                    .load("https://image.tmdb.org/t/p/w185"+movieModel.getPoster_path())
+                    .placeholder(Util.getRandomColor())
+                    .fit()
+                    .into(mImageView);
         }
 
         @Override

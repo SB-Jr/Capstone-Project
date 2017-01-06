@@ -10,16 +10,9 @@ import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
 import android.util.Log;
-import android.util.Size;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
-import com.project.sbjr.showinfodatabase.HighOnShow;
-import com.project.sbjr.showinfodatabase.handler.ShowHandler;
-import com.project.sbjr.showinfodatabase.model.MovieModel;
-import com.project.sbjr.showinfodatabase.model.TvShowModel;
-import com.project.sbjr.showinfodatabase.response.MovieResponse;
-import com.project.sbjr.showinfodatabase.response.TvOnAirResponse;
 import com.project.sbjr.showledger.R;
 
 import java.util.ArrayList;

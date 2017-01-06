@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.view.MenuItem;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -16,7 +18,7 @@ import com.project.sbjr.showinfodatabase.handler.ShowHandler;
 import com.project.sbjr.showinfodatabase.model.MovieModel;
 import com.project.sbjr.showinfodatabase.model.TvShowModel;
 import com.project.sbjr.showinfodatabase.response.MovieResponse;
-import com.project.sbjr.showinfodatabase.response.TvOnAirResponse;
+import com.project.sbjr.showinfodatabase.response.TvResponse;
 import com.project.sbjr.showledger.R;
 import com.project.sbjr.showledger.Util;
 import com.project.sbjr.showledger.adapter.ShowMovieItemAdapter;
@@ -32,8 +34,9 @@ public class SearchActivity extends AppCompatActivity implements ShowMovieItemAd
     private SearchView mSearchView;
     private ProgressBar mProgressBar;
     private TextView mErrorTextView;
+    private FrameLayout mDetailsFrameLayout;
 
-    private boolean isTwoPane;
+    private boolean isTwoPane = false;
     private boolean isMovie = true;
 
     @Override
@@ -45,6 +48,14 @@ public class SearchActivity extends AppCompatActivity implements ShowMovieItemAd
         mSearchView = (SearchView) findViewById(R.id.search_view);
         mProgressBar = (ProgressBar) findViewById(R.id.progress);
         mErrorTextView = (TextView) findViewById(R.id.error_text);
+
+        mDetailsFrameLayout = (FrameLayout) findViewById(R.id.details_layout);
+        if(mDetailsFrameLayout!=null){
+            isTwoPane = true;
+        }
+
+        Intent intent = getIntent();
+        isMovie = intent.getBooleanExtra(ShowActivity.MOVIE_NAME, false);
 
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -59,16 +70,17 @@ public class SearchActivity extends AppCompatActivity implements ShowMovieItemAd
             }
         });
 
-        //todo: add other layout and change this
-        isTwoPane=false;
+    }
 
-        Intent intent = getIntent();
-        if (intent.getBooleanExtra(ShowActivity.MOVIE_NAME,false)) {
-            isMovie = true;
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if(item.getItemId()==R.id.home){
+            onBackPressed();
+            return true;
         }
-        else{
-            isMovie = false;
-        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     public void search(String query){
@@ -89,9 +101,9 @@ public class SearchActivity extends AppCompatActivity implements ShowMovieItemAd
             });
         }
         else{
-            new HighOnShow(getString(R.string.api_key)).initTvShow().getTvShowDetailsBySearch(query, mSearchListRecyclerView, mProgressBar, mErrorTextView, new ShowHandler<TvOnAirResponse>() {
+            new HighOnShow(getString(R.string.api_key)).initTvShow().getTvShowDetailsBySearch(query, mSearchListRecyclerView, mProgressBar, mErrorTextView, new ShowHandler<TvResponse>() {
                 @Override
-                public void onResult(TvOnAirResponse result) {
+                public void onResult(TvResponse result) {
                     ArrayList<TvShowModel> tvShowModels = result.getResults();
                     ShowTvItemAdapter adapter = new ShowTvItemAdapter(tvShowModels,SearchActivity.this);
                     mSearchListRecyclerView.setLayoutManager(new GridLayoutManager(SearchActivity.this,2));
@@ -112,7 +124,7 @@ public class SearchActivity extends AppCompatActivity implements ShowMovieItemAd
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             DetailsMovieFragment fragment = DetailsMovieFragment.newInstance(Util.getUserUidFromSharedPreference(this),movie);
-            //fragmentTransaction.replace(R.id.details_layout,fragment,ShowActivity.DETAILS_FRAG_TAG);
+            fragmentTransaction.replace(R.id.details_layout,fragment,ShowActivity.DETAILS_FRAG_TAG);
             fragmentTransaction.commit();
         }
         else{
@@ -128,7 +140,7 @@ public class SearchActivity extends AppCompatActivity implements ShowMovieItemAd
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             DetailsTvShowFragment fragment = DetailsTvShowFragment.newInstance(Util.getUserUidFromSharedPreference(this),tvShowModel);
-            //fragmentTransaction.replace(R.id.details_layout,fragment,ShowActivity.DETAILS_FRAG_TAG);
+            fragmentTransaction.replace(R.id.details_layout,fragment,ShowActivity.DETAILS_FRAG_TAG);
             fragmentTransaction.commit();
         }
         else{

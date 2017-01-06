@@ -12,6 +12,8 @@ import com.project.sbjr.showinfodatabase.HighOnShow;
 import com.project.sbjr.showinfodatabase.handler.ShowHandler;
 import com.project.sbjr.showinfodatabase.model.TvShowModel;
 import com.project.sbjr.showledger.R;
+import com.project.sbjr.showledger.Util;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -55,6 +57,11 @@ public class UserListTvShowAdapter extends RecyclerView.Adapter<UserListTvShowAd
             this.tvShowModel = tvShowModel;
             mNameTextView.setText(tvShowModel.getName());
             mRatingTextView.setText(tvShowModel.getVote_average()+"");
+            Picasso.with(mContext)
+                    .load("https://image.tmdb.org/t/p/w185"+tvShowModel.getPoster_path())
+                    .placeholder(Util.getRandomColor())
+                    .fit()
+                    .into(mImageView);
         }
 
         @Override

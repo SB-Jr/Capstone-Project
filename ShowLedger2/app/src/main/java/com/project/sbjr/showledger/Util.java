@@ -2,10 +2,14 @@ package com.project.sbjr.showledger;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
+
+import java.util.Random;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -16,25 +20,24 @@ import static android.content.Context.MODE_PRIVATE;
 public class Util {
 
 
-    public static void checkInternet(Context context, CoordinatorLayout coordinatorLayout){
-        if(!isInternetConnected(context)) {
+    public static void checkInternet(Context context, CoordinatorLayout coordinatorLayout) {
+        if (!isInternetConnected(context)) {
             Snackbar.make(coordinatorLayout, R.string.no_internet, Snackbar.LENGTH_LONG).show();
         }
     }
 
-    public static boolean isInternetConnected(Context context){
+    public static boolean isInternetConnected(Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        if(activeNetworkInfo.isConnected()) {
+        if (activeNetworkInfo.isConnected()) {
             return true;
-        }
-        else{
+        } else {
             return false;
         }
     }
 
-    public static boolean isUserDataPresent(Context context){
-        if(getUserIdFromSharedPreference(context)!=null){
+    public static boolean isUserDataPresent(Context context) {
+        if (getUserIdFromSharedPreference(context) != null) {
             return true;
         }
         return false;
@@ -72,41 +75,58 @@ public class Util {
         return null;
     }
 
-    public static void setUserNameInSharedPreference(Context context,String user){
+    public static void setUserNameInSharedPreference(Context context, String user) {
         SharedPreferences sharedPreferences = context.getSharedPreferences("ShowLedger", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("user",user);
+        editor.putString("user", user);
         editor.commit();
     }
 
-    public static void setUserIdInSharedPreference(Context context,String userid){
+    public static void setUserIdInSharedPreference(Context context, String userid) {
         SharedPreferences sharedPreferences = context.getSharedPreferences("ShowLedger", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("userid",userid);
+        editor.putString("userid", userid);
         editor.commit();
     }
 
-    public static void setUserPassInSharedPreference(Context context,String pass){
+    public static void setUserPassInSharedPreference(Context context, String pass) {
         SharedPreferences sharedPreferences = context.getSharedPreferences("ShowLedger", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("pass",pass);
+        editor.putString("pass", pass);
         editor.commit();
     }
 
-    public static void setUserUIDInSharedPreference(Context context,String useruid){
+    public static void setUserUIDInSharedPreference(Context context, String useruid) {
         SharedPreferences sharedPreferences = context.getSharedPreferences("ShowLedger", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("useruid",useruid);
+        editor.putString("useruid", useruid);
         editor.commit();
     }
 
-    public static class FireBaseConstants{
-        public final static String USER="user";
-        public final static String MOVIE="movies";
-        public final static String TVSHOW="tvshows";
-        public final static String WATCHED ="watched";
+    public static class FireBaseConstants {
+        public final static String USER = "user";
+        public final static String MOVIE = "movies";
+        public final static String TVSHOW = "tvshows";
+        public final static String WATCHED = "watched";
         public final static String WISHLIST = "watchLater";
-        public final static String INCOMPLETE ="incomplete";
+        public final static String INCOMPLETE = "incomplete";
+    }
+
+
+    private static ColorDrawable[] vibrantLightColorList = {
+            new ColorDrawable(Color.parseColor("#9ACCCD")),
+            new ColorDrawable(Color.parseColor("#8FD8A0")),
+            new ColorDrawable(Color.parseColor("#CBD890")),
+            new ColorDrawable(Color.parseColor("#DACC8F")),
+            new ColorDrawable(Color.parseColor("#D9A790")),
+            new ColorDrawable(Color.parseColor("#D18FD9")),
+            new ColorDrawable(Color.parseColor("#FF6772")),
+            new ColorDrawable(Color.parseColor("#DDFB5C"))
+    };
+
+    public static ColorDrawable getRandomColor() {
+        int idx = new Random().nextInt(vibrantLightColorList.length);
+        return vibrantLightColorList[idx];
     }
 
 }

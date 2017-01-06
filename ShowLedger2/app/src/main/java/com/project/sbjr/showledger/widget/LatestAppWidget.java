@@ -14,7 +14,7 @@ import com.project.sbjr.showinfodatabase.handler.ShowHandler;
 import com.project.sbjr.showinfodatabase.model.MovieModel;
 import com.project.sbjr.showinfodatabase.model.TvShowModel;
 import com.project.sbjr.showinfodatabase.response.MovieResponse;
-import com.project.sbjr.showinfodatabase.response.TvOnAirResponse;
+import com.project.sbjr.showinfodatabase.response.TvResponse;
 import com.project.sbjr.showledger.R;
 
 import java.util.ArrayList;
@@ -68,9 +68,9 @@ public class LatestAppWidget extends AppWidgetProvider {
                     //mIntent.putExtra(CONTENT_DATA, movieListItems);
 
 
-                    new HighOnShow(context.getString(R.string.api_key)).initTvShow().getTvShowOnAir(null, null, null, new ShowHandler<TvOnAirResponse>() {
+                    new HighOnShow(context.getString(R.string.api_key)).initTvShow().getTvShowOnAir(null, null, null, new ShowHandler<TvResponse>() {
                         @Override
-                        public void onResult(TvOnAirResponse result) {
+                        public void onResult(TvResponse result) {
 
                             ArrayList<String> listItems = new ArrayList<>();
 

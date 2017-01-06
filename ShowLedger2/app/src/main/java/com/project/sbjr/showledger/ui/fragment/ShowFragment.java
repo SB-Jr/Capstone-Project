@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.project.sbjr.showinfodatabase.handler.ShowHandler;
 import com.project.sbjr.showinfodatabase.model.TvShowModel;
 import com.project.sbjr.showinfodatabase.response.MovieResponse;
-import com.project.sbjr.showinfodatabase.response.TvOnAirResponse;
+import com.project.sbjr.showinfodatabase.response.TvResponse;
 import com.project.sbjr.showledger.R;
 
 import com.project.sbjr.showinfodatabase.HighOnShow;
@@ -103,9 +103,9 @@ public class ShowFragment extends Fragment implements ShowMovieItemAdapter.ShowM
             });
         }
         else{
-            new HighOnShow(getString(R.string.api_key)).initTvShow().getTvShowOnAir(mRecyclerView, mProgressBar, mErrorTextView, new ShowHandler<TvOnAirResponse>() {
+            new HighOnShow(getString(R.string.api_key)).initTvShow().getTvShowOnAir(mRecyclerView, mProgressBar, mErrorTextView, new ShowHandler<TvResponse>() {
                 @Override
-                public void onResult(TvOnAirResponse result) {
+                public void onResult(TvResponse result) {
                     ArrayList<TvShowModel> tvShowModels = result.getResults();
                     ShowTvItemAdapter adapter = new ShowTvItemAdapter(tvShowModels,ShowFragment.this);
                     mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(),2));
@@ -123,7 +123,7 @@ public class ShowFragment extends Fragment implements ShowMovieItemAdapter.ShowM
 
     public void initListener(Fragment fragment){
 
-        if(showType.equalsIgnoreCase(MovieFragment.MOVIE_TAG)) {
+        if(showType!=null&&showType.equalsIgnoreCase(MovieFragment.MOVIE_TAG)) {
             if (fragment instanceof OnMovieShowFragmentInteractionListener) {
                 mMovieListener = (OnMovieShowFragmentInteractionListener) fragment;
             } else {

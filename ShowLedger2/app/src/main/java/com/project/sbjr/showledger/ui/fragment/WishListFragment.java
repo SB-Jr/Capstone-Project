@@ -79,6 +79,7 @@ public class WishListFragment extends Fragment implements UserListMovieAdapter.U
         super.onSaveInstanceState(outState);
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -136,7 +137,7 @@ public class WishListFragment extends Fragment implements UserListMovieAdapter.U
     }
 
     public void initListener(Fragment fragment){
-        if(showType.equalsIgnoreCase(MovieFragment.MOVIE_TAG)) {
+        if(showType!=null&&showType.equalsIgnoreCase(MovieFragment.MOVIE_TAG)) {
             if (fragment instanceof OnMovieWishListFragmentInteractionListener) {
                 mMovieListener = (OnMovieWishListFragmentInteractionListener) fragment;
             } else {

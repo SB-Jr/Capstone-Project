@@ -81,29 +81,38 @@ public class ShowActivity extends AppCompatActivity implements NavigationDrawerF
         setupToolbar();
         setupNavigationBar();
         mContainerFrameLayout = (FrameLayout) findViewById(R.id.fragment_content_holder);
+
+
         if(savedInstanceState!=null){
             mMovieFragment = (MovieFragment) getSupportFragmentManager().getFragment(savedInstanceState,mMovieFragmentKey);
             mTvShowFragment = (TvShowFragment) getSupportFragmentManager().getFragment(savedInstanceState,mTvShowFragmentKey);
+            if(savedInstanceState.getBoolean(MISMOVIEKEY,true)) {
+                mIsMovie = true;
+                changeShowFragment(mMovieFragment);
+            }else{
+                mIsMovie = false;
+                changeShowFragment(mTvShowFragment);
+            }
         }
         else {
+            mIsMovie = true;
             mMovieFragment = MovieFragment.newInstance(Util.getUserUidFromSharedPreference(this));
             mTvShowFragment = TvShowFragment.newInstance(Util.getUserUidFromSharedPreference(this));
+            changeShowFragment(mMovieFragment);
         }
 
-        if(savedInstanceState.getBoolean(MISMOVIEKEY,true)) {
-            mIsMovie = true;
-            changeShowFragment(mMovieFragment);
-        }else{
-            mIsMovie = false;
-            changeShowFragment(mTvShowFragment);
-        }
+
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putBoolean(MISMOVIEKEY,mIsMovie);
-        getSupportFragmentManager().putFragment(outState,mMovieFragmentKey,mMovieFragment);
-        getSupportFragmentManager().putFragment(outState,mTvShowFragmentKey,mTvShowFragment);
+        if(mIsMovie) {
+            getSupportFragmentManager().putFragment(outState, mMovieFragmentKey, mMovieFragment);
+        }
+        else {
+            getSupportFragmentManager().putFragment(outState, mTvShowFragmentKey, mTvShowFragment);
+        }
         super.onSaveInstanceState(outState);
     }
 
@@ -122,14 +131,8 @@ public class ShowActivity extends AppCompatActivity implements NavigationDrawerF
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId()==R.id.search){
-
             Intent intent = new Intent(this,SearchActivity.class);
-            if(mIsMovie) {
-                intent.putExtra(MOVIE_NAME, true);
-            }
-            else{
-                intent.putExtra(MOVIE_NAME, false);
-            }
+            intent.putExtra(MOVIE_NAME, mIsMovie);
             startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
@@ -149,12 +152,6 @@ public class ShowActivity extends AppCompatActivity implements NavigationDrawerF
         /**
          * using the tag we see if we are replacing any fragment with the same fragment
          * */
-        if(fragment instanceof MovieFragment){
-            mIsMovie = true;
-        }
-        else{
-            mIsMovie = false;
-        }
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         Fragment presFrag = fragmentManager.findFragmentByTag(DETAILS_FRAG_TAG);
@@ -180,12 +177,26 @@ public class ShowActivity extends AppCompatActivity implements NavigationDrawerF
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        invalidateDetailsContentHolder();
+        if(mIsMovie) {
+            mMovieFragment.onStop();
+        }
+        else {
+            mTvShowFragment.onStop();
+        }
+    }
+
+    @Override
     public void onNavigationFragmentInteraction(int pos) {
         mDrawerLayout.closeDrawer(GravityCompat.START,true);
         switch (pos){
             case 0: changeShowFragment(mMovieFragment);
+                mIsMovie = true;
                 break;
             case 1: changeShowFragment(mTvShowFragment);
+                mIsMovie = false;
                 break;
             case 2://todo: complete this 2 cases
                 break;

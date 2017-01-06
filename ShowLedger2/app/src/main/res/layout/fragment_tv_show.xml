@@ -13,6 +13,7 @@
         android:layout_height="?attr/actionBarSize"
         android:background="@color/colorPrimary"
         app:tabGravity="center"
+        android:elevation="@dimen/appbar_elevation"
         app:tabMode="scrollable" />
 
     <android.support.v4.view.ViewPager

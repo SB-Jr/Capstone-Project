@@ -2,6 +2,8 @@ package com.project.sbjr.showledger.ui.activity;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -26,6 +29,7 @@ import com.project.sbjr.showinfodatabase.model.TvShowNetwork;
 import com.project.sbjr.showinfodatabase.model.TvShowSeason;
 import com.project.sbjr.showledger.R;
 import com.project.sbjr.showledger.Util;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,10 +59,12 @@ public class TvShowDetailActivity extends AppCompatActivity {
             mNumberOfSeaonsContainer,
             mOverviewContainer;
 
+    private ImageView mImageView;
     private Toolbar mToolbar;
     private ProgressBar mProgressBar;
     private TextView mErrorTextView;
     private LinearLayout mContainerLinearLayout;
+    private CollapsingToolbarLayout mCollapsingToolbarLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +99,8 @@ public class TvShowDetailActivity extends AppCompatActivity {
         mProgressBar = (ProgressBar) findViewById(R.id.progress);
         mErrorTextView = (TextView) findViewById(R.id.error_text);
         mContainerLinearLayout = (LinearLayout) findViewById(R.id.container);
+        mImageView = (ImageView) findViewById(R.id.tvshow_image);
+        mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
 
         mCreatedByContainer = (LinearLayout) findViewById(R.id.container_created_by);
         mGenreContainer = (LinearLayout) findViewById(R.id.container_genre);
@@ -108,10 +116,21 @@ public class TvShowDetailActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(mTvShowModel.getName());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
+        mCollapsingToolbarLayout.setTitleEnabled(true);
+        mCollapsingToolbarLayout.setTitle(mTvShowModel.getName());
+        mCollapsingToolbarLayout.setCollapsedTitleTextColor(Color.WHITE);
+        mCollapsingToolbarLayout.setExpandedTitleColor(Color.WHITE);
 
         mOverviewTextView.setText(mTvShowModel.getOverview());
         mFirstAirDateTextView.setText(mTvShowModel.getFirst_air_date());
         mRatingTextView.setText(mTvShowModel.getVote_average()+"");
+
+        Picasso.with(TvShowDetailActivity.this)
+                .load("https://image.tmdb.org/t/p/w300"+mTvShowModel.getBackdrop_path())
+                .placeholder(Util.getRandomColor())
+                .fit()
+                .placeholder(Util.getRandomColor())
+                .into(mImageView);
 
         new HighOnShow(getString(R.string.api_key)).initTvShow().getTvShowDetailsById(mTvShowModel.getId(), mContainerLinearLayout, mProgressBar, mErrorTextView, new ShowHandler<TvShowModel>() {
             @Override
@@ -180,6 +199,9 @@ public class TvShowDetailActivity extends AppCompatActivity {
             case R.id.watch_later: addShowToWatchLaterList();
                 break;
             case R.id.incomplete: addShowToIncompleteList();
+                break;
+            case R.id.home:
+                onBackPressed();
                 break;
         }
         return super.onOptionsItemSelected(item);

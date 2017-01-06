@@ -50,6 +50,7 @@
             <FrameLayout
                 android:id="@+id/details_layout"
                 android:layout_width="match_parent"
+                android:translationZ="@dimen/appbar_elevation"
                 android:layout_height="match_parent"
                 android:layout_weight="1">
 
