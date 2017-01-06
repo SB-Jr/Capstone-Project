@@ -32,9 +32,12 @@
                 android:resource="@xml/searchable_config"/>
 
         </activity>
-        <activity android:name=".ui.activity.RegisterActivity" />
-        <activity android:name=".ui.activity.MovieDetailsActivity" />
-        <activity android:name=".ui.activity.TvShowDetailActivity" />
+        <activity android:name=".ui.activity.RegisterActivity"
+            android:parentActivityName=".ui.activity.SignInActivity"/>
+        <activity android:name=".ui.activity.MovieDetailsActivity"
+            android:parentActivityName=".ui.activity.ShowActivity"/>
+        <activity android:name=".ui.activity.TvShowDetailActivity"
+            android:parentActivityName=".ui.activity.ShowActivity"/>
 
         <receiver android:name=".widget.LatestAppWidget">
             <intent-filter>
@@ -46,7 +49,8 @@
                 android:resource="@xml/latest_app_widget_info" />
         </receiver>
 
-        <activity android:name=".ui.activity.SearchActivity">
+        <activity android:name=".ui.activity.SearchActivity"
+            android:parentActivityName=".ui.activity.ShowActivity">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>

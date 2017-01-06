@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.firebase.database.DatabaseError;
@@ -49,6 +50,10 @@ public class DetailsMovieFragment extends Fragment {
             mReleaseContainer,
             mOverviewContainer;
 
+    private ProgressBar mProgressBar;
+    private TextView mErrorTextView;
+    private LinearLayout mContainerLinearLayout;
+
     public DetailsMovieFragment() {
         // Required empty public constructor
     }
@@ -67,7 +72,11 @@ public class DetailsMovieFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
+        if(savedInstanceState!=null){
+            mMovieModel = savedInstanceState.getParcelable(MOVIE_MODEL);
+            userUid = savedInstanceState.getString(USER_UID);
+        }
+        else if (getArguments() != null) {
             userUid = getArguments().getString(USER_UID);
             mMovieModel = getArguments().getParcelable(MOVIE_MODEL);
         }
@@ -106,6 +115,10 @@ public class DetailsMovieFragment extends Fragment {
         mRatingTextView = (TextView) view.findViewById(R.id.rating);
         mOverviewTextView = (TextView) view.findViewById(R.id.overview);
 
+        mProgressBar = (ProgressBar) view.findViewById(R.id.progress);
+        mErrorTextView = (TextView) view.findViewById(R.id.error_text);
+        mContainerLinearLayout = (LinearLayout) view.findViewById(R.id.container);
+
         mDirectorContainer = (LinearLayout) view.findViewById(R.id.container_director);
         mMusicContainer = (LinearLayout) view.findViewById(R.id.container_music);
         mCastContainer = (LinearLayout) view.findViewById(R.id.container_cast);
@@ -119,7 +132,7 @@ public class DetailsMovieFragment extends Fragment {
         mRatingTextView.setText(mMovieModel.getVote_average()+"");
 
         HighOnShow.Movie movie = new HighOnShow(getString(R.string.api_key)).initMovie();
-        movie.getMovieCredits(mMovieModel.getId(), null, null, null, new ShowHandler<CreditResponse>() {
+        movie.getMovieCredits(mMovieModel.getId(), mContainerLinearLayout, mProgressBar, mErrorTextView, new ShowHandler<CreditResponse>() {
             @Override
             public void onResult(CreditResponse result) {
                 String producers="";
@@ -177,6 +190,13 @@ public class DetailsMovieFragment extends Fragment {
         });
 
         return view;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelable(MOVIE_MODEL,mMovieModel);
+        outState.putString(USER_UID,userUid);
+        super.onSaveInstanceState(outState);
     }
 
     private void addMovieToWatchedList() {

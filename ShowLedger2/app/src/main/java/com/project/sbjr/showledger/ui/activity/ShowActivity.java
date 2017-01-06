@@ -42,6 +42,8 @@ public class ShowActivity extends AppCompatActivity implements NavigationDrawerF
     public final static String PRESENT_FRAG_TAG = "present_frag";
 
     private final static String MISMOVIEKEY="com.project.sbjr.ShowActivity.mismovie";
+    private static  final String mMovieFragmentKey="com.project.sbjr.showledger.ui.activity.ShowActivity.moviefragment";
+    private static  final String mTvShowFragmentKey="com.project.sbjr.showledger.ui.activity.ShowActivity.tvshowfragment";
 
 
     private boolean mTwoPane=false;
@@ -79,8 +81,15 @@ public class ShowActivity extends AppCompatActivity implements NavigationDrawerF
         setupToolbar();
         setupNavigationBar();
         mContainerFrameLayout = (FrameLayout) findViewById(R.id.fragment_content_holder);
-        mMovieFragment = MovieFragment.newInstance(Util.getUserUidFromSharedPreference(this));
-        mTvShowFragment = TvShowFragment.newInstance(Util.getUserUidFromSharedPreference(this));
+        if(savedInstanceState!=null){
+            mMovieFragment = (MovieFragment) getSupportFragmentManager().getFragment(savedInstanceState,mMovieFragmentKey);
+            mTvShowFragment = (TvShowFragment) getSupportFragmentManager().getFragment(savedInstanceState,mTvShowFragmentKey);
+        }
+        else {
+            mMovieFragment = MovieFragment.newInstance(Util.getUserUidFromSharedPreference(this));
+            mTvShowFragment = TvShowFragment.newInstance(Util.getUserUidFromSharedPreference(this));
+        }
+
         if(savedInstanceState.getBoolean(MISMOVIEKEY,true)) {
             mIsMovie = true;
             changeShowFragment(mMovieFragment);
@@ -93,6 +102,8 @@ public class ShowActivity extends AppCompatActivity implements NavigationDrawerF
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putBoolean(MISMOVIEKEY,mIsMovie);
+        getSupportFragmentManager().putFragment(outState,mMovieFragmentKey,mMovieFragment);
+        getSupportFragmentManager().putFragment(outState,mTvShowFragmentKey,mTvShowFragment);
         super.onSaveInstanceState(outState);
     }
 

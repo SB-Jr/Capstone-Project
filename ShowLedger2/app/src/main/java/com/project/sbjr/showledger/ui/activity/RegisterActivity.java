@@ -27,6 +27,12 @@ import static com.project.sbjr.showledger.Util.setUserNameInSharedPreference;
 
 public class RegisterActivity extends AppCompatActivity {
 
+
+    private final static String mUserNameEditTextKey="com.project.sbjr.showledger.ui.activity.RegisterActivity.username";
+    private final static String mEmailIdEditTextKey="com.project.sbjr.showledger.ui.activity.RegisterActivity.emailid";
+    private final static String mPasswordEditTextKey="com.project.sbjr.showledger.ui.activity.RegisterActivity.password";
+    private final static String mRetypePasswordEditTextKey="com.project.sbjr.showledger.ui.activity.RegisterActivity.retypepassword";
+
     private EditText mUserNameEditText;
     private EditText mEmailIdEditText;
     private EditText mPasswordEditText;
@@ -44,6 +50,7 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+
         mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinator_layout);
         mUserNameEditText = (EditText) findViewById(R.id.user_name);
         mEmailIdEditText = (EditText) findViewById(R.id.user_id);
@@ -55,6 +62,14 @@ public class RegisterActivity extends AppCompatActivity {
         mRetypePasswordTextInputLaout = (TextInputLayout) findViewById(R.id.retype_password_text_input_layout);
         mRegisterButton = (Button) findViewById(R.id.register);
         mProgressBar = (ProgressBar) findViewById(R.id.progress);
+
+        if(savedInstanceState!=null){
+            mEmailIdEditText.setText(savedInstanceState.getString(mEmailIdEditTextKey));
+            mUserNameEditText.setText(savedInstanceState.getString(mUserNameEditTextKey));
+            mPasswordEditText.setText(savedInstanceState.getString(mPasswordEditTextKey));
+            mRetypePasswordEditText.setText(savedInstanceState.getString(mRetypePasswordEditTextKey));
+        }
+
 
         mUserNameTextInputLaout.setErrorEnabled(true);
         mEmailIdTextInputLaout.setErrorEnabled(true);
@@ -113,6 +128,17 @@ public class RegisterActivity extends AppCompatActivity {
                         });
             }
         });
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+
+        outState.putString(mPasswordEditTextKey,mPasswordEditText.getText().toString());
+        outState.putString(mEmailIdEditTextKey,mEmailIdEditText.getText().toString());
+        outState.putString(mRetypePasswordEditTextKey,mRetypePasswordEditText.getText().toString());
+        outState.putString(mUserNameEditTextKey,mUserNameEditText.getText().toString());
+
+        super.onSaveInstanceState(outState);
     }
 
     public boolean checkCred(){

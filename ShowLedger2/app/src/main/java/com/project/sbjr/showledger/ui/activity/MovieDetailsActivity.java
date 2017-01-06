@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
@@ -24,6 +25,8 @@ import com.project.sbjr.showledger.R;
 import com.project.sbjr.showledger.Util;
 
 public class MovieDetailsActivity extends AppCompatActivity {
+
+    private static final String MOVIE_MODEL_KEY="com.project.sbjr.showledger.ui.activity.MovieDetailsActivity.mMovieModel";
 
     private MovieModel mMovieModel;
     private String userUid;
@@ -45,6 +48,9 @@ public class MovieDetailsActivity extends AppCompatActivity {
                          mOverviewContainer;
 
     private Toolbar mToolbar;
+    private ProgressBar mProgressBar;
+    private TextView mErrorTextView;
+    private LinearLayout mContainerLinearLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +63,13 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 .build();
         mAdView.loadAd(adRequest);
 
-        mMovieModel = getIntent().getParcelableExtra(ShowActivity.MOVIE_NAME);
+
+        if(savedInstanceState!=null){
+            mMovieModel = savedInstanceState.getParcelable(MOVIE_MODEL_KEY);
+        }
+        else {
+            mMovieModel = getIntent().getParcelableExtra(ShowActivity.MOVIE_NAME);
+        }
         userUid = Util.getUserUidFromSharedPreference(this);
 
         mDirectorTextView = (TextView) findViewById(R.id.director);
@@ -67,6 +79,10 @@ public class MovieDetailsActivity extends AppCompatActivity {
         mReleaseTextView = (TextView) findViewById(R.id.release);
         mRatingTextView = (TextView) findViewById(R.id.rating);
         mOverviewTextView = (TextView) findViewById(R.id.overview);
+
+        mProgressBar = (ProgressBar) findViewById(R.id.progress);
+        mErrorTextView = (TextView) findViewById(R.id.error_text);
+        mContainerLinearLayout = (LinearLayout) findViewById(R.id.container);
 
         mDirectorContainer = (LinearLayout) findViewById(R.id.container_director);
         mMusicContainer = (LinearLayout) findViewById(R.id.container_music);
@@ -87,9 +103,8 @@ public class MovieDetailsActivity extends AppCompatActivity {
         mReleaseTextView.setText(mMovieModel.getRelease_date());
         mRatingTextView.setText(mMovieModel.getVote_average()+"");
 
-
         HighOnShow.Movie movie = new HighOnShow(getString(R.string.api_key)).initMovie();
-        movie.getMovieCredits(mMovieModel.getId(), null, null, null, new ShowHandler<CreditResponse>() {
+        movie.getMovieCredits(mMovieModel.getId(), mContainerLinearLayout, mProgressBar, mErrorTextView, new ShowHandler<CreditResponse>() {
             @Override
             public void onResult(CreditResponse result) {
                 String producers="";
@@ -145,6 +160,12 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putParcelable(MOVIE_MODEL_KEY,mMovieModel);
+        super.onSaveInstanceState(outState);
     }
 
     @Override

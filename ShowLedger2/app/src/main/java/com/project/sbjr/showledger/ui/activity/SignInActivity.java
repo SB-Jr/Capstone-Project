@@ -41,6 +41,8 @@ public class SignInActivity extends AppCompatActivity {
 
     private final String TAG=SignInActivity.class.getName();
 
+    private final static String mUseridEditTextKey="com.project.sbjr.showledger.ui.activity.SignInActivity.userid";
+    private final static String mPasswordEditTextKey="com.project.sbjr.showledger.ui.activity.SignInActivity.password";
 
     private EditText mUseridEditText;
     private EditText mPasswordEditText;
@@ -92,8 +94,15 @@ public class SignInActivity extends AppCompatActivity {
 
         checkInternet(this,mCoordinatorLayout);
 
+        if(savedInstanceState!=null){
+            mUseridEditText.setText(savedInstanceState.getString(mUseridEditTextKey));
+            mPasswordEditText.setText(savedInstanceState.getString(mPasswordEditTextKey));
+        }
+
+
         mUserIdTextInputLayout.setErrorEnabled(true);
         mPasswordTextInputLayout.setErrorEnabled(true);
+
 
         mRegisterButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -164,6 +173,15 @@ public class SignInActivity extends AppCompatActivity {
         });
     }
 
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+
+        outState.putString(mPasswordEditTextKey,mPasswordEditText.getText().toString());
+        outState.putString(mUseridEditTextKey,mUseridEditText.getText().toString());
+
+        super.onSaveInstanceState(outState);
+    }
 
     private boolean checkEntry(){
         String userid = mUseridEditText.getText().toString();

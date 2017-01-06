@@ -18,12 +18,21 @@ public class MovieFragment extends Fragment implements ShowFragment.OnMovieShowF
 
     private static final String USER_UID = "user_uid";
 
+
+    private final static String mShowFragmentKey="com.project.sbjr.showledger.ui.fragment.MovieFragment.showfrag";
+    private final static String mWatchedListFragmentKey="com.project.sbjr.showledger.ui.fragment.MovieFragment.watchlistfrag";
+    private final static String mWishListFragmentKey="com.project.sbjr.showledger.ui.fragment.MovieFragment.wishlistfrag";
+
     private String userUid;
 
     private OnMovieFragmentInteractionListener mListener;
 
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
+
+    private ShowFragment mShowFragment;
+    private WatchedListFragment mWatchedListFragment;
+    private WishListFragment mWishListFragment;
 
     public MovieFragment() {
         // Required empty public constructor
@@ -41,9 +50,29 @@ public class MovieFragment extends Fragment implements ShowFragment.OnMovieShowF
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            userUid = getArguments().getString(USER_UID);
+        if(savedInstanceState!=null){
+            userUid = savedInstanceState.getString(USER_UID);
+            mShowFragment = (ShowFragment) getChildFragmentManager().getFragment(savedInstanceState,mShowFragmentKey);
+            mWishListFragment = (WishListFragment) getChildFragmentManager().getFragment(savedInstanceState,mWishListFragmentKey);
+            mWatchedListFragment = (WatchedListFragment) getChildFragmentManager().getFragment(savedInstanceState,mWatchedListFragmentKey);
         }
+        else if (getArguments() != null) {
+            userUid = getArguments().getString(USER_UID);
+            mShowFragment = ShowFragment.newInstance(userUid,MOVIE_TAG);
+            mWishListFragment = WishListFragment.newInstance(userUid,MOVIE_TAG);
+            mWatchedListFragment = WatchedListFragment.newInstance(userUid,MOVIE_TAG);
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+
+        outState.putString(USER_UID,userUid);
+        getChildFragmentManager().putFragment(outState,mShowFragmentKey,mShowFragment);
+        getChildFragmentManager().putFragment(outState,mWishListFragmentKey,mWishListFragment);
+        getChildFragmentManager().putFragment(outState,mWatchedListFragmentKey,mWatchedListFragment);
+
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -94,9 +123,9 @@ public class MovieFragment extends Fragment implements ShowFragment.OnMovieShowF
 
     public void initViewPager(){
         ShowViewPagerAdapter adapter = new ShowViewPagerAdapter(getChildFragmentManager());
-        adapter.addFragment(ShowFragment.newInstance(userUid,MOVIE_TAG),getString(R.string.show_movie));
-        adapter.addFragment(WishListFragment.newInstance(userUid,MOVIE_TAG),getString(R.string.show_wish));
-        adapter.addFragment(WatchedListFragment.newInstance(userUid,MOVIE_TAG),getString(R.string.show_watched));
+        adapter.addFragment(mShowFragment,getString(R.string.show_movie));
+        adapter.addFragment(mWishListFragment,getString(R.string.show_wish));
+        adapter.addFragment(mWatchedListFragment,getString(R.string.show_watched));
         mViewPager.setAdapter(adapter);
         mViewPager.setOffscreenPageLimit(3);
     }

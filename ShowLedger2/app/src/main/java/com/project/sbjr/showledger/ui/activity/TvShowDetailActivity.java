@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
@@ -30,6 +31,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class TvShowDetailActivity extends AppCompatActivity {
+
+    private final static String TV_SHOW_MODEL_KEY="com.project.sbjr.showledger.ui.activity.TvShowDetailActivity.tvshowmodel";
 
     private String userUid;
     private TvShowModel mTvShowModel;
@@ -53,13 +56,22 @@ public class TvShowDetailActivity extends AppCompatActivity {
             mOverviewContainer;
 
     private Toolbar mToolbar;
+    private ProgressBar mProgressBar;
+    private TextView mErrorTextView;
+    private LinearLayout mContainerLinearLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tv_show_detail);
 
-        mTvShowModel = getIntent().getParcelableExtra(ShowActivity.TVSHOW_NAME);
+
+        if(savedInstanceState!=null){
+            mTvShowModel = savedInstanceState.getParcelable(TV_SHOW_MODEL_KEY);
+        }
+        else {
+            mTvShowModel = getIntent().getParcelableExtra(ShowActivity.TVSHOW_NAME);
+        }
         userUid = Util.getUserUidFromSharedPreference(this);
         AdView mAdView = (AdView) findViewById(R.id.ad_bottom);
         AdRequest adRequest = new AdRequest.Builder()
@@ -77,6 +89,10 @@ public class TvShowDetailActivity extends AppCompatActivity {
         mRatingTextView = (TextView) findViewById(R.id.rating);
         mNumberOfSeasonsTextView = (TextView) findViewById(R.id.number_of_season);
         mOverviewTextView = (TextView) findViewById(R.id.overview);
+
+        mProgressBar = (ProgressBar) findViewById(R.id.progress);
+        mErrorTextView = (TextView) findViewById(R.id.error_text);
+        mContainerLinearLayout = (LinearLayout) findViewById(R.id.container);
 
         mCreatedByContainer = (LinearLayout) findViewById(R.id.container_created_by);
         mGenreContainer = (LinearLayout) findViewById(R.id.container_genre);
@@ -97,7 +113,7 @@ public class TvShowDetailActivity extends AppCompatActivity {
         mFirstAirDateTextView.setText(mTvShowModel.getFirst_air_date());
         mRatingTextView.setText(mTvShowModel.getVote_average()+"");
 
-        new HighOnShow(getString(R.string.api_key)).initTvShow().getTvShowDetailsById(mTvShowModel.getId(), null, null, null, new ShowHandler<TvShowModel>() {
+        new HighOnShow(getString(R.string.api_key)).initTvShow().getTvShowDetailsById(mTvShowModel.getId(), mContainerLinearLayout, mProgressBar, mErrorTextView, new ShowHandler<TvShowModel>() {
             @Override
             public void onResult(TvShowModel result) {
 
@@ -169,6 +185,14 @@ public class TvShowDetailActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+
+        outState.putParcelable(TV_SHOW_MODEL_KEY,mTvShowModel);
+
+        super.onSaveInstanceState(outState);
+    }
 
     private void addShowToWatchedList(){
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference(Util.FireBaseConstants.USER).child(userUid).child(Util.FireBaseConstants.TVSHOW).child(Util.FireBaseConstants.WATCHED);

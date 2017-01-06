@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.firebase.database.DatabaseError;
@@ -56,6 +57,9 @@ public class DetailsTvShowFragment extends Fragment {
             mNumberOfSeaonsContainer,
             mOverviewContainer;
 
+    private ProgressBar mProgressBar;
+    private TextView mErrorTextView;
+    private LinearLayout mContainerLinearLayout;
 
     public DetailsTvShowFragment() {
         // Required empty public constructor
@@ -98,6 +102,10 @@ public class DetailsTvShowFragment extends Fragment {
         mNumberOfSeasonsTextView = (TextView) view.findViewById(R.id.number_of_season);
         mOverviewTextView = (TextView) view.findViewById(R.id.overview);
 
+        mProgressBar = (ProgressBar) view.findViewById(R.id.progress);
+        mErrorTextView = (TextView) view.findViewById(R.id.error_text);
+        mContainerLinearLayout = (LinearLayout) view.findViewById(R.id.container);
+
         mCreatedByContainer = (LinearLayout) view.findViewById(R.id.container_created_by);
         mGenreContainer = (LinearLayout) view.findViewById(R.id.container_genre);
         mNetworksContainer = (LinearLayout) view.findViewById(R.id.container_network);
@@ -112,7 +120,7 @@ public class DetailsTvShowFragment extends Fragment {
         mFirstAirDateTextView.setText(mTvShowModel.getFirst_air_date());
         mRatingTextView.setText(mTvShowModel.getVote_average()+"");
 
-        new HighOnShow(getString(R.string.api_key)).initTvShow().getTvShowDetailsById(mTvShowModel.getId(), null, null, null, new ShowHandler<TvShowModel>() {
+        new HighOnShow(getString(R.string.api_key)).initTvShow().getTvShowDetailsById(mTvShowModel.getId(), mContainerLinearLayout, mProgressBar, mErrorTextView, new ShowHandler<TvShowModel>() {
             @Override
             public void onResult(TvShowModel result) {
 

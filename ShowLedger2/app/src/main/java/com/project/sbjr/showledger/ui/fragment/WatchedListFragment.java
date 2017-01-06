@@ -61,10 +61,21 @@ public class WatchedListFragment extends Fragment implements UserListMovieAdapte
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
+        if(savedInstanceState!=null){
+            userUid = savedInstanceState.getString(USER_UID);
+            showType = savedInstanceState.getString(SHOW_TYPE);
+        }
+        else if (getArguments() != null) {
             userUid = getArguments().getString(USER_UID);
             showType = getArguments().getString(SHOW_TYPE);
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putString(USER_UID,userUid);
+        outState.putString(SHOW_TYPE,showType);
+        super.onSaveInstanceState(outState);
     }
 
     @Override

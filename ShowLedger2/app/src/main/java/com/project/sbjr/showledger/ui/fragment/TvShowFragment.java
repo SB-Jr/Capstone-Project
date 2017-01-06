@@ -21,12 +21,22 @@ public class TvShowFragment extends Fragment implements ShowFragment.onTvShowFra
 
     private static final String USER_UID = "user_uid";
 
+    private final static String mShowFragmentKey="com.project.sbjr.showledger.ui.fragment.MovieFragment.showfrag";
+    private final static String mWatchedListFragmentKey="com.project.sbjr.showledger.ui.fragment.MovieFragment.watchlistfrag";
+    private final static String mWishListFragmentKey="com.project.sbjr.showledger.ui.fragment.MovieFragment.wishlistfrag";
+    private final static String mIncompleteListFragmentKey="com.project.sbjr.showledger.ui.fragment.MovieFragment.incompletelistfrag";
+
     private String userUid;
 
     private OnTvShowFragmentInteractionListener mListener;
 
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
+
+    private ShowFragment mShowFragment;
+    private WatchedListFragment mWatchedListFragment;
+    private WishListFragment mWishListFragment;
+    private IncompleteListFragment mIncompleteListFragment;
 
     public TvShowFragment() {
         // Required empty public constructor
@@ -45,9 +55,32 @@ public class TvShowFragment extends Fragment implements ShowFragment.onTvShowFra
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            userUid = getArguments().getString(USER_UID);
+        if(savedInstanceState!=null){
+            userUid = savedInstanceState.getString(USER_UID);
+            mShowFragment = (ShowFragment) getChildFragmentManager().getFragment(savedInstanceState,mShowFragmentKey);
+            mWishListFragment = (WishListFragment) getChildFragmentManager().getFragment(savedInstanceState,mWishListFragmentKey);
+            mWatchedListFragment = (WatchedListFragment) getChildFragmentManager().getFragment(savedInstanceState,mWatchedListFragmentKey);
+            mIncompleteListFragment = (IncompleteListFragment) getChildFragmentManager().getFragment(savedInstanceState,mIncompleteListFragmentKey);
         }
+        else if (getArguments() != null) {
+            userUid = getArguments().getString(USER_UID);
+            mShowFragment = ShowFragment.newInstance(userUid,TVSHOW_TAG);
+            mWishListFragment = WishListFragment.newInstance(userUid,TVSHOW_TAG);
+            mWatchedListFragment = WatchedListFragment.newInstance(userUid,TVSHOW_TAG);
+            mIncompleteListFragment = IncompleteListFragment.newInstance(userUid,TVSHOW_TAG);
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+
+        outState.putString(USER_UID,userUid);
+        getChildFragmentManager().putFragment(outState,mShowFragmentKey,mShowFragment);
+        getChildFragmentManager().putFragment(outState,mWishListFragmentKey,mWishListFragment);
+        getChildFragmentManager().putFragment(outState,mWatchedListFragmentKey,mWatchedListFragment);
+        getChildFragmentManager().putFragment(outState,mIncompleteListFragmentKey,mIncompleteListFragment);
+
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -92,10 +125,10 @@ public class TvShowFragment extends Fragment implements ShowFragment.onTvShowFra
 
     public void initViewPager(){
         ShowViewPagerAdapter adapter = new ShowViewPagerAdapter(getChildFragmentManager());
-        adapter.addFragment(ShowFragment.newInstance(userUid, TVSHOW_TAG),getString(R.string.show_tvshow));
-        adapter.addFragment(WishListFragment.newInstance(userUid, TVSHOW_TAG),getString(R.string.show_wish));
-        adapter.addFragment(WatchedListFragment.newInstance(userUid, TVSHOW_TAG),getString(R.string.show_watched));
-        adapter.addFragment(IncompleteListFragment.newInstance(userUid,TVSHOW_TAG),getString(R.string.show_incomplete));
+        adapter.addFragment(mShowFragment,getString(R.string.show_tvshow));
+        adapter.addFragment(mWishListFragment,getString(R.string.show_wish));
+        adapter.addFragment(mWatchedListFragment,getString(R.string.show_watched));
+        adapter.addFragment(mIncompleteListFragment,getString(R.string.show_incomplete));
         mViewPager.setAdapter(adapter);
         mViewPager.setOffscreenPageLimit(3);
     }
