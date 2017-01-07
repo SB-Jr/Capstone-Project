@@ -62,8 +62,8 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
 
-        NativeExpressAdView mAdView = (NativeExpressAdView) view.findViewById(R.id.ad_nav);
-        /*AdRequest adRequest = new AdRequest.Builder()
+        /*NativeExpressAdView mAdView = (NativeExpressAdView) view.findViewById(R.id.ad_nav);
+        AdRequest adRequest = new AdRequest.Builder()
                 .addTestDevice("D26C335A1E231CBAA6BF6FCF0777F14B")
                 .build();
         mAdView.loadAd(adRequest);*/

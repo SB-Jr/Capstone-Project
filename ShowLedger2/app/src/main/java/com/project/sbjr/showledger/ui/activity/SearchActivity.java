@@ -16,6 +16,8 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.project.sbjr.showinfodatabase.HighOnShow;
 import com.project.sbjr.showinfodatabase.handler.ShowHandler;
 import com.project.sbjr.showinfodatabase.model.MovieModel;
@@ -56,9 +58,20 @@ public class SearchActivity extends AppCompatActivity implements ShowMovieItemAd
         mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinator_layout);
         mEmptyTextView = (TextView) findViewById(R.id.empty_text);
 
+        AdView mAdView = (AdView) findViewById(R.id.ad_bottom);
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice("D26C335A1E231CBAA6BF6FCF0777F14B")
+                .build();
+        mAdView.loadAd(adRequest);
+
         mDetailsFrameLayout = (FrameLayout) findViewById(R.id.details_layout);
         if(mDetailsFrameLayout!=null){
             isTwoPane = true;
+            AdView mAdViewDetails = (AdView) findViewById(R.id.ad_details);
+            AdRequest adRequestDetails = new AdRequest.Builder()
+                    .addTestDevice("D26C335A1E231CBAA6BF6FCF0777F14B")
+                    .build();
+            mAdViewDetails.loadAd(adRequestDetails);
         }
 
         Intent intent = getIntent();

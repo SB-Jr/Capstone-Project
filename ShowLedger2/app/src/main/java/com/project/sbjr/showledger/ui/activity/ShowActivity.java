@@ -74,6 +74,12 @@ public class ShowActivity extends AppCompatActivity implements NavigationDrawerF
         if(mDetailsFrameLayout!=null){
             mTwoPane = true;
             Log.d(TAG,"2 panes exist");
+
+            AdView mAdViewDetails = (AdView) findViewById(R.id.ad_details);
+            AdRequest adRequestDetails = new AdRequest.Builder()
+                    .addTestDevice("D26C335A1E231CBAA6BF6FCF0777F14B")
+                    .build();
+            mAdViewDetails.loadAd(adRequestDetails);
         }
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);

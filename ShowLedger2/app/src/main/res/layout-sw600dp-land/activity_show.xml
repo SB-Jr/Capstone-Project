@@ -61,13 +61,32 @@
 
         </LinearLayout>
 
-        <com.google.android.gms.ads.AdView
-            android:id="@+id/ad_bottom"
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_gravity="bottom"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            ads:adSize="BANNER"
-            ads:adUnitId="@string/ad_bottom"/>
+            android:layout_height="wrap_content">
+
+            <com.google.android.gms.ads.AdView
+                android:id="@+id/ad_bottom"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                ads:adSize="BANNER"
+                android:layout_weight="1"
+                ads:adUnitId="@string/ad_bottom" />
+
+            <com.google.android.gms.ads.AdView
+                android:id="@+id/ad_details"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                ads:adSize="BANNER"
+                android:layout_weight="1"
+                ads:adUnitId="@string/ad_details" />
+
+
+        </LinearLayout>
 
     </android.support.design.widget.CoordinatorLayout>
 

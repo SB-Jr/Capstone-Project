@@ -225,6 +225,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         ads:adSize="BANNER"
-        ads:adUnitId="@string/ad_bottom" />
+        ads:adUnitId="@string/ad_details" />
 
 </android.support.design.widget.CoordinatorLayout>

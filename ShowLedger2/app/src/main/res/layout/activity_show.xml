@@ -54,7 +54,7 @@
     <!-- navigation drawer layout -->
     <fragment
         android:id="@+id/navigation_fragment"
-        android:layout_width="300dp"
+        android:layout_width="@dimen/navigation_drawer_width"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:name="com.project.sbjr.showledger.ui.fragment.NavigationDrawerFragment"
