@@ -51,6 +51,14 @@
 
     </FrameLayout>
 
+    <TextView
+        android:id="@+id/empty_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/search_empty"
+        android:visibility="gone" />
+
     <com.google.android.gms.ads.AdView
         android:id="@+id/ad_bottom"
         ads:adSize="BANNER"

@@ -67,20 +67,13 @@ public class SignInActivity extends AppCompatActivity {
             FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
             firebaseAuth.signInWithEmailAndPassword(getUserIdFromSharedPreference(this),getUserPassFromSharedPreference(this));
             Intent intent = new Intent(SignInActivity.this,ShowActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
 
             MobileAds.initialize(getApplicationContext(), getString(R.string.ad_bottom));
             MobileAds.initialize(getApplicationContext(), getString(R.string.ad_nav));
 
             startActivity(intent);
         }
-        /**
-         * todo: delete this later
-         *
-        else{
-            setUserNameInSharedPreference(SignInActivity.this,"user1");
-            Intent intent = new Intent(SignInActivity.this,ShowActivity.class);
-            startActivity(intent);
-        }*/
 
         mUseridEditText = (EditText) findViewById(R.id.user_id);
         mPasswordEditText = (EditText) findViewById(R.id.password);
@@ -144,6 +137,7 @@ public class SignInActivity extends AppCompatActivity {
                                         setUserUIDInSharedPreference(SignInActivity.this,userUid);
                                         setUserPassInSharedPreference(SignInActivity.this,pass);
                                         Intent intent = new Intent(SignInActivity.this,ShowActivity.class);
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
 
                                         MobileAds.initialize(getApplicationContext(), getString(R.string.ad_bottom));
                                         MobileAds.initialize(getApplicationContext(), getString(R.string.ad_nav));

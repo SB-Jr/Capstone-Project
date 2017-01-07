@@ -2,6 +2,7 @@ package com.project.sbjr.showledger.ui.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 
 import com.project.sbjr.showinfodatabase.model.MovieModel;
 import com.project.sbjr.showledger.R;
+import com.project.sbjr.showledger.Util;
 import com.project.sbjr.showledger.adapter.ShowViewPagerAdapter;
 
 public class MovieFragment extends Fragment implements ShowFragment.OnMovieShowFragmentInteractionListener,WatchedListFragment.OnMovieWatchedFragmentInteractionListener,WishListFragment.OnMovieWishListFragmentInteractionListener {
@@ -52,32 +54,35 @@ public class MovieFragment extends Fragment implements ShowFragment.OnMovieShowF
         super.onCreate(savedInstanceState);
         if(savedInstanceState!=null){
             userUid = savedInstanceState.getString(USER_UID);
-            mShowFragment = (ShowFragment) getChildFragmentManager().getFragment(savedInstanceState,mShowFragmentKey);
+            /*mShowFragment = (ShowFragment) getChildFragmentManager().getFragment(savedInstanceState,mShowFragmentKey);
             mWishListFragment = (WishListFragment) getChildFragmentManager().getFragment(savedInstanceState,mWishListFragmentKey);
-            mWatchedListFragment = (WatchedListFragment) getChildFragmentManager().getFragment(savedInstanceState,mWatchedListFragmentKey);
+            mWatchedListFragment = (WatchedListFragment) getChildFragmentManager().getFragment(savedInstanceState,mWatchedListFragmentKey);*/
         }
-        else if (getArguments() != null) {
+        if (getArguments() != null) {
             userUid = getArguments().getString(USER_UID);
-            mShowFragment = ShowFragment.newInstance(userUid,MOVIE_TAG);
-            mWishListFragment = WishListFragment.newInstance(userUid,MOVIE_TAG);
-            mWatchedListFragment = WatchedListFragment.newInstance(userUid,MOVIE_TAG);
         }
+        if(userUid==null){
+            userUid = Util.getUserUidFromSharedPreference(getContext());
+        }
+        mShowFragment = ShowFragment.newInstance(userUid,MOVIE_TAG);
+        mWishListFragment = WishListFragment.newInstance(userUid,MOVIE_TAG);
+        mWatchedListFragment = WatchedListFragment.newInstance(userUid,MOVIE_TAG);
+        mShowFragment.initListener(this);
+        mWatchedListFragment.initListener(this);
+        mWishListFragment.initListener(this);
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-
         outState.putString(USER_UID,userUid);
-        getChildFragmentManager().putFragment(outState,mShowFragmentKey,mShowFragment);
+        /*getChildFragmentManager().putFragment(outState,mShowFragmentKey,mShowFragment);
         getChildFragmentManager().putFragment(outState,mWishListFragmentKey,mWishListFragment);
-        getChildFragmentManager().putFragment(outState,mWatchedListFragmentKey,mWatchedListFragment);
-
+        getChildFragmentManager().putFragment(outState,mWatchedListFragmentKey,mWatchedListFragment);*/
         super.onSaveInstanceState(outState);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_movie, container, false);
         mTabLayout = (TabLayout)view.findViewById(R.id.tab_layout);
@@ -104,7 +109,7 @@ public class MovieFragment extends Fragment implements ShowFragment.OnMovieShowF
         mListener = null;
     }
 
-    @Override
+    /*@Override
     public void onAttachFragment(Fragment childFragment) {
         super.onAttachFragment(childFragment);
         if (childFragment instanceof ShowFragment){
@@ -119,7 +124,7 @@ public class MovieFragment extends Fragment implements ShowFragment.OnMovieShowF
         else if(childFragment instanceof IncompleteListFragment){
             ((IncompleteListFragment) childFragment).initListener(this);
         }
-    }
+    }*/
 
     public void initViewPager(){
         ShowViewPagerAdapter adapter = new ShowViewPagerAdapter(getChildFragmentManager());

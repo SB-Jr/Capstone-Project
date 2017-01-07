@@ -26,6 +26,8 @@ import com.project.sbjr.showledger.adapter.UserListMovieAdapter;
 import com.project.sbjr.showledger.adapter.UserListTvShowAdapter;
 import com.project.sbjr.showledger.ui.activity.ShowActivity;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 
@@ -42,6 +44,7 @@ public class WatchedListFragment extends Fragment implements UserListMovieAdapte
     private RecyclerView mRecyclerView;
     private ProgressBar mProgressBar;
     private TextView mErrorTextView;
+    private TextView mEmptyTextView;
 
     public WatchedListFragment() {
         // Required empty public constructor
@@ -86,48 +89,107 @@ public class WatchedListFragment extends Fragment implements UserListMovieAdapte
         mRecyclerView = (RecyclerView) view.findViewById(R.id.contents);
         mProgressBar = (ProgressBar) view.findViewById(R.id.progress);
         mErrorTextView = (TextView) view.findViewById(R.id.error_text);
+        mEmptyTextView = (TextView) view.findViewById(R.id.empty_text);
+
+        if(!Util.isInternetConnected(getContext())){
+            toggleVisibility(mErrorTextView);
+            return view;
+        }
 
         if(showType.equalsIgnoreCase(MovieFragment.MOVIE_TAG)){
             final ArrayList<Integer> movies = new ArrayList<>();
-            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(Util.FireBaseConstants.USER).child(userUid).child(Util.FireBaseConstants.MOVIE).child(Util.FireBaseConstants.WATCHED);
-            databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+
+            toggleVisibility(mProgressBar);
+
+            DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(Util.FireBaseConstants.USER).child(userUid).child(Util.FireBaseConstants.MOVIE);
+            reference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    for(DataSnapshot snapshot: dataSnapshot.getChildren()){
-                        long l = (long) snapshot.getValue();
-                        movies.add((int)l);
+                    if(dataSnapshot.hasChild(Util.FireBaseConstants.WATCHED)){
+                        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(Util.FireBaseConstants.USER).child(userUid).child(Util.FireBaseConstants.MOVIE).child(Util.FireBaseConstants.WATCHED);
+                        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                for(DataSnapshot snapshot: dataSnapshot.getChildren()){
+                                    long l = (long) snapshot.getValue();
+                                    movies.add((int)l);
+                                }
+                                if(movies.isEmpty()){
+                                    toggleVisibility(mEmptyTextView);
+                                    return;
+                                }
+
+                                toggleVisibility(mRecyclerView);
+
+                                UserListMovieAdapter adapter = new UserListMovieAdapter(getContext(),WatchedListFragment.this,movies);
+                                mRecyclerView.setAdapter(adapter);
+                                mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(),2));
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                                toggleVisibility(mErrorTextView);
+                            }
+                        });
                     }
-                    UserListMovieAdapter adapter = new UserListMovieAdapter(getContext(),WatchedListFragment.this,movies);
-                    mRecyclerView.setAdapter(adapter);
-                    mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(),2));
+                    else {
+                        toggleVisibility(mEmptyTextView);
+                    }
                 }
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-
+                    toggleVisibility(mErrorTextView);
                 }
             });
         }
         else{
+
+            toggleVisibility(mProgressBar);
+
             final ArrayList<Integer> tvshows = new ArrayList<>();
-            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(Util.FireBaseConstants.USER).child(userUid).child(Util.FireBaseConstants.TVSHOW).child(Util.FireBaseConstants.WATCHED);
-            databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(Util.FireBaseConstants.USER).child(userUid).child(Util.FireBaseConstants.TVSHOW);
+            reference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        long l = (long) snapshot.getValue();
-                        tvshows.add((int)l);
+                    if(dataSnapshot.hasChild(Util.FireBaseConstants.WATCHED)){
+                        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(Util.FireBaseConstants.USER).child(userUid).child(Util.FireBaseConstants.TVSHOW).child(Util.FireBaseConstants.WATCHED);
+                        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                    long l = (long) snapshot.getValue();
+                                    tvshows.add((int)l);
+                                }
+                                if(tvshows.isEmpty()){
+                                    toggleVisibility(mEmptyTextView);
+                                    return;
+                                }
+
+                                toggleVisibility(mRecyclerView);
+
+                                UserListTvShowAdapter adapter = new UserListTvShowAdapter(getContext(),WatchedListFragment.this,tvshows);
+                                mRecyclerView.setAdapter(adapter);
+                                mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(),2));
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                                toggleVisibility(mErrorTextView);
+                            }
+                        });
                     }
-                    UserListTvShowAdapter adapter = new UserListTvShowAdapter(getContext(),WatchedListFragment.this,tvshows);
-                    mRecyclerView.setAdapter(adapter);
-                    mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(),2));
+                    else {
+                        toggleVisibility(mEmptyTextView);
+                    }
                 }
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-
+                    toggleVisibility(mErrorTextView);
                 }
             });
+
         }
 
 
@@ -135,7 +197,7 @@ public class WatchedListFragment extends Fragment implements UserListMovieAdapte
     }
 
     public void initListener(Fragment fragment){
-        if(showType!=null&&showType.equalsIgnoreCase(MovieFragment.MOVIE_TAG)) {
+        if(showType.equalsIgnoreCase(MovieFragment.MOVIE_TAG)) {
             if (fragment instanceof OnMovieWatchedFragmentInteractionListener) {
                 mMovieListener = (OnMovieWatchedFragmentInteractionListener) fragment;
             } else {
@@ -151,6 +213,14 @@ public class WatchedListFragment extends Fragment implements UserListMovieAdapte
                         + " must implement OnTvShowWatchedFragmentInteractionListener");
             }
         }
+    }
+
+    public void toggleVisibility(View v){
+        mRecyclerView.setVisibility(View.GONE);
+        mErrorTextView.setVisibility(View.GONE);
+        mProgressBar.setVisibility(View.GONE);
+        mEmptyTextView.setVisibility(View.GONE);
+        v.setVisibility(View.VISIBLE);
     }
 
     @Override

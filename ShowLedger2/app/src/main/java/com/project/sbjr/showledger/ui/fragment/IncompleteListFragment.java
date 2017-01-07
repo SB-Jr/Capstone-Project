@@ -37,6 +37,7 @@ public class IncompleteListFragment extends Fragment implements UserListTvShowAd
     private RecyclerView mRecyclerView;
     private ProgressBar mProgressBar;
     private TextView mErrorTextView;
+    private TextView mEmptyTextView;
 
     public IncompleteListFragment() {
         // Required empty public constructor
@@ -81,29 +82,67 @@ public class IncompleteListFragment extends Fragment implements UserListTvShowAd
         mRecyclerView = (RecyclerView) view.findViewById(R.id.contents);
         mProgressBar = (ProgressBar) view.findViewById(R.id.progress);
         mErrorTextView = (TextView) view.findViewById(R.id.error_text);
+        mEmptyTextView = (TextView) view.findViewById(R.id.empty_text);
+
+        if(!Util.isInternetConnected(getContext())){
+            toggleVisibility(mErrorTextView);
+            return view;
+        }
+
+        toggleVisibility(mProgressBar);
 
         final ArrayList<Integer> tvshows = new ArrayList<>();
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(Util.FireBaseConstants.USER).child(userUid).child(Util.FireBaseConstants.TVSHOW).child(Util.FireBaseConstants.INCOMPLETE);
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(Util.FireBaseConstants.USER).child(userUid).child(Util.FireBaseConstants.TVSHOW);
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    int l = Integer.parseInt(snapshot.getKey());
-                    tvshows.add(l);
-                }
+                if(dataSnapshot.hasChild(Util.FireBaseConstants.INCOMPLETE)){
+                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(Util.FireBaseConstants.USER).child(userUid).child(Util.FireBaseConstants.TVSHOW).child(Util.FireBaseConstants.INCOMPLETE);
+                    databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                int l = Integer.parseInt(snapshot.getKey());
+                                tvshows.add(l);
+                            }
 
-                UserListTvShowAdapter adapter = new UserListTvShowAdapter(getContext(),IncompleteListFragment.this,tvshows);
-                mRecyclerView.setAdapter(adapter);
-                mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(),2));
+                            if(tvshows.isEmpty()){
+                                toggleVisibility(mEmptyTextView);
+                                return;
+                            }
+
+                            toggleVisibility(mRecyclerView);
+
+                            UserListTvShowAdapter adapter = new UserListTvShowAdapter(getContext(),IncompleteListFragment.this,tvshows);
+                            mRecyclerView.setAdapter(adapter);
+                            mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(),2));
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+                }
+                else{
+                    toggleVisibility(mEmptyTextView);
+                }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                toggleVisibility(mErrorTextView);
             }
         });
-
         return view;
+    }
+
+    public void toggleVisibility(View v){
+        mRecyclerView.setVisibility(View.GONE);
+        mErrorTextView.setVisibility(View.GONE);
+        mProgressBar.setVisibility(View.GONE);
+        mEmptyTextView.setVisibility(View.GONE);
+        v.setVisibility(View.VISIBLE);
     }
 
     public void initListener(Fragment fragment) {

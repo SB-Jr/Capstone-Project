@@ -3,6 +3,7 @@ package com.project.sbjr.showledger.ui.activity;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -120,9 +121,7 @@ public class RegisterActivity extends AppCompatActivity {
                         .addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                /**
-                                 * Todo:add snackbar that there was a problem
-                                 * */
+                                Snackbar.make(mCoordinatorLayout,getString(R.string.register_error),Snackbar.LENGTH_SHORT).show();
                                 mProgressBar.setVisibility(View.GONE);
                             }
                         });

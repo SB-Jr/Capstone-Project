@@ -84,6 +84,7 @@
             android:layout_height="wrap_content"
             android:text="@string/sign_up"
             android:layout_gravity="center"
+            android:contentDescription="@string/content_description_register"
             android:backgroundTint="@color/colorPrimary"
             style="@style/Base.Widget.AppCompat.Button.Colored"/>
 

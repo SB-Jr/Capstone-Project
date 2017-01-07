@@ -51,16 +51,14 @@ public class NavigationDrawerAdapter  extends RecyclerView.Adapter<NavigationDra
         public void onBind(int pos){
             position = pos;
             switch (pos){
-                case 0: mTitleImageView.setImageResource(R.drawable.ic_movies);
+                case 0: mTitleImageView.setImageResource(R.drawable.ic_local_movies_grey_400_24dp);
                         mTitleTextView.setText(context.getString(R.string.navigation_movies));
                     break;
                 case 1: mTitleImageView.setImageResource(R.drawable.ic_tv_show);
                         mTitleTextView.setText(context.getString(R.string.navigation_tvshows));
                     break;
-                case 2: mTitleImageView.setVisibility(View.INVISIBLE);
+                case 2: mTitleImageView.setImageResource(R.drawable.ic_sign_out);
                     mTitleTextView.setText(context.getString(R.string.navigation_signout));
-                    break;
-                case 3:mTitleTextView.setText("AD here");
                     break;
             }
         }
@@ -81,13 +79,12 @@ public class NavigationDrawerAdapter  extends RecyclerView.Adapter<NavigationDra
 
     @Override
     public void onBindViewHolder(NavigationDrawerViewHolder holder, int position) {
-
         holder.onBind(position);
     }
 
     @Override
     public int getItemCount() {
-        return 4;
+        return 3;
     }
 
 

@@ -11,12 +11,16 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.NativeExpressAdView;
 import com.project.sbjr.showledger.R;
+import com.project.sbjr.showledger.Util;
 import com.project.sbjr.showledger.adapter.NavigationDrawerAdapter;
+
+import org.w3c.dom.Text;
 
 public class NavigationDrawerFragment extends Fragment implements NavigationDrawerAdapter.NavigationDrawerItemClickListener{
     private static final String CURRENT_SELECTION = "current_selection";
@@ -29,6 +33,7 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
     private Toolbar mToolbar;
     private ActionBarDrawerToggle mActionBarDrawerToggle;
     private RecyclerView mRecyclerView;
+    private TextView mUserGreetTextView;
 
     public NavigationDrawerFragment() {
         // Required empty public constructor
@@ -37,6 +42,7 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
     public static NavigationDrawerFragment newInstance(int currentSelection) {
         NavigationDrawerFragment fragment = new NavigationDrawerFragment();
         Bundle args = new Bundle();
+        fragment.mCurrentSelection = currentSelection;
         args.putInt(CURRENT_SELECTION, currentSelection);
         fragment.setArguments(args);
         return fragment;
@@ -66,6 +72,8 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
         NavigationDrawerAdapter adapter = new NavigationDrawerAdapter(getContext(),this);
         mRecyclerView.setAdapter(adapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mUserGreetTextView = (TextView) view.findViewById(R.id.user_greeting);
+        mUserGreetTextView.setText(Util.getUsernameFromSharedPreference(getContext()));
 
         return view;
     }

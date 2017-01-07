@@ -1,12 +1,15 @@
 package com.project.sbjr.showledger.ui.fragment;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -41,6 +44,7 @@ public class ShowFragment extends Fragment implements ShowMovieItemAdapter.ShowM
     private RecyclerView mRecyclerView;
     private ProgressBar mProgressBar;
     private TextView mErrorTextView;
+    private FrameLayout mFrameLayout;
 
     public ShowFragment() {
         // Required empty public constructor
@@ -64,7 +68,7 @@ public class ShowFragment extends Fragment implements ShowMovieItemAdapter.ShowM
             userUid = savedInstanceState.getString(USER_UID);
             showType = savedInstanceState.getString(SHOW_TYPE);
         }
-        else if (getArguments() != null) {
+        if (getArguments() != null) {
             userUid = getArguments().getString(USER_UID);
             showType = getArguments().getString(SHOW_TYPE);
         }
@@ -78,12 +82,21 @@ public class ShowFragment extends Fragment implements ShowMovieItemAdapter.ShowM
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.fragment_show, container, false);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.contents);
         mProgressBar = (ProgressBar) view.findViewById(R.id.progress);
         mErrorTextView = (TextView) view.findViewById(R.id.error_text);
+        mFrameLayout = (FrameLayout) view.findViewById(R.id.sudo_coordinator_layout);
+
+        if(savedInstanceState!=null){
+            userUid = savedInstanceState.getString(USER_UID);
+            showType = savedInstanceState.getString(SHOW_TYPE);
+        }
+        if (getArguments() != null) {
+            userUid = getArguments().getString(USER_UID);
+            showType = getArguments().getString(SHOW_TYPE);
+        }
 
 
         if(showType.equalsIgnoreCase(MovieFragment.MOVIE_TAG)) {
@@ -98,7 +111,7 @@ public class ShowFragment extends Fragment implements ShowMovieItemAdapter.ShowM
 
                 @Override
                 public void onFailure() {
-                    //Todo: add a snackbar for failure and try again later
+                    //Snackbar.make(mFrameLayout,getString(R.string.snack_bar_error),Snackbar.LENGTH_SHORT).show();
                 }
             });
         }
@@ -114,7 +127,7 @@ public class ShowFragment extends Fragment implements ShowMovieItemAdapter.ShowM
 
                 @Override
                 public void onFailure() {
-                    //Todo: add a snackbar for failure and try again later
+                    //Snackbar.make(mFrameLayout,getString(R.string.snack_bar_error),Snackbar.LENGTH_SHORT).show();
                 }
             });
         }
@@ -123,7 +136,7 @@ public class ShowFragment extends Fragment implements ShowMovieItemAdapter.ShowM
 
     public void initListener(Fragment fragment){
 
-        if(showType!=null&&showType.equalsIgnoreCase(MovieFragment.MOVIE_TAG)) {
+        if(showType.equalsIgnoreCase(MovieFragment.MOVIE_TAG)) {
             if (fragment instanceof OnMovieShowFragmentInteractionListener) {
                 mMovieListener = (OnMovieShowFragmentInteractionListener) fragment;
             } else {

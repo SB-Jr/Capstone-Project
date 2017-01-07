@@ -83,9 +83,12 @@ public class ShowActivity extends AppCompatActivity implements NavigationDrawerF
         mContainerFrameLayout = (FrameLayout) findViewById(R.id.fragment_content_holder);
 
 
+        mMovieFragment = MovieFragment.newInstance(Util.getUserUidFromSharedPreference(this));
+        mTvShowFragment = TvShowFragment.newInstance(Util.getUserUidFromSharedPreference(this));
+
         if(savedInstanceState!=null){
-            mMovieFragment = (MovieFragment) getSupportFragmentManager().getFragment(savedInstanceState,mMovieFragmentKey);
-            mTvShowFragment = (TvShowFragment) getSupportFragmentManager().getFragment(savedInstanceState,mTvShowFragmentKey);
+            /*mMovieFragment = (MovieFragment) getSupportFragmentManager().getFragment(savedInstanceState,mMovieFragmentKey);
+            mTvShowFragment = (TvShowFragment) getSupportFragmentManager().getFragment(savedInstanceState,mTvShowFragmentKey);*/
             if(savedInstanceState.getBoolean(MISMOVIEKEY,true)) {
                 mIsMovie = true;
                 changeShowFragment(mMovieFragment);
@@ -96,23 +99,13 @@ public class ShowActivity extends AppCompatActivity implements NavigationDrawerF
         }
         else {
             mIsMovie = true;
-            mMovieFragment = MovieFragment.newInstance(Util.getUserUidFromSharedPreference(this));
-            mTvShowFragment = TvShowFragment.newInstance(Util.getUserUidFromSharedPreference(this));
             changeShowFragment(mMovieFragment);
         }
-
-
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putBoolean(MISMOVIEKEY,mIsMovie);
-        if(mIsMovie) {
-            getSupportFragmentManager().putFragment(outState, mMovieFragmentKey, mMovieFragment);
-        }
-        else {
-            getSupportFragmentManager().putFragment(outState, mTvShowFragmentKey, mTvShowFragment);
-        }
         super.onSaveInstanceState(outState);
     }
 
@@ -171,21 +164,15 @@ public class ShowActivity extends AppCompatActivity implements NavigationDrawerF
             Fragment fragment = fragmentManager.findFragmentByTag(DETAILS_FRAG_TAG);
             if(fragment!=null){
                 fragmentTransaction.remove(fragment);
+                fragmentTransaction.commit();
             }
-            fragmentTransaction.commit();
+
         }
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        invalidateDetailsContentHolder();
-        if(mIsMovie) {
-            mMovieFragment.onStop();
-        }
-        else {
-            mTvShowFragment.onStop();
-        }
     }
 
     @Override
@@ -198,9 +185,10 @@ public class ShowActivity extends AppCompatActivity implements NavigationDrawerF
             case 1: changeShowFragment(mTvShowFragment);
                 mIsMovie = false;
                 break;
-            case 2://todo: complete this 2 cases
-                break;
-            case 3:
+            case 2:Util.clearCredentials(this);
+                Intent intent = new Intent(this,SignInActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
                 break;
         }
     }

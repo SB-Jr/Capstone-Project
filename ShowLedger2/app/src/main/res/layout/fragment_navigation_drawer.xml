@@ -1,35 +1,59 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:ads="http://schemas.android.com/apk/res-auto"
     android:background="@android:color/white"
     android:orientation="vertical"
-    tools:context="com.project.sbjr.showledger.ui.fragment.NavigationDrawerFragment"
-    android:weightSum="1">
+    android:weightSum="1"
+    tools:context="com.project.sbjr.showledger.ui.fragment.NavigationDrawerFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <FrameLayout
         android:id="@+id/header"
-        android:background="@drawable/navigation_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/header_height"
+        android:background="@drawable/navigation_bar"
         android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/navigation_user_greetings_margin"
+            android:layout_marginEnd="@dimen/navigation_user_greetings_margin"
+            android:layout_marginTop="@dimen/navigation_user_greetings_margin_top"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/navigation_hi"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/navigation_user_greetings_size" />
+
+            <TextView
+                android:id="@+id/user_greeting"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/navigation_user_greetings_user_size" />
+
+        </LinearLayout>
 
     </FrameLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/contents"
         android:layout_width="match_parent"
-        android:layout_marginTop="@dimen/card_view_margin_vertical"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/card_view_margin_vertical" />
 
 
     <com.google.android.gms.ads.NativeExpressAdView
         android:id="@+id/ad_nav"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
         ads:adUnitId="@string/ad_nav" />
 
 

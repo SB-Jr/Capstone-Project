@@ -8,6 +8,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
+import android.view.View;
 
 import java.util.Random;
 
@@ -20,15 +21,28 @@ import static android.content.Context.MODE_PRIVATE;
 public class Util {
 
 
-    public static void checkInternet(Context context, CoordinatorLayout coordinatorLayout) {
+    public static void checkInternet(Context context, View coordinatorLayout) {
         if (!isInternetConnected(context)) {
             Snackbar.make(coordinatorLayout, R.string.no_internet, Snackbar.LENGTH_LONG).show();
         }
     }
 
+    public static void clearCredentials(Context context){
+        SharedPreferences sharedPreferences = context.getSharedPreferences("ShowLedger", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.remove("user");
+        editor.remove("pass");
+        editor.remove("useruid");
+        editor.remove("userid");
+        editor.commit();
+    }
+
     public static boolean isInternetConnected(Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        if(activeNetworkInfo==null){
+            return false;
+        }
         if (activeNetworkInfo.isConnected()) {
             return true;
         } else {
@@ -61,7 +75,7 @@ public class Util {
 
     public static String getUserUidFromSharedPreference(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences("ShowLedger", MODE_PRIVATE);
-        if (sharedPreferences.contains("user") && sharedPreferences.getString("user", "").length() > 0) {
+        if (sharedPreferences.contains("useruid") && sharedPreferences.getString("useruid", "").length() > 0) {
             return sharedPreferences.getString("useruid", null);
         }
         return null;

@@ -2,6 +2,8 @@ package com.project.sbjr.showledger.ui.activity;
 
 import android.graphics.Color;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -57,6 +59,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
     private TextView mErrorTextView;
     private LinearLayout mContainerLinearLayout;
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
+    private CoordinatorLayout mCoordinatorLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +94,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
         mContainerLinearLayout = (LinearLayout) findViewById(R.id.container);
         mImageView = (ImageView) findViewById(R.id.movie_image);
         mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+        mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinator_layout);
 
         mDirectorContainer = (LinearLayout) findViewById(R.id.container_director);
         mMusicContainer = (LinearLayout) findViewById(R.id.container_music);
@@ -119,9 +123,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
         Picasso.with(MovieDetailsActivity.this)
                 .load("https://image.tmdb.org/t/p/w300"+mMovieModel.getBackdrop_path())
-                .placeholder(Util.getRandomColor())
                 .fit()
-                .placeholder(Util.getRandomColor())
                 .into(mImageView);
 
         HighOnShow.Movie movie = new HighOnShow(getString(R.string.api_key)).initMovie();
@@ -216,7 +218,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
         reference.child(mMovieModel.getId() + "").setValue(mMovieModel.getId(), new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                //todo: add sncakbar for completion
+                Snackbar.make(mCoordinatorLayout,getString(R.string.snack_bar_watch_list),Snackbar.LENGTH_SHORT).show();
             }
         });
     }
@@ -226,7 +228,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
         reference.child(mMovieModel.getId() + "").setValue(mMovieModel.getId(), new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                //todo: add sncakbar for completion
+                Snackbar.make(mCoordinatorLayout,getString(R.string.snack_bar_wish_list),Snackbar.LENGTH_SHORT).show();
             }
         });
     }

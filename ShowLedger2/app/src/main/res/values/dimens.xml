@@ -9,10 +9,15 @@
     <dimen name="title_height">48dp</dimen>
     <dimen name="icon_start_margin">16dp</dimen>
     <dimen name="title_start_margin">72dp</dimen>
+    <dimen name="navigation_user_greetings_size">20sp</dimen>
+    <dimen name="navigation_user_greetings_margin">16dp</dimen>
+    <dimen name="navigation_user_greetings_user_size">28sp</dimen>
+    <dimen name="navigation_user_greetings_margin_top">50dp</dimen>
 
     <!--Show details-->
     <dimen name="show_details_horizontal_margin">32dp</dimen>
     <dimen name="show_details_image_height">250dp</dimen>
+    <dimen name="show_details_text_size">18sp</dimen>
 
     <!--card view-->
     <dimen name="card_view_movie_title">24sp</dimen>

@@ -16,8 +16,8 @@
 
     <item
         android:id="@+id/incomplete"
-        android:title="@string/show_incomplete"
-        android:icon="@drawable/ic_watched_list_icon"
+        android:title="@string/menu_incomplete"
+        android:icon="@drawable/ic_incomplete"
         app:showAsAction="ifRoom"/>
 
 </menu>

@@ -1,6 +1,5 @@
 package com.project.sbjr.showledger.ui.fragment;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -11,9 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -28,7 +25,7 @@ import com.project.sbjr.showledger.adapter.UserListTvShowAdapter;
 
 import java.util.ArrayList;
 
-public class WishListFragment extends Fragment implements UserListMovieAdapter.UserListMovieAdapterInteraction,UserListTvShowAdapter.UserListTvShowAdapterInteraction{
+public class WishListFragment extends Fragment implements UserListMovieAdapter.UserListMovieAdapterInteraction, UserListTvShowAdapter.UserListTvShowAdapterInteraction {
     private static final String USER_UID = "user_uid";
     private static final String SHOW_TYPE = "show_type";
 
@@ -42,6 +39,7 @@ public class WishListFragment extends Fragment implements UserListMovieAdapter.U
     private RecyclerView mRecyclerView;
     private ProgressBar mProgressBar;
     private TextView mErrorTextView;
+    private TextView mEmptyTextView;
 
     public WishListFragment() {
         // Required empty public constructor
@@ -62,11 +60,10 @@ public class WishListFragment extends Fragment implements UserListMovieAdapter.U
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(savedInstanceState!=null){
+        if (savedInstanceState != null) {
             userUid = savedInstanceState.getString(USER_UID);
             showType = savedInstanceState.getString(SHOW_TYPE);
-        }
-        else if (getArguments() != null) {
+        } else if (getArguments() != null) {
             userUid = getArguments().getString(USER_UID);
             showType = getArguments().getString(SHOW_TYPE);
         }
@@ -74,8 +71,8 @@ public class WishListFragment extends Fragment implements UserListMovieAdapter.U
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putString(USER_UID,userUid);
-        outState.putString(SHOW_TYPE,showType);
+        outState.putString(USER_UID, userUid);
+        outState.putString(SHOW_TYPE, showType);
         super.onSaveInstanceState(outState);
     }
 
@@ -84,51 +81,106 @@ public class WishListFragment extends Fragment implements UserListMovieAdapter.U
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view= inflater.inflate(R.layout.fragment_wish_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_wish_list, container, false);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.contents);
         mProgressBar = (ProgressBar) view.findViewById(R.id.progress);
         mErrorTextView = (TextView) view.findViewById(R.id.error_text);
+        mEmptyTextView = (TextView) view.findViewById(R.id.empty_text);
 
-        if(showType.equalsIgnoreCase(MovieFragment.MOVIE_TAG)){
+        if(!Util.isInternetConnected(getContext())){
+            toggleVisibility(mErrorTextView);
+            return view;
+        }
+
+        if (showType.equalsIgnoreCase(MovieFragment.MOVIE_TAG)) {
             final ArrayList<Integer> movies = new ArrayList<>();
-            DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Util.FireBaseConstants.USER).child(userUid).child(Util.FireBaseConstants.MOVIE).child(Util.FireBaseConstants.WISHLIST);
-            database.addListenerForSingleValueEvent(new ValueEventListener() {
+
+            toggleVisibility(mProgressBar);
+
+            DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(Util.FireBaseConstants.USER).child(userUid).child(Util.FireBaseConstants.MOVIE);
+            reference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    for(DataSnapshot snapshot: dataSnapshot.getChildren()){
-                        long l = (long) snapshot.getValue();
-                        movies.add((int)l);
+                    if (dataSnapshot.hasChild(Util.FireBaseConstants.WISHLIST)) {
+                        DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(Util.FireBaseConstants.USER).child(userUid).child(Util.FireBaseConstants.MOVIE).child(Util.FireBaseConstants.WISHLIST);
+                        database.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                    long l = (long) snapshot.getValue();
+                                    movies.add((int) l);
+                                }
+                                if (movies.isEmpty()) {
+                                    toggleVisibility(mEmptyTextView);
+                                    return;
+                                }
+
+                                toggleVisibility(mRecyclerView);
+
+                                UserListMovieAdapter adapter = new UserListMovieAdapter(getContext(), WishListFragment.this, movies);
+                                mRecyclerView.setAdapter(adapter);
+                                mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                                Log.d("FireBaseError", databaseError.getMessage() + "-----" + databaseError.toString());
+                            }
+                        });
+                    } else {
+                        toggleVisibility(mEmptyTextView);
                     }
-                    UserListMovieAdapter adapter = new UserListMovieAdapter(getContext(),WishListFragment.this,movies);
-                    mRecyclerView.setAdapter(adapter);
-                    mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(),2));
                 }
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-                    Log.d("FireBaseError",databaseError.getMessage()+"-----"+databaseError.toString());
+                    toggleVisibility(mErrorTextView);
                 }
             });
-        }
-        else {
+        } else {
             final ArrayList<Integer> tvshows = new ArrayList<>();
-            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(Util.FireBaseConstants.USER).child(userUid).child(Util.FireBaseConstants.TVSHOW).child(Util.FireBaseConstants.WISHLIST);
-            databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+
+            toggleVisibility(mProgressBar);
+
+            DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(Util.FireBaseConstants.USER).child(userUid).child(Util.FireBaseConstants.TVSHOW);
+            reference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        long l = (long) snapshot.getValue();
-                        tvshows.add((int)l);
-                    }
+                    if (dataSnapshot.hasChild(Util.FireBaseConstants.WISHLIST)) {
+                        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(Util.FireBaseConstants.USER).child(userUid).child(Util.FireBaseConstants.TVSHOW).child(Util.FireBaseConstants.WISHLIST);
+                        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                    long l = (long) snapshot.getValue();
+                                    tvshows.add((int) l);
+                                }
+                                if (tvshows.isEmpty()) {
+                                    toggleVisibility(mEmptyTextView);
+                                    return;
+                                }
 
-                    UserListTvShowAdapter adapter = new UserListTvShowAdapter(getContext(),WishListFragment.this,tvshows);
-                    mRecyclerView.setAdapter(adapter);
-                    mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(),2));
+                                toggleVisibility(mRecyclerView);
+
+                                UserListTvShowAdapter adapter = new UserListTvShowAdapter(getContext(), WishListFragment.this, tvshows);
+                                mRecyclerView.setAdapter(adapter);
+                                mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                                Log.d("FireBaseError", databaseError.getMessage() + "-----" + databaseError.toString());
+                            }
+                        });
+
+                    } else {
+                        toggleVisibility(mEmptyTextView);
+                    }
                 }
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-                    Log.d("FireBaseError",databaseError.getMessage()+"-----"+databaseError.toString());
+                    toggleVisibility(mErrorTextView);
                 }
             });
         }
@@ -136,16 +188,15 @@ public class WishListFragment extends Fragment implements UserListMovieAdapter.U
         return view;
     }
 
-    public void initListener(Fragment fragment){
-        if(showType!=null&&showType.equalsIgnoreCase(MovieFragment.MOVIE_TAG)) {
+    public void initListener(Fragment fragment) {
+        if (showType.equalsIgnoreCase(MovieFragment.MOVIE_TAG)) {
             if (fragment instanceof OnMovieWishListFragmentInteractionListener) {
                 mMovieListener = (OnMovieWishListFragmentInteractionListener) fragment;
             } else {
                 throw new RuntimeException(fragment.toString()
                         + " must implement OnMovieWishListFragmentInteractionListener");
             }
-        }
-        else {
+        } else {
             if (fragment instanceof OnTvShowWishListFragmentInteractionListener) {
                 mTvListener = (OnTvShowWishListFragmentInteractionListener) fragment;
             } else {
@@ -153,6 +204,14 @@ public class WishListFragment extends Fragment implements UserListMovieAdapter.U
                         + " must implement OnTvShowWishListFragmentInteractionListener");
             }
         }
+    }
+
+    public void toggleVisibility(View v){
+        mRecyclerView.setVisibility(View.GONE);
+        mErrorTextView.setVisibility(View.GONE);
+        mProgressBar.setVisibility(View.GONE);
+        mEmptyTextView.setVisibility(View.GONE);
+        v.setVisibility(View.VISIBLE);
     }
 
     @Override

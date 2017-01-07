@@ -1,6 +1,7 @@
 package com.project.sbjr.showledger.ui.fragment;
 
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -8,6 +9,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -23,6 +26,8 @@ import com.project.sbjr.showinfodatabase.model.MovieModel;
 import com.project.sbjr.showinfodatabase.response.CreditResponse;
 import com.project.sbjr.showledger.R;
 import com.project.sbjr.showledger.Util;
+import com.project.sbjr.showledger.ui.activity.MovieDetailsActivity;
+import com.squareup.picasso.Picasso;
 
 
 public class DetailsMovieFragment extends Fragment {
@@ -53,6 +58,8 @@ public class DetailsMovieFragment extends Fragment {
     private ProgressBar mProgressBar;
     private TextView mErrorTextView;
     private LinearLayout mContainerLinearLayout;
+    private FrameLayout mFrameLayout;
+    private ImageView mImageView;
 
     public DetailsMovieFragment() {
         // Required empty public constructor
@@ -118,6 +125,8 @@ public class DetailsMovieFragment extends Fragment {
         mProgressBar = (ProgressBar) view.findViewById(R.id.progress);
         mErrorTextView = (TextView) view.findViewById(R.id.error_text);
         mContainerLinearLayout = (LinearLayout) view.findViewById(R.id.container);
+        mFrameLayout = (FrameLayout) view.findViewById(R.id.sudo_coordinator_layout);
+        mImageView = (ImageView) view.findViewById(R.id.movie_image);
 
         mDirectorContainer = (LinearLayout) view.findViewById(R.id.container_director);
         mMusicContainer = (LinearLayout) view.findViewById(R.id.container_music);
@@ -130,6 +139,12 @@ public class DetailsMovieFragment extends Fragment {
         mOverviewTextView.setText(mMovieModel.getOverview());
         mReleaseTextView.setText(mMovieModel.getRelease_date());
         mRatingTextView.setText(mMovieModel.getVote_average()+"");
+
+
+        Picasso.with(getContext())
+                .load("https://image.tmdb.org/t/p/w300"+mMovieModel.getBackdrop_path())
+                .fit()
+                .into(mImageView);
 
         HighOnShow.Movie movie = new HighOnShow(getString(R.string.api_key)).initMovie();
         movie.getMovieCredits(mMovieModel.getId(), mContainerLinearLayout, mProgressBar, mErrorTextView, new ShowHandler<CreditResponse>() {
@@ -204,7 +219,7 @@ public class DetailsMovieFragment extends Fragment {
         reference.child(mMovieModel.getId() + "").setValue(mMovieModel.getId(), new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                //todo: add sncakbar for completion
+                Snackbar.make(mFrameLayout,getString(R.string.snack_bar_watch_list),Snackbar.LENGTH_SHORT).show();
             }
         });
     }
@@ -214,7 +229,7 @@ public class DetailsMovieFragment extends Fragment {
         reference.child(mMovieModel.getId() + "").setValue(mMovieModel.getId(), new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                //todo: add sncakbar for completion
+                Snackbar.make(mFrameLayout,getString(R.string.snack_bar_wish_list),Snackbar.LENGTH_SHORT).show();
             }
         });
     }

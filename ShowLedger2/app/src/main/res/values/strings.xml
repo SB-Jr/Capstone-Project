@@ -18,9 +18,10 @@
     <string name="user_name_error_empty">User Name can\'t be empty</string>
     <string name="retype_password_error_not_match">Passwords don\'t match</string>
     <string name="signin_error">There was a problem signing you in!! Please retry later..</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="register_error">There was a problem registering you! Please retry later..</string>
+    <string name="content_description_register">Click here after filling the above form to register</string>
+    <string name="content_description_register_button">Click here to go to registering screen</string>
+    <string name="content_description_signin">Click here after filling the user id and password to signin</string>
 
 
     <!--Descriptions-->
@@ -32,6 +33,8 @@
     <string name="navigation_movies">Movies</string>
     <string name="navigation_tvshows">TV Shows</string>
     <string name="navigation_signout">Sign Out</string>
+    <string name="navigation_hi">Hello</string>
+
 
 
     <!--Show View pager-->
@@ -43,7 +46,7 @@
     <string name="show_favourite">Favourite List</string>
 
     <!--error-->
-    <string name="connection_error">Oops!!Some Error Occurred!! Please try again!!</string>
+    <string name="connection_error">Oops!!Some Error Occurred!! Please check your Internet Connection and try again!!</string>
 
     <!--Details fragment/activity-->
     <string name="detail_director">Director</string>
@@ -58,10 +61,11 @@
     <string name="detail_first_air_date">First Air Date:</string>
     <string name="detail_networks">Networks</string>
     <string name="detail_number_seasons">Number Of Seasons:</string>
+    <string name="detail_select_watched_seasons">Select Seasons you have watched already</string>
 
     <!--Menu strings and description-->
     <string name="menu_done">Add the item to Watched List</string>
-    <string name="menu_watch_later">Add the item to Watch Later</string>
+    <string name="menu_watch_later">Add the item to Watch Later List</string>
     <string name="menu_incomplete">Add the item to Incomplete List</string>
     <string name="menu_search">Search Item</string>
 
@@ -73,4 +77,31 @@
 
     <!--Search-->
     <string name="search_hint">Type the Show Name</string>
+    <string name="search_empty">Couldn\'t find any result…</string>
+
+    <!--List-->
+    <string name="empty_list_incomplete">Your List of Incomplete shows list is empty.\n If you have any shows which you have not watched completely, Please add to this list</string>
+    <string name="empty_list_wish">Your Wish List is empty.\n If you want to keep track of un-watched shows Please add to this list</string>
+    <string name="empty_list_watch">Your Already Watched List is empty.\n If you want to keep track of all watched shows Please add to this list</string>
+
+
+    <!--Snackbar Texts-->
+    <string name="snack_bar_wish_list">Show added to Wish List</string>
+    <string name="snack_bar_watch_list">Show added to Watch List</string>
+    <string name="snack_bar_incomplete_list">Show added to Incomplete List</string>
+    <string name="snack_bar_wish_list_removed">Show removed from Wish List</string>
+    <string name="snack_bar_watch_list_removed">Show removed from Watch List</string>
+    <string name="snack_bar_incomplete_list_removed">Show removed from Incomplete List</string>
+    <string name="snack_bar_wish_list_cant_add_to_another">Show already present in WishList.\n Please Remove from that list to add to another list</string>
+    <string name="snack_bar_watch_list_cant_add_to_another">Show already present in WatchList.\n Please Remove from that list to add to another list</string>
+    <string name="snack_bar_incomplete_list_cant_add_to_another">Show already present in Incomplete List.\n Please Remove from that list to add to another list</string>
+    <string name="snack_bar_error">Sorry!! Some error Occurred</string>
+    <string name="snack_bar_wait">Please wait till the data loads!!And try again after data is loaded</string>
+
+
+
+
+    <string name="done">Done</string>
+    <string name="cancel">Cancel</string>
+    <string name="season">Season</string>
 </resources>

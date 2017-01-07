@@ -4,6 +4,8 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -65,6 +67,7 @@ public class TvShowDetailActivity extends AppCompatActivity {
     private TextView mErrorTextView;
     private LinearLayout mContainerLinearLayout;
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
+    private CoordinatorLayout mCoordinatorLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +104,7 @@ public class TvShowDetailActivity extends AppCompatActivity {
         mContainerLinearLayout = (LinearLayout) findViewById(R.id.container);
         mImageView = (ImageView) findViewById(R.id.tvshow_image);
         mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+        mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinator_layout);
 
         mCreatedByContainer = (LinearLayout) findViewById(R.id.container_created_by);
         mGenreContainer = (LinearLayout) findViewById(R.id.container_genre);
@@ -127,9 +131,7 @@ public class TvShowDetailActivity extends AppCompatActivity {
 
         Picasso.with(TvShowDetailActivity.this)
                 .load("https://image.tmdb.org/t/p/w300"+mTvShowModel.getBackdrop_path())
-                .placeholder(Util.getRandomColor())
                 .fit()
-                .placeholder(Util.getRandomColor())
                 .into(mImageView);
 
         new HighOnShow(getString(R.string.api_key)).initTvShow().getTvShowDetailsById(mTvShowModel.getId(), mContainerLinearLayout, mProgressBar, mErrorTextView, new ShowHandler<TvShowModel>() {
@@ -221,7 +223,7 @@ public class TvShowDetailActivity extends AppCompatActivity {
         reference.child(mTvShowModel.getId() + "").setValue(mTvShowModel.getId(), new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                //todo: add sncakbar for completion
+                Snackbar.make(mCoordinatorLayout,getString(R.string.snack_bar_watch_list),Snackbar.LENGTH_SHORT).show();
             }
         });
     }
@@ -231,28 +233,30 @@ public class TvShowDetailActivity extends AppCompatActivity {
         reference.child(mTvShowModel.getId() + "").setValue(mTvShowModel.getId(), new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                //todo: add sncakbar for completion
+                Snackbar.make(mCoordinatorLayout,getString(R.string.snack_bar_wish_list),Snackbar.LENGTH_SHORT).show();
             }
         });
     }
 
     private void addShowToIncompleteList(){
-
-        //todo: add a dialog box to ask the the seasons and episodes the user has watched
         buildDialog();
     }
 
 
     public void buildDialog(){
+        if(mTvShowModel.getSeasons()==null){
+            Snackbar.make(mCoordinatorLayout,getString(R.string.snack_bar_wait),Snackbar.LENGTH_LONG).show();
+            return;
+        }
         Dialog dialog;
         ArrayList<TvShowSeason> seasons = mTvShowModel.getSeasons();
-        final String[] items = new String[seasons.size()];
-        for(int i=0;i<seasons.size();i++){
-            items[i] = "Season "+seasons.get(i).getSeason_number();
+        final String[] items = new String[seasons.size()-1];
+        for(int i=1;i<seasons.size();i++){
+            items[i-1] = getString(R.string.season)+" "+i;
         }
         final ArrayList itemsSelected = new ArrayList();
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Select Languages you know : ");
+        builder.setTitle(getString(R.string.detail_select_watched_seasons));
         builder.setMultiChoiceItems(items, null,
                 new DialogInterface.OnMultiChoiceClickListener() {
                     @Override
@@ -265,7 +269,7 @@ public class TvShowDetailActivity extends AppCompatActivity {
                         }
                     }
                 })
-                .setPositiveButton("Done!", new DialogInterface.OnClickListener() {
+                .setPositiveButton(getString(R.string.done), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
 
@@ -275,13 +279,13 @@ public class TvShowDetailActivity extends AppCompatActivity {
                         reference.child(mTvShowModel.getId() + "").setValue(itemsSelected, new DatabaseReference.CompletionListener() {
                             @Override
                             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                                //todo: add sncakbar for completion
+                                Snackbar.make(mCoordinatorLayout,getString(R.string.snack_bar_incomplete_list),Snackbar.LENGTH_SHORT).show();
                             }
                         });
 
                     }
                 })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                     }

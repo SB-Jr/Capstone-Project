@@ -1,6 +1,6 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:ads="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/coordinator_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -15,23 +15,23 @@
             android:id="@+id/collapsing_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_scrollFlags="scroll|enterAlways|exitUntilCollapsed"
-            app:contentScrim="@color/colorPrimary">
+            app:contentScrim="@color/colorPrimary"
+            app:layout_scrollFlags="scroll|enterAlways|exitUntilCollapsed">
 
             <ImageView
                 android:id="@+id/movie_image"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/show_details_image_height"
                 app:layout_collapseMode="parallax"
-                app:layout_scrollFlags="scroll"/>
+                app:layout_scrollFlags="scroll" />
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:titleTextColor="@android:color/white"
                 app:layout_collapseMode="pin"
-                app:layout_scrollFlags="enterAlways"/>
+                app:layout_scrollFlags="enterAlways"
+                app:titleTextColor="@android:color/white" />
 
         </android.support.design.widget.CollapsingToolbarLayout>
 
@@ -65,18 +65,19 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
+
                     <TextView
-                        android:paddingStart="@dimen/activity_horizontal_margin"
-                        android:text="@string/detail_director"
-                        android:textColor="@color/colorSecondaryText"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:text="@string/detail_director"
+                        android:textColor="@color/colorPrimaryText" />
+
                     <TextView
                         android:id="@+id/director"
-                        android:textColor="@color/colorPrimaryText"
-                        android:textStyle="bold"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/colorSecondaryText"
+                        android:textSize="@dimen/show_details_text_size" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -84,18 +85,19 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
+
                     <TextView
-                        android:text="@string/detail_cast"
-                        android:textColor="@color/colorSecondaryText"
-                        android:paddingStart="@dimen/activity_horizontal_margin"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:text="@string/detail_cast"
+                        android:textColor="@color/colorPrimaryText" />
+
                     <TextView
                         android:id="@+id/cast"
-                        android:textColor="@color/colorPrimaryText"
-                        android:textStyle="bold"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/colorSecondaryText"
+                        android:textSize="@dimen/show_details_text_size" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -103,18 +105,19 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
+
                     <TextView
-                        android:paddingStart="@dimen/activity_horizontal_margin"
-                        android:text="@string/detail_music"
-                        android:textColor="@color/colorSecondaryText"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:text="@string/detail_music"
+                        android:textColor="@color/colorPrimaryText" />
+
                     <TextView
                         android:id="@+id/music"
-                        android:textColor="@color/colorPrimaryText"
-                        android:textStyle="bold"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/colorSecondaryText"
+                        android:textSize="@dimen/show_details_text_size" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -122,18 +125,19 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
+
                     <TextView
-                        android:text="@string/detail_produced"
-                        android:paddingStart="@dimen/activity_horizontal_margin"
-                        android:textColor="@color/colorSecondaryText"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:text="@string/detail_produced"
+                        android:textColor="@color/colorPrimaryText" />
+
                     <TextView
                         android:id="@+id/produced"
-                        android:textColor="@color/colorPrimaryText"
-                        android:textStyle="bold"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/colorSecondaryText"
+                        android:textSize="@dimen/show_details_text_size" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -141,16 +145,18 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
+
                     <TextView
-                        android:text="@string/detail_release_date"
-                        android:textColor="@color/colorSecondaryText"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:text="@string/detail_release_date"
+                        android:textColor="@color/colorPrimaryText" />
+
                     <TextView
                         android:id="@+id/release"
-                        android:textColor="@color/colorPrimaryText"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/colorSecondaryText" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -158,16 +164,18 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
+
                     <TextView
-                        android:text="@string/detail_rating"
-                        android:textColor="@color/colorSecondaryText"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:text="@string/detail_rating"
+                        android:textColor="@color/colorPrimaryText" />
+
                     <TextView
                         android:id="@+id/rating"
-                        android:textColor="@color/colorPrimaryText"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/colorSecondaryText" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -175,17 +183,19 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
+
                     <TextView
-                        android:text="@string/detail_overview"
-                        android:paddingStart="@dimen/activity_horizontal_margin"
-                        android:textColor="@color/colorSecondaryText"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:text="@string/detail_overview"
+                        android:textColor="@color/colorPrimaryText" />
+
                     <TextView
                         android:id="@+id/overview"
-                        android:textColor="@color/colorPrimaryText"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/colorSecondaryText"
+                        android:textSize="@dimen/show_details_text_size" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -211,10 +221,10 @@
 
     <com.google.android.gms.ads.AdView
         android:id="@+id/ad_bottom"
-        android:layout_gravity="bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
         ads:adSize="BANNER"
-        ads:adUnitId="@string/ad_bottom"/>
+        ads:adUnitId="@string/ad_bottom" />
 
 </android.support.design.widget.CoordinatorLayout>

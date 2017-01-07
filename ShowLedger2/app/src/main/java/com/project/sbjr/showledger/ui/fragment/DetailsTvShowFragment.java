@@ -4,6 +4,7 @@ package com.project.sbjr.showledger.ui.fragment;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -12,6 +13,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -27,6 +30,8 @@ import com.project.sbjr.showinfodatabase.model.TvShowNetwork;
 import com.project.sbjr.showinfodatabase.model.TvShowSeason;
 import com.project.sbjr.showledger.R;
 import com.project.sbjr.showledger.Util;
+import com.project.sbjr.showledger.ui.activity.MovieDetailsActivity;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -60,6 +65,8 @@ public class DetailsTvShowFragment extends Fragment {
     private ProgressBar mProgressBar;
     private TextView mErrorTextView;
     private LinearLayout mContainerLinearLayout;
+    private FrameLayout mFrameLayout;
+    private ImageView mImageView;
 
     public DetailsTvShowFragment() {
         // Required empty public constructor
@@ -105,6 +112,8 @@ public class DetailsTvShowFragment extends Fragment {
         mProgressBar = (ProgressBar) view.findViewById(R.id.progress);
         mErrorTextView = (TextView) view.findViewById(R.id.error_text);
         mContainerLinearLayout = (LinearLayout) view.findViewById(R.id.container);
+        mFrameLayout = (FrameLayout) view.findViewById(R.id.sudo_coordinator_layout);
+        mImageView = (ImageView) view.findViewById(R.id.tvshow_image);
 
         mCreatedByContainer = (LinearLayout) view.findViewById(R.id.container_created_by);
         mGenreContainer = (LinearLayout) view.findViewById(R.id.container_genre);
@@ -119,6 +128,12 @@ public class DetailsTvShowFragment extends Fragment {
         mOverviewTextView.setText(mTvShowModel.getOverview());
         mFirstAirDateTextView.setText(mTvShowModel.getFirst_air_date());
         mRatingTextView.setText(mTvShowModel.getVote_average()+"");
+
+
+        Picasso.with(getContext())
+                .load("https://image.tmdb.org/t/p/w300"+mTvShowModel.getBackdrop_path())
+                .fit()
+                .into(mImageView);
 
         new HighOnShow(getString(R.string.api_key)).initTvShow().getTvShowDetailsById(mTvShowModel.getId(), mContainerLinearLayout, mProgressBar, mErrorTextView, new ShowHandler<TvShowModel>() {
             @Override
@@ -198,7 +213,7 @@ public class DetailsTvShowFragment extends Fragment {
         reference.child(mTvShowModel.getId() + "").setValue(mTvShowModel.getId(), new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                //todo: add sncakbar for completion
+                Snackbar.make(mFrameLayout,getString(R.string.snack_bar_watch_list),Snackbar.LENGTH_SHORT).show();
             }
         });
     }
@@ -208,28 +223,31 @@ public class DetailsTvShowFragment extends Fragment {
         reference.child(mTvShowModel.getId() + "").setValue(mTvShowModel.getId(), new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                //todo: add sncakbar for completion
+                Snackbar.make(mFrameLayout,getString(R.string.snack_bar_wish_list),Snackbar.LENGTH_SHORT).show();
             }
         });
     }
 
     private void addShowToIncompleteList(){
 
-        //todo: add a dialog box to ask the the seasons and episodes the user has watched
         buildDialog();
     }
 
 
     public void buildDialog(){
+        if(mTvShowModel.getSeasons()==null){
+            Snackbar.make(mFrameLayout,getString(R.string.snack_bar_wait),Snackbar.LENGTH_LONG).show();
+            return;
+        }
         Dialog dialog;
         ArrayList<TvShowSeason> seasons = mTvShowModel.getSeasons();
-        final String[] items = new String[seasons.size()];
-        for(int i=0;i<seasons.size();i++){
-            items[i] = "Season "+seasons.get(i).getSeason_number();
+        final String[] items = new String[seasons.size()-1];
+        for(int i=1;i<seasons.size();i++){
+            items[i-1] =getString(R.string.season)+" "+i;
         }
         final ArrayList itemsSelected = new ArrayList();
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("Select Languages you know : ");
+        builder.setTitle(getString(R.string.detail_select_watched_seasons));
         builder.setMultiChoiceItems(items, null,
                 new DialogInterface.OnMultiChoiceClickListener() {
                     @Override
@@ -242,7 +260,7 @@ public class DetailsTvShowFragment extends Fragment {
                         }
                     }
                 })
-                .setPositiveButton("Done!", new DialogInterface.OnClickListener() {
+                .setPositiveButton(getString(R.string.done), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
 
@@ -252,13 +270,13 @@ public class DetailsTvShowFragment extends Fragment {
                         reference.child(mTvShowModel.getId() + "").setValue(itemsSelected, new DatabaseReference.CompletionListener() {
                             @Override
                             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                                //todo: add sncakbar for completion
+                                Snackbar.make(mFrameLayout,getString(R.string.snack_bar_incomplete_list),Snackbar.LENGTH_SHORT).show();
                             }
                         });
 
                     }
                 })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                     }
