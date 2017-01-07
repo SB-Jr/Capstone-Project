@@ -132,6 +132,10 @@ public class SearchActivity extends AppCompatActivity implements ShowMovieItemAd
                 @Override
                 public void onResult(TvResponse result) {
                     ArrayList<TvShowModel> tvShowModels = result.getResults();
+                    if(tvShowModels.isEmpty()){
+                        showEmpty();
+                        return;
+                    }
                     ShowTvItemAdapter adapter = new ShowTvItemAdapter(tvShowModels,SearchActivity.this);
                     mSearchListRecyclerView.setLayoutManager(new GridLayoutManager(SearchActivity.this,2));
                     mSearchListRecyclerView.setAdapter(adapter);

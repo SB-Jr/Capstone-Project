@@ -104,4 +104,11 @@
     <string name="done">Done</string>
     <string name="cancel">Cancel</string>
     <string name="season">Season</string>
+
+
+    <!--Ad-->
+    <string name="ad_bottom">ca-app-pub-3878325488904580/1026283352</string>
+    <string name="ad_nav">ca-app-pub-3878325488904580/9747081756</string>
+    <string name="ad_details">ca-app-pub-3878325488904580/5844285757</string>
+    <string name="ad_search">ca-app-pub-3878325488904580/8797752154</string>
 </resources>

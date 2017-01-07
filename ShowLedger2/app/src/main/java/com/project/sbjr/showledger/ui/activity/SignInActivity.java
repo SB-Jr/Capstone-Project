@@ -70,6 +70,8 @@ public class SignInActivity extends AppCompatActivity {
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
 
             MobileAds.initialize(getApplicationContext(), getString(R.string.ad_bottom));
+            MobileAds.initialize(getApplicationContext(), getString(R.string.ad_search));
+            MobileAds.initialize(getApplicationContext(), getString(R.string.ad_details));
             MobileAds.initialize(getApplicationContext(), getString(R.string.ad_nav));
 
             startActivity(intent);
@@ -124,7 +126,7 @@ public class SignInActivity extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
 
-                                final String userUid = firebaseAuth.getCurrentUser().getUid();
+                                final String userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
                                 final FirebaseDatabase database = FirebaseDatabase.getInstance();
                                 DatabaseReference reference = database.getReference().child("user").child(userUid).child("username");
                                 reference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -140,6 +142,8 @@ public class SignInActivity extends AppCompatActivity {
                                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
 
                                         MobileAds.initialize(getApplicationContext(), getString(R.string.ad_bottom));
+                                        MobileAds.initialize(getApplicationContext(), getString(R.string.ad_search));
+                                        MobileAds.initialize(getApplicationContext(), getString(R.string.ad_details));
                                         MobileAds.initialize(getApplicationContext(), getString(R.string.ad_nav));
 
                                         startActivity(intent);
