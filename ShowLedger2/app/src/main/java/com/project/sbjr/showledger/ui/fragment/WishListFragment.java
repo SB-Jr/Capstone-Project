@@ -24,6 +24,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.project.sbjr.showinfodatabase.model.MovieModel;
 import com.project.sbjr.showinfodatabase.model.TvShowModel;
 import com.project.sbjr.showledger.R;
+import com.project.sbjr.showledger.SyncService;
 import com.project.sbjr.showledger.Util;
 import com.project.sbjr.showledger.adapter.item.UserListMovieAdapter;
 import com.project.sbjr.showledger.adapter.item.UserListTvShowAdapter;
@@ -133,6 +134,8 @@ public class WishListFragment extends Fragment implements UserListMovieAdapter.U
                             return;
                         }
 
+                        SyncService.startSync(getContext(),Util.FireBaseConstants.MOVIE,Util.FireBaseConstants.WISHLIST,movies);
+
                         toggleVisibility(mRecyclerView);
 
                         UserListMovieAdapter adapter = new UserListMovieAdapter(getContext(),WishListFragment.this,movies);
@@ -220,6 +223,8 @@ public class WishListFragment extends Fragment implements UserListMovieAdapter.U
                             toggleVisibility(mEmptyTextView);
                             return;
                         }
+
+                        SyncService.startSync(getContext(),Util.FireBaseConstants.TVSHOW,Util.FireBaseConstants.WISHLIST,tvshows);
 
                         toggleVisibility(mRecyclerView);
 

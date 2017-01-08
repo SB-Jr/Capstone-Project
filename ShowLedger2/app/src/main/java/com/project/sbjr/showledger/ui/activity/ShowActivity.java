@@ -67,15 +67,12 @@ public class ShowActivity extends AppCompatActivity implements NavigationDrawerF
         setContentView(R.layout.activity_show);
 
 
-        /**
-         * sync adapter
-         * */
-        Account account = new Account("example",getString(R.string.auth_type));
-        /*Bundle bundle = new Bundle();
-        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_INITIALIZE,true);*/
+        /*Account account = new Account("example",getString(R.string.auth_type));
+        *//*Bundle bundle = new Bundle();
+        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_INITIALIZE,true);*//*
         ContentResolver.setIsSyncable(account,ProviderContract.AUTHORITY,1);
         ContentResolver.requestSync(account, ProviderContract.AUTHORITY,Bundle.EMPTY);
-        //ContentResolver.addPeriodicSync(account, ProviderContract.AUTHORITY,Bundle.EMPTY,INTERVAL_SYNC_ADAPTER);
+        //ContentResolver.addPeriodicSync(account, ProviderContract.AUTHORITY,Bundle.EMPTY,INTERVAL_SYNC_ADAPTER);*/
 
 
         AdView mAdView = (AdView) findViewById(R.id.ad_bottom);

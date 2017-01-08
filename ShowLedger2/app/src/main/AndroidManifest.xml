@@ -4,11 +4,11 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS"/>
-    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS"/>
-    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS"/>
-    <uses-permission android:name="com.project.sbjr.showledger.provider.READ"/>
-    <uses-permission android:name="com.project.sbjr.showledger.provider.WRITE"/>
+    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
+    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
+    <uses-permission android:name="com.project.sbjr.showledger.provider.READ" />
+    <uses-permission android:name="com.project.sbjr.showledger.provider.WRITE" />
 
     <application
         android:allowBackup="true"
@@ -74,9 +74,9 @@
             android:authorities="com.project.sbjr.showledger.provider"
             android:enabled="true"
             android:exported="true"
-            android:syncable="true"
             android:readPermission="com.project.sbjr.showledger.provider.READ"
-            android:writePermission="com.project.sbjr.showledger.provider.WRITE"/>
+            android:syncable="true"
+            android:writePermission="com.project.sbjr.showledger.provider.WRITE" />
 
         <service
             android:name=".adapter.sync.AuthenticatorService"
@@ -90,17 +90,21 @@
                 android:name="android.accounts.AccountAuthenticator"
                 android:resource="@xml/sync_authenticator" />
         </service>
-
         <service
             android:name=".adapter.sync.ContentSyncService"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
-                <action android:name="android.content.SyncAdapter"/>
+                <action android:name="android.content.SyncAdapter" />
             </intent-filter>
-            <meta-data android:name=".adapter.sync.ContentSynAdapter"
-                android:resource="@xml/content_sync_adapter"/>
+
+            <meta-data
+                android:name=".adapter.sync.ContentSynAdapter"
+                android:resource="@xml/content_sync_adapter" />
         </service>
+        <service
+            android:name=".SyncService"
+            android:exported="false"></service>
     </application>
 
 </manifest>

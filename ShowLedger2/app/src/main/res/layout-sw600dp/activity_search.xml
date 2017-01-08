@@ -25,6 +25,7 @@
         android:layout_height="match_parent"
         android:layout_marginBottom="?listPreferredItemHeight"
         android:orientation="horizontal"
+        android:translationZ="@dimen/appbar_elevation"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <!-- will contain the fragment depending on which item is choosed in navigation ndrawer -->

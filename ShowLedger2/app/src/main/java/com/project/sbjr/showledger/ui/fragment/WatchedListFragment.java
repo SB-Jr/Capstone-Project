@@ -1,7 +1,9 @@
 package com.project.sbjr.showledger.ui.fragment;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -23,6 +25,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.project.sbjr.showinfodatabase.model.MovieModel;
 import com.project.sbjr.showinfodatabase.model.TvShowModel;
 import com.project.sbjr.showledger.R;
+import com.project.sbjr.showledger.SyncService;
 import com.project.sbjr.showledger.Util;
 import com.project.sbjr.showledger.adapter.item.UserListMovieAdapter;
 import com.project.sbjr.showledger.adapter.item.UserListTvShowAdapter;
@@ -131,6 +134,8 @@ public class WatchedListFragment extends Fragment implements UserListMovieAdapte
                             return;
                         }
 
+                        SyncService.startSync(getContext(),Util.FireBaseConstants.MOVIE,Util.FireBaseConstants.WATCHED,movies);
+
                         toggleVisibility(mRecyclerView);
 
                         UserListMovieAdapter adapter = new UserListMovieAdapter(getContext(),WatchedListFragment.this,movies);
@@ -224,6 +229,8 @@ public class WatchedListFragment extends Fragment implements UserListMovieAdapte
                             toggleVisibility(mEmptyTextView);
                             return;
                         }
+
+                        SyncService.startSync(getContext(),Util.FireBaseConstants.TVSHOW,Util.FireBaseConstants.WATCHED,tvshows);
 
                         toggleVisibility(mRecyclerView);
 
