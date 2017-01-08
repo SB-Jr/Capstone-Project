@@ -2,11 +2,11 @@ apply plugin: 'com.android.application'
 
 android {
     signingConfigs {
-        sbjr_config {
-            keyAlias 'sbjr'
-            keyPassword '@Shrijit08'
-            storeFile file('/home/sbjr/key_store.jks')
-            storePassword '@Shrijit08'
+        config {
+            keyAlias 'udacity_config'
+            keyPassword 'password'
+            storeFile file("$rootDir/keystore.jks")
+            storePassword 'password'
         }
     }
     compileSdkVersion 25
@@ -18,12 +18,14 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        signingConfig signingConfigs.sbjr_config
+        signingConfig signingConfigs.config
     }
     buildTypes {
         release {
             minifyEnabled false
+            applicationIdSuffix ".release"
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
         }
     }
     productFlavors {

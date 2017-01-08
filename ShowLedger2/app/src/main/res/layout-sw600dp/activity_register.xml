@@ -7,7 +7,7 @@
     <FrameLayout
         android:background="@color/colorPrimary"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/frame_layout_backdrop_height"/>
+        android:layout_height="@dimen/frame_layout_backdrop_height" />
 
     <LinearLayout
         android:id="@+id/activity_register"
@@ -29,7 +29,7 @@
                 android:id="@+id/user_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/user_name"/>
+                android:hint="@string/user_name" />
 
         </android.support.design.widget.TextInputLayout>
 
@@ -44,7 +44,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
-                android:hint="@string/user_id"/>
+                android:hint="@string/user_id" />
 
         </android.support.design.widget.TextInputLayout>
 
@@ -59,7 +59,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/password"
-                android:inputType="textPassword"/>
+                android:inputType="textPassword" />
 
         </android.support.design.widget.TextInputLayout>
 
@@ -74,7 +74,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/retype_password"
-                android:inputType="textPassword"/>
+                android:inputType="textPassword" />
 
         </android.support.design.widget.TextInputLayout>
 
@@ -86,7 +86,7 @@
             android:layout_gravity="center"
             android:contentDescription="@string/content_description_register"
             android:backgroundTint="@color/colorPrimary"
-            style="@style/Base.Widget.AppCompat.Button.Colored"/>
+            style="@style/Base.Widget.AppCompat.Button.Colored" />
 
         <ProgressBar
             android:id="@+id/progress"
@@ -94,7 +94,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:visibility="gone"
-            android:indeterminate="true"/>
+            android:indeterminate="true" />
 
     </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>

@@ -27,8 +27,8 @@ import com.project.sbjr.showinfodatabase.response.MovieResponse;
 import com.project.sbjr.showinfodatabase.response.TvResponse;
 import com.project.sbjr.showledger.R;
 import com.project.sbjr.showledger.Util;
-import com.project.sbjr.showledger.adapter.item.ShowMovieItemAdapter;
-import com.project.sbjr.showledger.adapter.item.ShowTvItemAdapter;
+import com.project.sbjr.showledger.adapter.ShowMovieItemAdapter;
+import com.project.sbjr.showledger.adapter.ShowTvItemAdapter;
 import com.project.sbjr.showledger.ui.fragment.DetailsMovieFragment;
 import com.project.sbjr.showledger.ui.fragment.DetailsTvShowFragment;
 

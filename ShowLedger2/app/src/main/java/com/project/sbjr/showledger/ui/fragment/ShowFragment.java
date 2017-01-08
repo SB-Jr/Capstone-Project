@@ -19,8 +19,8 @@ import com.project.sbjr.showledger.R;
 
 import com.project.sbjr.showinfodatabase.HighOnShow;
 import com.project.sbjr.showinfodatabase.model.MovieModel;
-import com.project.sbjr.showledger.adapter.item.ShowMovieItemAdapter;
-import com.project.sbjr.showledger.adapter.item.ShowTvItemAdapter;
+import com.project.sbjr.showledger.adapter.ShowMovieItemAdapter;
+import com.project.sbjr.showledger.adapter.ShowTvItemAdapter;
 
 import java.util.ArrayList;
 

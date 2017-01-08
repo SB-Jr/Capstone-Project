@@ -39,7 +39,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/password"
-                android:inputType="textPassword"/>
+                android:inputType="textPassword" />
 
         </android.support.design.widget.TextInputLayout>
 
@@ -57,7 +57,7 @@
                 android:backgroundTint="@color/colorPrimary"
                 android:contentDescription="@string/content_description_signin"
                 android:inputType="textEmailAddress"
-                style="@style/Base.Widget.AppCompat.Button.Colored"/>
+                style="@style/Base.Widget.AppCompat.Button.Colored" />
 
             <Button
                 android:id="@+id/sign_up"
@@ -66,7 +66,7 @@
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/content_description_register_button"
                 android:text="@string/sign_up"
-                style="@style/Base.Widget.AppCompat.Button.Borderless"/>
+                style="@style/Base.Widget.AppCompat.Button.Borderless" />
 
         </LinearLayout>
 
@@ -76,7 +76,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:visibility="gone"
-            android:indeterminate="true"/>
+            android:indeterminate="true" />
 
     </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>

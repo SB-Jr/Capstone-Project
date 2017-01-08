@@ -1,4 +1,4 @@
-package com.project.sbjr.showledger.adapter.item;
+package com.project.sbjr.showledger.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.project.sbjr.showinfodatabase.model.TvShowModel;
+import com.project.sbjr.showinfodatabase.model.MovieModel;
 import com.project.sbjr.showledger.R;
 import com.project.sbjr.showledger.Util;
 import com.squareup.picasso.Picasso;
@@ -16,17 +16,17 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 /**
- * Created by sbjr on 28/12/16.
+ * Created by sbjr on 26/12/16.
  */
 
-public class ShowTvItemAdapter extends RecyclerView.Adapter<ShowTvItemAdapter.ShowItemViewHolder>{
+public class ShowMovieItemAdapter extends RecyclerView.Adapter<ShowMovieItemAdapter.ShowItemViewHolder>{
 
-    private ArrayList<TvShowModel> mTvShowList = new ArrayList<>();
+    private ArrayList<MovieModel> mMovieList = new ArrayList<>();
 
-    private ShowTvItemAdapterInteractionListener mListener;
+    private ShowMovieItemAdapterInteractionListener mListener;
 
-    public ShowTvItemAdapter(ArrayList<TvShowModel> mTvShowList, ShowTvItemAdapterInteractionListener mListener) {
-        this.mTvShowList = mTvShowList;
+    public ShowMovieItemAdapter(ArrayList<MovieModel> mMovieList, ShowMovieItemAdapterInteractionListener mListener) {
+        this.mMovieList = mMovieList;
         this.mListener = mListener;
     }
 
@@ -39,24 +39,23 @@ public class ShowTvItemAdapter extends RecyclerView.Adapter<ShowTvItemAdapter.Sh
 
     @Override
     public void onBindViewHolder(ShowItemViewHolder holder, int position) {
-        holder.fillData(mTvShowList.get(position));
+        holder.fillData(mMovieList.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return mTvShowList.size();
+        return mMovieList.size();
     }
-
 
     class ShowItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         private TextView mTitleTextView,mRatingTextView;
         private ImageView mImageView;
-        private ShowTvItemAdapterInteractionListener mListener;
-        TvShowModel mTvShow;
+        private ShowMovieItemAdapterInteractionListener mListener;
+        MovieModel mMovie;
         private Context mContext;
 
-        public ShowItemViewHolder(Context context,View itemView,ShowTvItemAdapterInteractionListener listener) {
+        public ShowItemViewHolder(Context context,View itemView,ShowMovieItemAdapterInteractionListener listener) {
             super(itemView);
             mContext = context;
             mTitleTextView = (TextView) itemView.findViewById(R.id.title);
@@ -66,12 +65,12 @@ public class ShowTvItemAdapter extends RecyclerView.Adapter<ShowTvItemAdapter.Sh
             itemView.setOnClickListener(this);
         }
 
-        public void fillData(TvShowModel tvShowModel){
-            mTvShow = tvShowModel;
-            mTitleTextView.setText(mTvShow.getName());
-            mRatingTextView.setText(mTvShow.getVote_average()+"");
+        public void fillData(MovieModel movieModel){
+            mMovie = movieModel;
+            mTitleTextView.setText(mMovie.getTitle());
+            mRatingTextView.setText(mMovie.getVote_average()+"");
             Picasso.with(mContext)
-                    .load("https://image.tmdb.org/t/p/w185"+mTvShow.getPoster_path())
+                    .load("https://image.tmdb.org/t/p/w185"+movieModel.getPoster_path())
                     .placeholder(Util.getRandomColor())
                     .fit()
                     .into(mImageView);
@@ -79,12 +78,11 @@ public class ShowTvItemAdapter extends RecyclerView.Adapter<ShowTvItemAdapter.Sh
 
         @Override
         public void onClick(View v) {
-            mListener.tvShowItemClickListener(mTvShow);
+            mListener.ShowMovieItemClickListener(mMovie);
         }
     }
 
-    public interface ShowTvItemAdapterInteractionListener{
-        void tvShowItemClickListener(TvShowModel tvShowModel);
+    public interface ShowMovieItemAdapterInteractionListener {
+        void ShowMovieItemClickListener(MovieModel movie);
     }
-
 }

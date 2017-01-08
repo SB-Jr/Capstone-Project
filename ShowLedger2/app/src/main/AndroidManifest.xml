@@ -78,33 +78,10 @@
             android:syncable="true"
             android:writePermission="com.project.sbjr.showledger.provider.WRITE" />
 
-        <service
-            android:name=".adapter.sync.AuthenticatorService"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.accounts.AccountAuthenticator" />
-            </intent-filter>
 
-            <meta-data
-                android:name="android.accounts.AccountAuthenticator"
-                android:resource="@xml/sync_authenticator" />
-        </service>
         <service
-            android:name=".adapter.sync.ContentSyncService"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.content.SyncAdapter" />
-            </intent-filter>
-
-            <meta-data
-                android:name=".adapter.sync.ContentSynAdapter"
-                android:resource="@xml/content_sync_adapter" />
-        </service>
-        <service
-            android:name=".SyncService"
-            android:exported="false"></service>
+            android:name=".service.SyncService"
+            android:exported="false" />
     </application>
 
 </manifest>

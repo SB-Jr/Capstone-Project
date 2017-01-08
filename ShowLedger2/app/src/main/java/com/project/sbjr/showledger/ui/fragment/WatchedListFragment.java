@@ -1,9 +1,7 @@
 package com.project.sbjr.showledger.ui.fragment;
 
-import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -17,18 +15,13 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.project.sbjr.showinfodatabase.model.MovieModel;
 import com.project.sbjr.showinfodatabase.model.TvShowModel;
 import com.project.sbjr.showledger.R;
-import com.project.sbjr.showledger.SyncService;
+import com.project.sbjr.showledger.service.SyncService;
 import com.project.sbjr.showledger.Util;
-import com.project.sbjr.showledger.adapter.item.UserListMovieAdapter;
-import com.project.sbjr.showledger.adapter.item.UserListTvShowAdapter;
+import com.project.sbjr.showledger.adapter.UserListMovieAdapter;
+import com.project.sbjr.showledger.adapter.UserListTvShowAdapter;
 import com.project.sbjr.showledger.provider.ProviderContract;
 
 import java.util.ArrayList;

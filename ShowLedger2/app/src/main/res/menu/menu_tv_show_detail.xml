@@ -6,18 +6,18 @@
         android:id="@+id/done"
         android:title="@string/menu_done"
         android:icon="@drawable/ic_watched_list_icon"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/watch_later"
         android:title="@string/menu_watch_later"
         android:icon="@drawable/ic_watch_later"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/incomplete"
         android:title="@string/menu_incomplete"
         android:icon="@drawable/ic_incomplete"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="ifRoom" />
 
 </menu>

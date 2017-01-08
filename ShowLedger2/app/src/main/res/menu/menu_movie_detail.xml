@@ -6,12 +6,12 @@
         android:id="@+id/done"
         android:title="@string/menu_done"
         app:showAsAction="ifRoom"
-        android:icon="@drawable/ic_watched_list_icon"/>
+        android:icon="@drawable/ic_watched_list_icon" />
 
     <item
         android:id="@+id/watch_later"
         android:title="@string/menu_watch_later"
         app:showAsAction="ifRoom"
-        android:icon="@drawable/ic_watch_later"/>
+        android:icon="@drawable/ic_watch_later" />
 
 </menu>

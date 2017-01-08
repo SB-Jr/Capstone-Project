@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import com.project.sbjr.showinfodatabase.model.MovieModel;
 import com.project.sbjr.showledger.R;
 import com.project.sbjr.showledger.Util;
-import com.project.sbjr.showledger.adapter.item.ShowViewPagerAdapter;
+import com.project.sbjr.showledger.adapter.ShowViewPagerAdapter;
 
 public class MovieFragment extends Fragment implements ShowFragment.OnMovieShowFragmentInteractionListener,WatchedListFragment.OnMovieWatchedFragmentInteractionListener,WishListFragment.OnMovieWishListFragmentInteractionListener {
     public static final String MOVIE_TAG = "movie";

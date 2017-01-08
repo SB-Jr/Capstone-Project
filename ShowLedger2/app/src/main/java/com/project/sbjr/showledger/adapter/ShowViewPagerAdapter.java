@@ -1,4 +1,4 @@
-package com.project.sbjr.showledger.adapter.item;
+package com.project.sbjr.showledger.adapter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

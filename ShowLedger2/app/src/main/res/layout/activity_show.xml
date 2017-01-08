@@ -45,7 +45,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             ads:adSize="BANNER"
-            ads:adUnitId="@string/ad_bottom"/>
+            ads:adUnitId="@string/ad_bottom" />
 
 
     </android.support.design.widget.CoordinatorLayout>

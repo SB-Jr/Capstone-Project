@@ -34,7 +34,7 @@
     <dimen name="widget_item_height">48dp</dimen>
     <dimen name="widget_item_divider">1dp</dimen>
     <dimen name="widget_text_size">25sp</dimen>
-    
+
     <dimen name="nav_ad_width">360dp</dimen>
     <dimen name="nav_ad_height">100dp</dimen>
 </resources>

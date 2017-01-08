@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 import com.project.sbjr.showledger.R;
 import com.project.sbjr.showledger.Util;
-import com.project.sbjr.showledger.adapter.item.NavigationDrawerAdapter;
+import com.project.sbjr.showledger.adapter.NavigationDrawerAdapter;
 
 public class NavigationDrawerFragment extends Fragment implements NavigationDrawerAdapter.NavigationDrawerItemClickListener{
     private static final String CURRENT_SELECTION = "current_selection";

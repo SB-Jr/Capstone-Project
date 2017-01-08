@@ -1,4 +1,4 @@
-package com.project.sbjr.showledger;
+package com.project.sbjr.showledger.service;
 
 import android.app.IntentService;
 import android.content.Intent;
@@ -6,6 +6,7 @@ import android.content.Context;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.project.sbjr.showledger.Util;
 
 import java.util.ArrayList;
 
@@ -29,7 +30,7 @@ public class SyncService extends IntentService {
         Intent intent = new Intent(context, SyncService.class);
         intent.putExtra(SHOW_TYPE, showType);
         intent.putExtra(SHOW_LIST_TYPE, showListType);
-        intent.putExtra(USER_UID,Util.getUserUidFromSharedPreference(context));
+        intent.putExtra(USER_UID, Util.getUserUidFromSharedPreference(context));
         intent.putExtra(SHOW_IDS,showIds);
         mContext.startService(intent);
     }
