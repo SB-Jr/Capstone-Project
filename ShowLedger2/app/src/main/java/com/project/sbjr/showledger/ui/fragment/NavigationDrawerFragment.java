@@ -13,14 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.NativeExpressAdView;
 import com.project.sbjr.showledger.R;
 import com.project.sbjr.showledger.Util;
-import com.project.sbjr.showledger.adapter.NavigationDrawerAdapter;
-
-import org.w3c.dom.Text;
+import com.project.sbjr.showledger.adapter.item.NavigationDrawerAdapter;
 
 public class NavigationDrawerFragment extends Fragment implements NavigationDrawerAdapter.NavigationDrawerItemClickListener{
     private static final String CURRENT_SELECTION = "current_selection";

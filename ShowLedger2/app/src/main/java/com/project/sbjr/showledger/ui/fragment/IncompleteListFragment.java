@@ -1,9 +1,13 @@
 package com.project.sbjr.showledger.ui.fragment;
 
-import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -20,7 +24,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.project.sbjr.showinfodatabase.model.TvShowModel;
 import com.project.sbjr.showledger.R;
 import com.project.sbjr.showledger.Util;
-import com.project.sbjr.showledger.adapter.UserListTvShowAdapter;
+import com.project.sbjr.showledger.adapter.item.UserListTvShowAdapter;
+import com.project.sbjr.showledger.provider.ProviderContract;
 
 import java.util.ArrayList;
 
@@ -38,6 +43,8 @@ public class IncompleteListFragment extends Fragment implements UserListTvShowAd
     private ProgressBar mProgressBar;
     private TextView mErrorTextView;
     private TextView mEmptyTextView;
+
+    private Loader<Cursor> mTvLoader=null;
 
     public IncompleteListFragment() {
         // Required empty public constructor
@@ -91,7 +98,51 @@ public class IncompleteListFragment extends Fragment implements UserListTvShowAd
 
         toggleVisibility(mProgressBar);
 
-        final ArrayList<Integer> tvshows = new ArrayList<>();
+        mTvLoader = getLoaderManager().initLoader(0, null, new LoaderManager.LoaderCallbacks<Cursor>() {
+            @Override
+            public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+                CursorLoader loader = new CursorLoader(getContext(),
+                        Uri.parse(ProviderContract.CONTENT_AUTHORITY +ProviderContract.URI_MATCH_TV_INCOMPLETE),
+                        null,
+                        null,
+                        null,
+                        null);
+
+                return loader;
+            }
+
+            @Override
+            public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+                if (cursor != null && cursor.getCount() > 0) {
+                    ArrayList<Integer> tvshows = new ArrayList<>();
+
+                    cursor.moveToFirst();
+                    do {
+                        tvshows.add(cursor.getInt(0));
+                    }while (cursor.moveToNext());
+
+                    if(tvshows.isEmpty()){
+                        toggleVisibility(mEmptyTextView);
+                        return;
+                    }
+
+                    toggleVisibility(mRecyclerView);
+
+                    UserListTvShowAdapter adapter = new UserListTvShowAdapter(getContext(),IncompleteListFragment.this,tvshows);
+                    mRecyclerView.setAdapter(adapter);
+                    mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(),2));
+                }else{
+                    toggleVisibility(mEmptyTextView);
+                }
+            }
+
+            @Override
+            public void onLoaderReset(Loader<Cursor> loader) {
+
+            }
+        });
+
+        /*final ArrayList<Integer> tvshows = new ArrayList<>();
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(Util.FireBaseConstants.USER).child(userUid).child(Util.FireBaseConstants.TVSHOW);
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -133,7 +184,7 @@ public class IncompleteListFragment extends Fragment implements UserListTvShowAd
             public void onCancelled(DatabaseError databaseError) {
                 toggleVisibility(mErrorTextView);
             }
-        });
+        });*/
         return view;
     }
 

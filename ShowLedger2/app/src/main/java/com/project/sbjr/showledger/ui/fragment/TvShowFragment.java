@@ -1,7 +1,6 @@
 package com.project.sbjr.showledger.ui.fragment;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -10,10 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.project.sbjr.showinfodatabase.model.MovieModel;
 import com.project.sbjr.showinfodatabase.model.TvShowModel;
 import com.project.sbjr.showledger.R;
-import com.project.sbjr.showledger.adapter.ShowViewPagerAdapter;
+import com.project.sbjr.showledger.adapter.item.ShowViewPagerAdapter;
 
 public class TvShowFragment extends Fragment implements ShowFragment.onTvShowFragmentInteractionListener,WatchedListFragment.OnTvShowWatchedFragmentInteractionListener,WishListFragment.OnTvShowWishListFragmentInteractionListener,IncompleteListFragment.OnIncompleteFragmentInteractionListener{
 

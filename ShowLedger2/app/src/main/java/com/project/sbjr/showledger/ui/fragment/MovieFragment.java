@@ -2,7 +2,6 @@ package com.project.sbjr.showledger.ui.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -13,7 +12,7 @@ import android.view.ViewGroup;
 import com.project.sbjr.showinfodatabase.model.MovieModel;
 import com.project.sbjr.showledger.R;
 import com.project.sbjr.showledger.Util;
-import com.project.sbjr.showledger.adapter.ShowViewPagerAdapter;
+import com.project.sbjr.showledger.adapter.item.ShowViewPagerAdapter;
 
 public class MovieFragment extends Fragment implements ShowFragment.OnMovieShowFragmentInteractionListener,WatchedListFragment.OnMovieWatchedFragmentInteractionListener,WishListFragment.OnMovieWishListFragmentInteractionListener {
     public static final String MOVIE_TAG = "movie";

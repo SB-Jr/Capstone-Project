@@ -1,7 +1,8 @@
 package com.project.sbjr.showledger.ui.activity;
 
+import android.accounts.Account;
 import android.app.SearchManager;
-import android.content.Context;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -23,6 +24,7 @@ import com.project.sbjr.showinfodatabase.model.MovieModel;
 import com.project.sbjr.showinfodatabase.model.TvShowModel;
 import com.project.sbjr.showledger.R;
 import com.project.sbjr.showledger.Util;
+import com.project.sbjr.showledger.provider.ProviderContract;
 import com.project.sbjr.showledger.ui.fragment.DetailsMovieFragment;
 import com.project.sbjr.showledger.ui.fragment.DetailsTvShowFragment;
 import com.project.sbjr.showledger.ui.fragment.MovieFragment;
@@ -58,10 +60,22 @@ public class ShowActivity extends AppCompatActivity implements NavigationDrawerF
     private TvShowFragment mTvShowFragment;
 
 
+    private final static int INTERVAL_SYNC_ADAPTER=60;//seconds
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show);
+
+
+        /**
+         * sync adapter
+         * */
+        Account account = new Account("example",getString(R.string.auth_type));
+        /*Bundle bundle = new Bundle();
+        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_INITIALIZE,true);*/
+        ContentResolver.setIsSyncable(account,ProviderContract.AUTHORITY,1);
+        ContentResolver.requestSync(account, ProviderContract.AUTHORITY,Bundle.EMPTY);
+        //ContentResolver.addPeriodicSync(account, ProviderContract.AUTHORITY,Bundle.EMPTY,INTERVAL_SYNC_ADAPTER);
 
 
         AdView mAdView = (AdView) findViewById(R.id.ad_bottom);
@@ -93,8 +107,6 @@ public class ShowActivity extends AppCompatActivity implements NavigationDrawerF
         mTvShowFragment = TvShowFragment.newInstance(Util.getUserUidFromSharedPreference(this));
 
         if(savedInstanceState!=null){
-            /*mMovieFragment = (MovieFragment) getSupportFragmentManager().getFragment(savedInstanceState,mMovieFragmentKey);
-            mTvShowFragment = (TvShowFragment) getSupportFragmentManager().getFragment(savedInstanceState,mTvShowFragmentKey);*/
             if(savedInstanceState.getBoolean(MISMOVIEKEY,true)) {
                 mIsMovie = true;
                 changeShowFragment(mMovieFragment);
@@ -102,6 +114,15 @@ public class ShowActivity extends AppCompatActivity implements NavigationDrawerF
                 mIsMovie = false;
                 changeShowFragment(mTvShowFragment);
             }
+
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            Fragment fragment = fragmentManager.findFragmentByTag(DETAILS_FRAG_TAG);
+            if(fragment!=null) {
+                fragmentTransaction.replace(R.id.details_layout, fragment, DETAILS_FRAG_TAG);
+                fragmentTransaction.commit();
+            }
+
         }
         else {
             mIsMovie = true;

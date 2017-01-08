@@ -1,4 +1,4 @@
-package com.project.sbjr.showledger.adapter;
+package com.project.sbjr.showledger.adapter.item;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

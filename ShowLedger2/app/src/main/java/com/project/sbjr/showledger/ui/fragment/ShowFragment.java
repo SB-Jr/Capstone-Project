@@ -1,8 +1,6 @@
 package com.project.sbjr.showledger.ui.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,8 +19,8 @@ import com.project.sbjr.showledger.R;
 
 import com.project.sbjr.showinfodatabase.HighOnShow;
 import com.project.sbjr.showinfodatabase.model.MovieModel;
-import com.project.sbjr.showledger.adapter.ShowMovieItemAdapter;
-import com.project.sbjr.showledger.adapter.ShowTvItemAdapter;
+import com.project.sbjr.showledger.adapter.item.ShowMovieItemAdapter;
+import com.project.sbjr.showledger.adapter.item.ShowTvItemAdapter;
 
 import java.util.ArrayList;
 

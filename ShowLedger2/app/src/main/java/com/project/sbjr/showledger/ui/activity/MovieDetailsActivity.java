@@ -1,6 +1,8 @@
 package com.project.sbjr.showledger.ui.activity;
 
+import android.content.ContentValues;
 import android.graphics.Color;
+import android.net.Uri;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
@@ -28,6 +30,8 @@ import com.project.sbjr.showinfodatabase.model.MovieModel;
 import com.project.sbjr.showinfodatabase.response.CreditResponse;
 import com.project.sbjr.showledger.R;
 import com.project.sbjr.showledger.Util;
+import com.project.sbjr.showledger.database.DatabaseContract;
+import com.project.sbjr.showledger.provider.ProviderContract;
 import com.squareup.picasso.Picasso;
 
 public class MovieDetailsActivity extends AppCompatActivity {
@@ -214,23 +218,31 @@ public class MovieDetailsActivity extends AppCompatActivity {
     }
 
     private void addMovieToWatchedList() {
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference(Util.FireBaseConstants.USER).child(userUid).child(Util.FireBaseConstants.MOVIE).child(Util.FireBaseConstants.WATCHED);
+        /*DatabaseReference reference = FirebaseDatabase.getInstance().getReference(Util.FireBaseConstants.USER).child(userUid).child(Util.FireBaseConstants.MOVIE).child(Util.FireBaseConstants.WATCHED);
         reference.child(mMovieModel.getId() + "").setValue(mMovieModel.getId(), new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
                 Snackbar.make(mCoordinatorLayout,getString(R.string.snack_bar_watch_list),Snackbar.LENGTH_SHORT).show();
             }
-        });
+        });*/
+        ContentValues values = new ContentValues();
+        values.put(DatabaseContract.TABLE_SHOW_ID,mMovieModel.getId());
+        getContentResolver().insert(Uri.parse(ProviderContract.CONTENT_AUTHORITY+ProviderContract.URI_MATCH_MOVIE_WATCHED),values);
+        Snackbar.make(mCoordinatorLayout,getString(R.string.snack_bar_watch_list),Snackbar.LENGTH_SHORT).show();
     }
 
     private void addMovieToWatchLaterList(){
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference(Util.FireBaseConstants.USER).child(userUid).child(Util.FireBaseConstants.MOVIE).child(Util.FireBaseConstants.WISHLIST);
+        /*DatabaseReference reference = FirebaseDatabase.getInstance().getReference(Util.FireBaseConstants.USER).child(userUid).child(Util.FireBaseConstants.MOVIE).child(Util.FireBaseConstants.WISHLIST);
         reference.child(mMovieModel.getId() + "").setValue(mMovieModel.getId(), new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
                 Snackbar.make(mCoordinatorLayout,getString(R.string.snack_bar_wish_list),Snackbar.LENGTH_SHORT).show();
             }
-        });
+        });*/
+        ContentValues values = new ContentValues();
+        values.put(DatabaseContract.TABLE_SHOW_ID,mMovieModel.getId());
+        getContentResolver().insert(Uri.parse(ProviderContract.CONTENT_AUTHORITY+ProviderContract.URI_MATCH_MOVIE_WISH),values);
+        Snackbar.make(mCoordinatorLayout,getString(R.string.snack_bar_wish_list),Snackbar.LENGTH_SHORT).show();
     }
 
 }

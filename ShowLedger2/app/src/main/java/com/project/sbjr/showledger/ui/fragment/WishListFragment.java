@@ -1,7 +1,12 @@
 package com.project.sbjr.showledger.ui.fragment;
 
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -20,8 +25,9 @@ import com.project.sbjr.showinfodatabase.model.MovieModel;
 import com.project.sbjr.showinfodatabase.model.TvShowModel;
 import com.project.sbjr.showledger.R;
 import com.project.sbjr.showledger.Util;
-import com.project.sbjr.showledger.adapter.UserListMovieAdapter;
-import com.project.sbjr.showledger.adapter.UserListTvShowAdapter;
+import com.project.sbjr.showledger.adapter.item.UserListMovieAdapter;
+import com.project.sbjr.showledger.adapter.item.UserListTvShowAdapter;
+import com.project.sbjr.showledger.provider.ProviderContract;
 
 import java.util.ArrayList;
 
@@ -40,6 +46,9 @@ public class WishListFragment extends Fragment implements UserListMovieAdapter.U
     private ProgressBar mProgressBar;
     private TextView mErrorTextView;
     private TextView mEmptyTextView;
+
+    private Loader<Cursor> mMovieLoader =null;
+    private Loader<Cursor> mTvLoader =null;
 
     public WishListFragment() {
         // Required empty public constructor
@@ -93,11 +102,54 @@ public class WishListFragment extends Fragment implements UserListMovieAdapter.U
         }
 
         if (showType.equalsIgnoreCase(MovieFragment.MOVIE_TAG)) {
-            final ArrayList<Integer> movies = new ArrayList<>();
 
             toggleVisibility(mProgressBar);
 
-            DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(Util.FireBaseConstants.USER).child(userUid).child(Util.FireBaseConstants.MOVIE);
+            mMovieLoader = getLoaderManager().initLoader(1, null, new LoaderManager.LoaderCallbacks<Cursor>() {
+                @Override
+                public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+                    CursorLoader loader = new CursorLoader(getContext(),
+                            Uri.parse(ProviderContract.CONTENT_AUTHORITY +ProviderContract.URI_MATCH_MOVIE_WISH),
+                            null,
+                            null,
+                            null,
+                            null);
+
+                    return loader;
+                }
+
+                @Override
+                public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+                    if (cursor != null && cursor.getCount() > 0) {
+                        ArrayList<Integer> movies = new ArrayList<>();
+
+                        cursor.moveToFirst();
+                        do {
+                            movies.add(cursor.getInt(0));
+                        }while (cursor.moveToNext());
+
+                        if(movies.isEmpty()){
+                            toggleVisibility(mEmptyTextView);
+                            return;
+                        }
+
+                        toggleVisibility(mRecyclerView);
+
+                        UserListMovieAdapter adapter = new UserListMovieAdapter(getContext(),WishListFragment.this,movies);
+                        mRecyclerView.setAdapter(adapter);
+                        mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(),2));
+                    }else{
+                        toggleVisibility(mEmptyTextView);
+                    }
+                }
+
+                @Override
+                public void onLoaderReset(Loader<Cursor> loader) {
+
+                }
+            });
+
+            /*DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(Util.FireBaseConstants.USER).child(userUid).child(Util.FireBaseConstants.MOVIE);
             reference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -136,12 +188,56 @@ public class WishListFragment extends Fragment implements UserListMovieAdapter.U
                 public void onCancelled(DatabaseError databaseError) {
                     toggleVisibility(mErrorTextView);
                 }
-            });
+            });*/
         } else {
-            final ArrayList<Integer> tvshows = new ArrayList<>();
 
             toggleVisibility(mProgressBar);
 
+            mTvLoader = getLoaderManager().initLoader(0, null, new LoaderManager.LoaderCallbacks<Cursor>() {
+                @Override
+                public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+                    CursorLoader loader = new CursorLoader(getContext(),
+                            Uri.parse(ProviderContract.CONTENT_AUTHORITY +ProviderContract.URI_MATCH_TV_WISH),
+                            null,
+                            null,
+                            null,
+                            null);
+
+                    return loader;
+                }
+
+                @Override
+                public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+                    if (cursor != null && cursor.getCount() > 0) {
+                        ArrayList<Integer> tvshows = new ArrayList<>();
+
+                        cursor.moveToFirst();
+                        do {
+                            tvshows.add(cursor.getInt(0));
+                        }while (cursor.moveToNext());
+
+                        if(tvshows.isEmpty()){
+                            toggleVisibility(mEmptyTextView);
+                            return;
+                        }
+
+                        toggleVisibility(mRecyclerView);
+
+                        UserListTvShowAdapter adapter = new UserListTvShowAdapter(getContext(),WishListFragment.this,tvshows);
+                        mRecyclerView.setAdapter(adapter);
+                        mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(),2));
+                    }else{
+                        toggleVisibility(mEmptyTextView);
+                    }
+                }
+
+                @Override
+                public void onLoaderReset(Loader<Cursor> loader) {
+
+                }
+            });
+
+            /*final ArrayList<Integer> tvshows = new ArrayList<>();
             DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(Util.FireBaseConstants.USER).child(userUid).child(Util.FireBaseConstants.TVSHOW);
             reference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -182,7 +278,7 @@ public class WishListFragment extends Fragment implements UserListMovieAdapter.U
                 public void onCancelled(DatabaseError databaseError) {
                     toggleVisibility(mErrorTextView);
                 }
-            });
+            });*/
         }
 
         return view;

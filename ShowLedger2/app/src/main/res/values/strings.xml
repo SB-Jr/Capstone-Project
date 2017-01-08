@@ -111,4 +111,9 @@
     <string name="ad_nav">ca-app-pub-3878325488904580/9747081756</string>
     <string name="ad_details">ca-app-pub-3878325488904580/5844285757</string>
     <string name="ad_search">ca-app-pub-3878325488904580/8797752154</string>
+    
+    
+    <!--Sync adapter and Content Provider-->
+    <string name="authority">com.project.sbjr.showledger.provider</string>
+    <string name="auth_type">example.com</string>
 </resources>

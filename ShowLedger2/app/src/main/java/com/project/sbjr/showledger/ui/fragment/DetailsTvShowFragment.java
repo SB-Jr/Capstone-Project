@@ -2,7 +2,9 @@ package com.project.sbjr.showledger.ui.fragment;
 
 
 import android.app.Dialog;
+import android.content.ContentValues;
 import android.content.DialogInterface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -30,6 +32,8 @@ import com.project.sbjr.showinfodatabase.model.TvShowNetwork;
 import com.project.sbjr.showinfodatabase.model.TvShowSeason;
 import com.project.sbjr.showledger.R;
 import com.project.sbjr.showledger.Util;
+import com.project.sbjr.showledger.database.DatabaseContract;
+import com.project.sbjr.showledger.provider.ProviderContract;
 import com.project.sbjr.showledger.ui.activity.MovieDetailsActivity;
 import com.squareup.picasso.Picasso;
 
@@ -90,6 +94,7 @@ public class DetailsTvShowFragment extends Fragment {
             userUid = getArguments().getString(USER_UID);
             mTvShowModel = getArguments().getParcelable(TV_SHOW_MODEL);
         }
+        setRetainInstance(true);
     }
 
     @Override
@@ -209,23 +214,31 @@ public class DetailsTvShowFragment extends Fragment {
     }
 
     private void addShowToWatchedList(){
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference(Util.FireBaseConstants.USER).child(userUid).child(Util.FireBaseConstants.TVSHOW).child(Util.FireBaseConstants.WATCHED);
+        /*DatabaseReference reference = FirebaseDatabase.getInstance().getReference(Util.FireBaseConstants.USER).child(userUid).child(Util.FireBaseConstants.TVSHOW).child(Util.FireBaseConstants.WATCHED);
         reference.child(mTvShowModel.getId() + "").setValue(mTvShowModel.getId(), new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
                 Snackbar.make(mFrameLayout,getString(R.string.snack_bar_watch_list),Snackbar.LENGTH_SHORT).show();
             }
-        });
+        });*/
+        ContentValues values = new ContentValues();
+        values.put(DatabaseContract.TABLE_SHOW_ID,mTvShowModel.getId());
+        getContext().getContentResolver().insert(Uri.parse(ProviderContract.CONTENT_AUTHORITY+ProviderContract.URI_MATCH_TV_WATCHED),values);
+        Snackbar.make(mFrameLayout,getString(R.string.snack_bar_watch_list),Snackbar.LENGTH_SHORT).show();
     }
 
     private void addShowToWatchLaterList(){
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference(Util.FireBaseConstants.USER).child(userUid).child(Util.FireBaseConstants.TVSHOW).child(Util.FireBaseConstants.WISHLIST);
+        /*DatabaseReference reference = FirebaseDatabase.getInstance().getReference(Util.FireBaseConstants.USER).child(userUid).child(Util.FireBaseConstants.TVSHOW).child(Util.FireBaseConstants.WISHLIST);
         reference.child(mTvShowModel.getId() + "").setValue(mTvShowModel.getId(), new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
                 Snackbar.make(mFrameLayout,getString(R.string.snack_bar_wish_list),Snackbar.LENGTH_SHORT).show();
             }
-        });
+        });*/
+        ContentValues values = new ContentValues();
+        values.put(DatabaseContract.TABLE_SHOW_ID,mTvShowModel.getId());
+        getContext().getContentResolver().insert(Uri.parse(ProviderContract.CONTENT_AUTHORITY+ProviderContract.URI_MATCH_TV_WISH),values);
+        Snackbar.make(mFrameLayout,getString(R.string.snack_bar_wish_list),Snackbar.LENGTH_SHORT).show();
     }
 
     private void addShowToIncompleteList(){
@@ -264,8 +277,11 @@ public class DetailsTvShowFragment extends Fragment {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
 
-                        HashMap<String, String> seasons = new HashMap<String, String>();
+                        ContentValues values = new ContentValues();
+                        values.put(DatabaseContract.TABLE_SHOW_ID,mTvShowModel.getId());
+                        getContext().getContentResolver().insert(Uri.parse(ProviderContract.CONTENT_AUTHORITY+ProviderContract.URI_MATCH_TV_INCOMPLETE),values);
 
+                        HashMap<String, String> seasons = new HashMap<String, String>();
                         DatabaseReference reference = FirebaseDatabase.getInstance().getReference(Util.FireBaseConstants.USER).child(userUid).child(Util.FireBaseConstants.TVSHOW).child(Util.FireBaseConstants.INCOMPLETE);
                         reference.child(mTvShowModel.getId() + "").setValue(itemsSelected, new DatabaseReference.CompletionListener() {
                             @Override

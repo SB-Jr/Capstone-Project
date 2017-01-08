@@ -1,9 +1,12 @@
 package com.project.sbjr.showledger.ui.fragment;
 
-import android.content.Context;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.IntegerRes;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,7 +15,6 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -22,11 +24,9 @@ import com.project.sbjr.showinfodatabase.model.MovieModel;
 import com.project.sbjr.showinfodatabase.model.TvShowModel;
 import com.project.sbjr.showledger.R;
 import com.project.sbjr.showledger.Util;
-import com.project.sbjr.showledger.adapter.UserListMovieAdapter;
-import com.project.sbjr.showledger.adapter.UserListTvShowAdapter;
-import com.project.sbjr.showledger.ui.activity.ShowActivity;
-
-import org.w3c.dom.Text;
+import com.project.sbjr.showledger.adapter.item.UserListMovieAdapter;
+import com.project.sbjr.showledger.adapter.item.UserListTvShowAdapter;
+import com.project.sbjr.showledger.provider.ProviderContract;
 
 import java.util.ArrayList;
 
@@ -45,6 +45,9 @@ public class WatchedListFragment extends Fragment implements UserListMovieAdapte
     private ProgressBar mProgressBar;
     private TextView mErrorTextView;
     private TextView mEmptyTextView;
+
+    private Loader<Cursor> mMovieLoader=null;
+    private Loader<Cursor> mTvLoader = null;
 
     public WatchedListFragment() {
         // Required empty public constructor
@@ -82,7 +85,7 @@ public class WatchedListFragment extends Fragment implements UserListMovieAdapte
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_watched_list, container, false);
@@ -97,7 +100,54 @@ public class WatchedListFragment extends Fragment implements UserListMovieAdapte
         }
 
         if(showType.equalsIgnoreCase(MovieFragment.MOVIE_TAG)){
-            final ArrayList<Integer> movies = new ArrayList<>();
+
+            toggleVisibility(mProgressBar);
+
+            mMovieLoader = getLoaderManager().initLoader(0, null, new LoaderManager.LoaderCallbacks<Cursor>() {
+                @Override
+                public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+                    CursorLoader loader = new CursorLoader(getContext(),
+                            Uri.parse(ProviderContract.CONTENT_AUTHORITY +ProviderContract.URI_MATCH_MOVIE_WATCHED),
+                            null,
+                            null,
+                            null,
+                            null);
+
+                    return loader;
+                }
+
+                @Override
+                public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+                    if (cursor != null && cursor.getCount() > 0) {
+                        ArrayList<Integer> movies = new ArrayList<>();
+
+                        cursor.moveToFirst();
+                        do {
+                            movies.add(cursor.getInt(0));
+                        }while (cursor.moveToNext());
+
+                        if(movies.isEmpty()){
+                            toggleVisibility(mEmptyTextView);
+                            return;
+                        }
+
+                        toggleVisibility(mRecyclerView);
+
+                        UserListMovieAdapter adapter = new UserListMovieAdapter(getContext(),WatchedListFragment.this,movies);
+                        mRecyclerView.setAdapter(adapter);
+                        mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(),2));
+                    }else{
+                        toggleVisibility(mEmptyTextView);
+                    }
+                }
+
+                @Override
+                public void onLoaderReset(Loader<Cursor> loader) {
+
+                }
+            });
+
+            /*
 
             toggleVisibility(mProgressBar);
 
@@ -141,13 +191,57 @@ public class WatchedListFragment extends Fragment implements UserListMovieAdapte
                 public void onCancelled(DatabaseError databaseError) {
                     toggleVisibility(mErrorTextView);
                 }
-            });
+            });*/
         }
         else{
 
             toggleVisibility(mProgressBar);
 
-            final ArrayList<Integer> tvshows = new ArrayList<>();
+            mTvLoader = getLoaderManager().initLoader(0, null, new LoaderManager.LoaderCallbacks<Cursor>() {
+                @Override
+                public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+                    CursorLoader loader = new CursorLoader(getContext(),
+                            Uri.parse(ProviderContract.CONTENT_AUTHORITY +ProviderContract.URI_MATCH_TV_WATCHED),
+                            null,
+                            null,
+                            null,
+                            null);
+
+                    return loader;
+                }
+
+                @Override
+                public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+                    if (cursor != null && cursor.getCount() > 0) {
+                        ArrayList<Integer> tvshows = new ArrayList<>();
+
+                        cursor.moveToFirst();
+                        do {
+                            tvshows.add(cursor.getInt(0));
+                        }while (cursor.moveToNext());
+
+                        if(tvshows.isEmpty()){
+                            toggleVisibility(mEmptyTextView);
+                            return;
+                        }
+
+                        toggleVisibility(mRecyclerView);
+
+                        UserListTvShowAdapter adapter = new UserListTvShowAdapter(getContext(),WatchedListFragment.this,tvshows);
+                        mRecyclerView.setAdapter(adapter);
+                        mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(),2));
+                    }else{
+                        toggleVisibility(mEmptyTextView);
+                    }
+                }
+
+                @Override
+                public void onLoaderReset(Loader<Cursor> loader) {
+
+                }
+            });
+
+            /*final ArrayList<Integer> tvshows = new ArrayList<>();
             DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(Util.FireBaseConstants.USER).child(userUid).child(Util.FireBaseConstants.TVSHOW);
             reference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -188,7 +282,7 @@ public class WatchedListFragment extends Fragment implements UserListMovieAdapte
                 public void onCancelled(DatabaseError databaseError) {
                     toggleVisibility(mErrorTextView);
                 }
-            });
+            });*/
 
         }
 
