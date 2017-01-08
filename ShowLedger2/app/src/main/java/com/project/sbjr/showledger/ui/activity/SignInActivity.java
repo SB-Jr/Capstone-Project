@@ -1,12 +1,12 @@
 package com.project.sbjr.showledger.ui.activity;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
@@ -30,7 +30,6 @@ import com.project.sbjr.showledger.R;
 import static com.project.sbjr.showledger.Util.checkInternet;
 import static com.project.sbjr.showledger.Util.getUserIdFromSharedPreference;
 import static com.project.sbjr.showledger.Util.getUserPassFromSharedPreference;
-import static com.project.sbjr.showledger.Util.getUsernameFromSharedPreference;
 import static com.project.sbjr.showledger.Util.isUserDataPresent;
 import static com.project.sbjr.showledger.Util.setUserIdInSharedPreference;
 import static com.project.sbjr.showledger.Util.setUserNameInSharedPreference;
@@ -39,10 +38,10 @@ import static com.project.sbjr.showledger.Util.setUserUIDInSharedPreference;
 
 public class SignInActivity extends AppCompatActivity {
 
-    private final String TAG=SignInActivity.class.getName();
+    private final String TAG = SignInActivity.class.getName();
 
-    private final static String mUseridEditTextKey="com.project.sbjr.showledger.ui.activity.SignInActivity.userid";
-    private final static String mPasswordEditTextKey="com.project.sbjr.showledger.ui.activity.SignInActivity.password";
+    private final static String mUseridEditTextKey = "com.project.sbjr.showledger.ui.activity.SignInActivity.userid";
+    private final static String mPasswordEditTextKey = "com.project.sbjr.showledger.ui.activity.SignInActivity.password";
 
     private EditText mUseridEditText;
     private EditText mPasswordEditText;
@@ -63,11 +62,11 @@ public class SignInActivity extends AppCompatActivity {
          * Check if user is already used the app before and using it again
          * or whether user is new or logged out
          * */
-        if(isUserDataPresent(this)){
+        if (isUserDataPresent(this)) {
             FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-            firebaseAuth.signInWithEmailAndPassword(getUserIdFromSharedPreference(this),getUserPassFromSharedPreference(this));
-            Intent intent = new Intent(SignInActivity.this,ShowActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+            firebaseAuth.signInWithEmailAndPassword(getUserIdFromSharedPreference(this), getUserPassFromSharedPreference(this));
+            Intent intent = new Intent(SignInActivity.this, ShowActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 
             MobileAds.initialize(getApplicationContext(), getString(R.string.ad_bottom));
             MobileAds.initialize(getApplicationContext(), getString(R.string.ad_search));
@@ -87,9 +86,9 @@ public class SignInActivity extends AppCompatActivity {
         mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinator_layout);
         mProgressBar = (ProgressBar) findViewById(R.id.progress);
 
-        checkInternet(this,mCoordinatorLayout);
+        checkInternet(this, mCoordinatorLayout);
 
-        if(savedInstanceState!=null){
+        if (savedInstanceState != null) {
             mUseridEditText.setText(savedInstanceState.getString(mUseridEditTextKey));
             mPasswordEditText.setText(savedInstanceState.getString(mPasswordEditTextKey));
         }
@@ -102,7 +101,7 @@ public class SignInActivity extends AppCompatActivity {
         mRegisterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(SignInActivity.this,RegisterActivity.class);
+                Intent intent = new Intent(SignInActivity.this, RegisterActivity.class);
                 startActivity(intent);
             }
         });
@@ -111,17 +110,17 @@ public class SignInActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                checkInternet(SignInActivity.this,mCoordinatorLayout);
+                checkInternet(SignInActivity.this, mCoordinatorLayout);
 
                 final String userid = mUseridEditText.getText().toString();
                 final String pass = mPasswordEditText.getText().toString();
-                if(!checkEntry()){
+                if (!checkEntry()) {
                     return;
                 }
 
                 mProgressBar.setVisibility(View.VISIBLE);
                 final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-                firebaseAuth.signInWithEmailAndPassword(userid,pass)
+                firebaseAuth.signInWithEmailAndPassword(userid, pass)
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -134,12 +133,12 @@ public class SignInActivity extends AppCompatActivity {
                                     public void onDataChange(DataSnapshot dataSnapshot) {
                                         mProgressBar.setVisibility(View.GONE);
                                         String username = dataSnapshot.getValue(String.class);
-                                        setUserNameInSharedPreference(SignInActivity.this,username);
-                                        setUserIdInSharedPreference(SignInActivity.this,userid);
-                                        setUserUIDInSharedPreference(SignInActivity.this,userUid);
-                                        setUserPassInSharedPreference(SignInActivity.this,pass);
-                                        Intent intent = new Intent(SignInActivity.this,ShowActivity.class);
-                                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        setUserNameInSharedPreference(SignInActivity.this, username);
+                                        setUserIdInSharedPreference(SignInActivity.this, userid);
+                                        setUserUIDInSharedPreference(SignInActivity.this, userUid);
+                                        setUserPassInSharedPreference(SignInActivity.this, pass);
+                                        Intent intent = new Intent(SignInActivity.this, ShowActivity.class);
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 
                                         MobileAds.initialize(getApplicationContext(), getString(R.string.ad_bottom));
                                         MobileAds.initialize(getApplicationContext(), getString(R.string.ad_search));
@@ -152,8 +151,8 @@ public class SignInActivity extends AppCompatActivity {
                                     @Override
                                     public void onCancelled(DatabaseError databaseError) {
                                         mProgressBar.setVisibility(View.GONE);
-                                        Log.d(TAG,databaseError.getMessage()+"->"+databaseError.getDetails());
-                                        Snackbar.make(mCoordinatorLayout,R.string.signin_error,Snackbar.LENGTH_LONG).show();
+                                        Log.d(TAG, databaseError.getMessage() + "->" + databaseError.getDetails());
+                                        Snackbar.make(mCoordinatorLayout, R.string.signin_error, Snackbar.LENGTH_LONG).show();
                                     }
                                 });
 
@@ -163,7 +162,7 @@ public class SignInActivity extends AppCompatActivity {
                             @Override
                             public void onFailure(@NonNull Exception e) {
                                 mProgressBar.setVisibility(View.GONE);
-                                Log.d(TAG,e.getMessage());
+                                Log.d(TAG, e.getMessage());
                                 mUserIdTextInputLayout.setError(getString(R.string.invalid_credentials));
                             }
                         });
@@ -175,31 +174,31 @@ public class SignInActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
 
-        outState.putString(mPasswordEditTextKey,mPasswordEditText.getText().toString());
-        outState.putString(mUseridEditTextKey,mUseridEditText.getText().toString());
+        outState.putString(mPasswordEditTextKey, mPasswordEditText.getText().toString());
+        outState.putString(mUseridEditTextKey, mUseridEditText.getText().toString());
 
         super.onSaveInstanceState(outState);
     }
 
-    private boolean checkEntry(){
+    private boolean checkEntry() {
         String userid = mUseridEditText.getText().toString();
         String pass = mPasswordEditText.getText().toString();
 
         mUserIdTextInputLayout.setErrorEnabled(false);
         mPasswordTextInputLayout.setErrorEnabled(false);
 
-        boolean result=true;
-        if(userid.length()==0){
+        boolean result = true;
+        if (userid.length() == 0) {
             mUserIdTextInputLayout.setError(getString(R.string.user_id_error_empty));
-            result= false;
+            result = false;
         }
-        if(!Patterns.EMAIL_ADDRESS.matcher(userid).matches()){
+        if (!Patterns.EMAIL_ADDRESS.matcher(userid).matches()) {
             mUserIdTextInputLayout.setError(getString(R.string.user_id_error_empty));
-            result= false;
+            result = false;
         }
-        if(pass.length()<6){
+        if (pass.length() < 6) {
             mPasswordTextInputLayout.setError(getString(R.string.user_id_error_invalid));
-            result= false;
+            result = false;
         }
         return result;
     }

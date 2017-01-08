@@ -24,7 +24,7 @@ import com.project.sbjr.showledger.provider.ProviderContract;
 import java.util.ArrayList;
 
 
-public class IncompleteListFragment extends Fragment implements UserListTvShowAdapter.UserListTvShowAdapterInteraction{
+public class IncompleteListFragment extends Fragment implements UserListTvShowAdapter.UserListTvShowAdapterInteraction {
     private static final String USER_UID = "user_uid";
     private static final String SHOW_TYPE = "show_type";
 
@@ -38,7 +38,7 @@ public class IncompleteListFragment extends Fragment implements UserListTvShowAd
     private TextView mErrorTextView;
     private TextView mEmptyTextView;
 
-    private Loader<Cursor> mTvLoader=null;
+    private Loader<Cursor> mTvLoader = null;
 
     public IncompleteListFragment() {
         // Required empty public constructor
@@ -58,11 +58,10 @@ public class IncompleteListFragment extends Fragment implements UserListTvShowAd
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(savedInstanceState!=null){
+        if (savedInstanceState != null) {
             userUid = savedInstanceState.getString(USER_UID);
             showType = savedInstanceState.getString(SHOW_TYPE);
-        }
-        else if (getArguments() != null) {
+        } else if (getArguments() != null) {
             userUid = getArguments().getString(USER_UID);
             showType = getArguments().getString(SHOW_TYPE);
         }
@@ -70,8 +69,8 @@ public class IncompleteListFragment extends Fragment implements UserListTvShowAd
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putString(USER_UID,userUid);
-        outState.putString(SHOW_TYPE,showType);
+        outState.putString(USER_UID, userUid);
+        outState.putString(SHOW_TYPE, showType);
         super.onSaveInstanceState(outState);
     }
 
@@ -85,7 +84,7 @@ public class IncompleteListFragment extends Fragment implements UserListTvShowAd
         mErrorTextView = (TextView) view.findViewById(R.id.error_text);
         mEmptyTextView = (TextView) view.findViewById(R.id.empty_text);
 
-        if(!Util.isInternetConnected(getContext())){
+        if (!Util.isInternetConnected(getContext())) {
             toggleVisibility(mErrorTextView);
             return view;
         }
@@ -96,7 +95,7 @@ public class IncompleteListFragment extends Fragment implements UserListTvShowAd
             @Override
             public Loader<Cursor> onCreateLoader(int id, Bundle args) {
                 CursorLoader loader = new CursorLoader(getContext(),
-                        Uri.parse(ProviderContract.CONTENT_AUTHORITY +ProviderContract.URI_MATCH_TV_INCOMPLETE),
+                        Uri.parse(ProviderContract.CONTENT_AUTHORITY + ProviderContract.URI_MATCH_TV_INCOMPLETE),
                         null,
                         null,
                         null,
@@ -113,19 +112,19 @@ public class IncompleteListFragment extends Fragment implements UserListTvShowAd
                     cursor.moveToFirst();
                     do {
                         tvshows.add(cursor.getInt(0));
-                    }while (cursor.moveToNext());
+                    } while (cursor.moveToNext());
 
-                    if(tvshows.isEmpty()){
+                    if (tvshows.isEmpty()) {
                         toggleVisibility(mEmptyTextView);
                         return;
                     }
 
                     toggleVisibility(mRecyclerView);
 
-                    UserListTvShowAdapter adapter = new UserListTvShowAdapter(getContext(),IncompleteListFragment.this,tvshows);
+                    UserListTvShowAdapter adapter = new UserListTvShowAdapter(getContext(), IncompleteListFragment.this, tvshows);
                     mRecyclerView.setAdapter(adapter);
-                    mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(),2));
-                }else{
+                    mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+                } else {
                     toggleVisibility(mEmptyTextView);
                 }
             }
@@ -182,7 +181,7 @@ public class IncompleteListFragment extends Fragment implements UserListTvShowAd
         return view;
     }
 
-    public void toggleVisibility(View v){
+    public void toggleVisibility(View v) {
         mRecyclerView.setVisibility(View.GONE);
         mErrorTextView.setVisibility(View.GONE);
         mProgressBar.setVisibility(View.GONE);

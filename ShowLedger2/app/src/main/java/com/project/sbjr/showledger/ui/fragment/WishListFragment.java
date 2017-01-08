@@ -18,11 +18,11 @@ import android.widget.TextView;
 import com.project.sbjr.showinfodatabase.model.MovieModel;
 import com.project.sbjr.showinfodatabase.model.TvShowModel;
 import com.project.sbjr.showledger.R;
-import com.project.sbjr.showledger.service.SyncService;
 import com.project.sbjr.showledger.Util;
 import com.project.sbjr.showledger.adapter.UserListMovieAdapter;
 import com.project.sbjr.showledger.adapter.UserListTvShowAdapter;
 import com.project.sbjr.showledger.provider.ProviderContract;
+import com.project.sbjr.showledger.service.SyncService;
 
 import java.util.ArrayList;
 
@@ -42,8 +42,8 @@ public class WishListFragment extends Fragment implements UserListMovieAdapter.U
     private TextView mErrorTextView;
     private TextView mEmptyTextView;
 
-    private Loader<Cursor> mMovieLoader =null;
-    private Loader<Cursor> mTvLoader =null;
+    private Loader<Cursor> mMovieLoader = null;
+    private Loader<Cursor> mTvLoader = null;
 
     public WishListFragment() {
         // Required empty public constructor
@@ -91,7 +91,7 @@ public class WishListFragment extends Fragment implements UserListMovieAdapter.U
         mErrorTextView = (TextView) view.findViewById(R.id.error_text);
         mEmptyTextView = (TextView) view.findViewById(R.id.empty_text);
 
-        if(!Util.isInternetConnected(getContext())){
+        if (!Util.isInternetConnected(getContext())) {
             toggleVisibility(mErrorTextView);
             return view;
         }
@@ -104,7 +104,7 @@ public class WishListFragment extends Fragment implements UserListMovieAdapter.U
                 @Override
                 public Loader<Cursor> onCreateLoader(int id, Bundle args) {
                     CursorLoader loader = new CursorLoader(getContext(),
-                            Uri.parse(ProviderContract.CONTENT_AUTHORITY +ProviderContract.URI_MATCH_MOVIE_WISH),
+                            Uri.parse(ProviderContract.CONTENT_AUTHORITY + ProviderContract.URI_MATCH_MOVIE_WISH),
                             null,
                             null,
                             null,
@@ -121,21 +121,21 @@ public class WishListFragment extends Fragment implements UserListMovieAdapter.U
                         cursor.moveToFirst();
                         do {
                             movies.add(cursor.getInt(0));
-                        }while (cursor.moveToNext());
+                        } while (cursor.moveToNext());
 
-                        if(movies.isEmpty()){
+                        if (movies.isEmpty()) {
                             toggleVisibility(mEmptyTextView);
                             return;
                         }
 
-                        SyncService.startSync(getContext(),Util.FireBaseConstants.MOVIE,Util.FireBaseConstants.WISHLIST,movies);
+                        SyncService.startSync(getContext(), Util.FireBaseConstants.MOVIE, Util.FireBaseConstants.WISHLIST, movies);
 
                         toggleVisibility(mRecyclerView);
 
-                        UserListMovieAdapter adapter = new UserListMovieAdapter(getContext(),WishListFragment.this,movies);
+                        UserListMovieAdapter adapter = new UserListMovieAdapter(getContext(), WishListFragment.this, movies);
                         mRecyclerView.setAdapter(adapter);
-                        mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(),2));
-                    }else{
+                        mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+                    } else {
                         toggleVisibility(mEmptyTextView);
                     }
                 }
@@ -194,7 +194,7 @@ public class WishListFragment extends Fragment implements UserListMovieAdapter.U
                 @Override
                 public Loader<Cursor> onCreateLoader(int id, Bundle args) {
                     CursorLoader loader = new CursorLoader(getContext(),
-                            Uri.parse(ProviderContract.CONTENT_AUTHORITY +ProviderContract.URI_MATCH_TV_WISH),
+                            Uri.parse(ProviderContract.CONTENT_AUTHORITY + ProviderContract.URI_MATCH_TV_WISH),
                             null,
                             null,
                             null,
@@ -211,21 +211,21 @@ public class WishListFragment extends Fragment implements UserListMovieAdapter.U
                         cursor.moveToFirst();
                         do {
                             tvshows.add(cursor.getInt(0));
-                        }while (cursor.moveToNext());
+                        } while (cursor.moveToNext());
 
-                        if(tvshows.isEmpty()){
+                        if (tvshows.isEmpty()) {
                             toggleVisibility(mEmptyTextView);
                             return;
                         }
 
-                        SyncService.startSync(getContext(),Util.FireBaseConstants.TVSHOW,Util.FireBaseConstants.WISHLIST,tvshows);
+                        SyncService.startSync(getContext(), Util.FireBaseConstants.TVSHOW, Util.FireBaseConstants.WISHLIST, tvshows);
 
                         toggleVisibility(mRecyclerView);
 
-                        UserListTvShowAdapter adapter = new UserListTvShowAdapter(getContext(),WishListFragment.this,tvshows);
+                        UserListTvShowAdapter adapter = new UserListTvShowAdapter(getContext(), WishListFragment.this, tvshows);
                         mRecyclerView.setAdapter(adapter);
-                        mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(),2));
-                    }else{
+                        mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+                    } else {
                         toggleVisibility(mEmptyTextView);
                     }
                 }
@@ -301,7 +301,7 @@ public class WishListFragment extends Fragment implements UserListMovieAdapter.U
         }
     }
 
-    public void toggleVisibility(View v){
+    public void toggleVisibility(View v) {
         mRecyclerView.setVisibility(View.GONE);
         mErrorTextView.setVisibility(View.GONE);
         mProgressBar.setVisibility(View.GONE);

@@ -19,7 +19,7 @@ import java.util.ArrayList;
  * Created by sbjr on 28/12/16.
  */
 
-public class ShowTvItemAdapter extends RecyclerView.Adapter<ShowTvItemAdapter.ShowItemViewHolder>{
+public class ShowTvItemAdapter extends RecyclerView.Adapter<ShowTvItemAdapter.ShowItemViewHolder> {
 
     private ArrayList<TvShowModel> mTvShowList = new ArrayList<>();
 
@@ -33,8 +33,8 @@ public class ShowTvItemAdapter extends RecyclerView.Adapter<ShowTvItemAdapter.Sh
     @Override
     public ShowItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
-        View view = LayoutInflater.from(context).inflate(R.layout.show_detail_list_item,parent,false);
-        return new ShowItemViewHolder(context,view,mListener);
+        View view = LayoutInflater.from(context).inflate(R.layout.show_detail_list_item, parent, false);
+        return new ShowItemViewHolder(context, view, mListener);
     }
 
     @Override
@@ -48,15 +48,15 @@ public class ShowTvItemAdapter extends RecyclerView.Adapter<ShowTvItemAdapter.Sh
     }
 
 
-    class ShowItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    class ShowItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private TextView mTitleTextView,mRatingTextView;
+        private TextView mTitleTextView, mRatingTextView;
         private ImageView mImageView;
         private ShowTvItemAdapterInteractionListener mListener;
         TvShowModel mTvShow;
         private Context mContext;
 
-        public ShowItemViewHolder(Context context,View itemView,ShowTvItemAdapterInteractionListener listener) {
+        public ShowItemViewHolder(Context context, View itemView, ShowTvItemAdapterInteractionListener listener) {
             super(itemView);
             mContext = context;
             mTitleTextView = (TextView) itemView.findViewById(R.id.title);
@@ -66,12 +66,12 @@ public class ShowTvItemAdapter extends RecyclerView.Adapter<ShowTvItemAdapter.Sh
             itemView.setOnClickListener(this);
         }
 
-        public void fillData(TvShowModel tvShowModel){
+        public void fillData(TvShowModel tvShowModel) {
             mTvShow = tvShowModel;
             mTitleTextView.setText(mTvShow.getName());
-            mRatingTextView.setText(mTvShow.getVote_average()+"");
+            mRatingTextView.setText(mTvShow.getVote_average() + "");
             Picasso.with(mContext)
-                    .load("https://image.tmdb.org/t/p/w185"+mTvShow.getPoster_path())
+                    .load("https://image.tmdb.org/t/p/w185" + mTvShow.getPoster_path())
                     .placeholder(Util.getRandomColor())
                     .fit()
                     .into(mImageView);
@@ -83,7 +83,7 @@ public class ShowTvItemAdapter extends RecyclerView.Adapter<ShowTvItemAdapter.Sh
         }
     }
 
-    public interface ShowTvItemAdapterInteractionListener{
+    public interface ShowTvItemAdapterInteractionListener {
         void tvShowItemClickListener(TvShowModel tvShowModel);
     }
 

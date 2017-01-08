@@ -1,13 +1,13 @@
 package com.project.sbjr.showledger.ui.activity;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -49,7 +49,7 @@ public class SearchActivity extends AppCompatActivity implements ShowMovieItemAd
     private CoordinatorLayout mCoordinatorLayout;
     private TextView mEmptyTextView;
 
-    private ArrayList<TvShowModel> SearchListTvShows =null;
+    private ArrayList<TvShowModel> SearchListTvShows = null;
     private ArrayList<MovieModel> SearchListMovies = null;
 
     private boolean isTwoPane = false;
@@ -74,7 +74,7 @@ public class SearchActivity extends AppCompatActivity implements ShowMovieItemAd
         mAdView.loadAd(adRequest);
 
         mDetailsFrameLayout = (FrameLayout) findViewById(R.id.details_layout);
-        if(mDetailsFrameLayout!=null){
+        if (mDetailsFrameLayout != null) {
             isTwoPane = true;
             AdView mAdViewDetails = (AdView) findViewById(R.id.ad_details);
             AdRequest adRequestDetails = new AdRequest.Builder()
@@ -87,22 +87,21 @@ public class SearchActivity extends AppCompatActivity implements ShowMovieItemAd
         /**
          * retaining saved instance so that searched list is retained
          * */
-        if(savedInstanceState!=null){
-            isMovie = savedInstanceState.getBoolean(IS_MOVIE_KEY,false);
+        if (savedInstanceState != null) {
+            isMovie = savedInstanceState.getBoolean(IS_MOVIE_KEY, false);
 
-            if(isMovie){
+            if (isMovie) {
                 SearchListMovies = savedInstanceState.getParcelableArrayList(SEARCH_LIST_KEY);
-                if(SearchListMovies!=null){
+                if (SearchListMovies != null) {
                     ShowMovieItemAdapter adapter = new ShowMovieItemAdapter(SearchListMovies, SearchActivity.this);
                     mSearchListRecyclerView.setLayoutManager(new GridLayoutManager(SearchActivity.this, 2));
                     mSearchListRecyclerView.setAdapter(adapter);
                 }
-            }
-            else{
+            } else {
                 SearchListTvShows = savedInstanceState.getParcelableArrayList(SEARCH_LIST_KEY);
-                if(SearchListTvShows!=null){
-                    ShowTvItemAdapter adapter = new ShowTvItemAdapter(SearchListTvShows,SearchActivity.this);
-                    mSearchListRecyclerView.setLayoutManager(new GridLayoutManager(SearchActivity.this,2));
+                if (SearchListTvShows != null) {
+                    ShowTvItemAdapter adapter = new ShowTvItemAdapter(SearchListTvShows, SearchActivity.this);
+                    mSearchListRecyclerView.setLayoutManager(new GridLayoutManager(SearchActivity.this, 2));
                     mSearchListRecyclerView.setAdapter(adapter);
                 }
             }
@@ -110,12 +109,11 @@ public class SearchActivity extends AppCompatActivity implements ShowMovieItemAd
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             Fragment fragment = fragmentManager.findFragmentByTag(DETAILS_FRAG_TAG);
-            if(fragment!=null) {
+            if (fragment != null) {
                 fragmentTransaction.replace(R.id.details_layout, fragment, DETAILS_FRAG_TAG);
                 fragmentTransaction.commit();
             }
-        }
-        else {
+        } else {
             Intent intent = getIntent();
             isMovie = intent.getBooleanExtra(ShowActivity.MOVIE_NAME, false);
         }
@@ -138,11 +136,10 @@ public class SearchActivity extends AppCompatActivity implements ShowMovieItemAd
     @Override
     protected void onSaveInstanceState(Bundle outState) {
 
-        outState.putBoolean(IS_MOVIE_KEY,isMovie);
-        if(isMovie) {
+        outState.putBoolean(IS_MOVIE_KEY, isMovie);
+        if (isMovie) {
             outState.putParcelableArrayList(SEARCH_LIST_KEY, SearchListMovies);
-        }
-        else{
+        } else {
             outState.putParcelableArrayList(SEARCH_LIST_KEY, SearchListTvShows);
         }
 
@@ -152,7 +149,7 @@ public class SearchActivity extends AppCompatActivity implements ShowMovieItemAd
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        if(item.getItemId()==R.id.home){
+        if (item.getItemId() == R.id.home) {
             onBackPressed();
             return true;
         }
@@ -160,17 +157,17 @@ public class SearchActivity extends AppCompatActivity implements ShowMovieItemAd
         return super.onOptionsItemSelected(item);
     }
 
-    public void search(String query){
+    public void search(String query) {
         mSearchListRecyclerView.setVisibility(View.VISIBLE);
         mEmptyTextView.setVisibility(View.GONE);
         mErrorTextView.setVisibility(View.GONE);
-        if(isMovie){
+        if (isMovie) {
             new HighOnShow(getString(R.string.api_key)).initMovie().getMovieBySearch(query, mSearchListRecyclerView, mProgressBar, mErrorTextView, new ShowHandler<MovieResponse>() {
                 @Override
                 public void onResult(MovieResponse result) {
                     ArrayList<MovieModel> movieModels = result.getResults();
                     SearchListMovies = movieModels;
-                    if(movieModels.isEmpty()){
+                    if (movieModels.isEmpty()) {
                         showEmpty();
                         return;
                     }
@@ -181,66 +178,63 @@ public class SearchActivity extends AppCompatActivity implements ShowMovieItemAd
 
                 @Override
                 public void onFailure() {
-                    Snackbar.make(mCoordinatorLayout,getString(R.string.snack_bar_error),Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(mCoordinatorLayout, getString(R.string.snack_bar_error), Snackbar.LENGTH_SHORT).show();
                 }
             });
-        }
-        else{
+        } else {
             new HighOnShow(getString(R.string.api_key)).initTvShow().getTvShowDetailsBySearch(query, mSearchListRecyclerView, mProgressBar, mErrorTextView, new ShowHandler<TvResponse>() {
                 @Override
                 public void onResult(TvResponse result) {
                     ArrayList<TvShowModel> tvShowModels = result.getResults();
                     SearchListTvShows = tvShowModels;
-                    if(tvShowModels.isEmpty()){
+                    if (tvShowModels.isEmpty()) {
                         showEmpty();
                         return;
                     }
-                    ShowTvItemAdapter adapter = new ShowTvItemAdapter(tvShowModels,SearchActivity.this);
-                    mSearchListRecyclerView.setLayoutManager(new GridLayoutManager(SearchActivity.this,2));
+                    ShowTvItemAdapter adapter = new ShowTvItemAdapter(tvShowModels, SearchActivity.this);
+                    mSearchListRecyclerView.setLayoutManager(new GridLayoutManager(SearchActivity.this, 2));
                     mSearchListRecyclerView.setAdapter(adapter);
                 }
 
                 @Override
                 public void onFailure() {
-                    Snackbar.make(mCoordinatorLayout,getString(R.string.snack_bar_error),Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(mCoordinatorLayout, getString(R.string.snack_bar_error), Snackbar.LENGTH_SHORT).show();
                 }
             });
         }
     }
 
-    public void showEmpty(){
+    public void showEmpty() {
         mSearchListRecyclerView.setVisibility(View.GONE);
         mEmptyTextView.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void ShowMovieItemClickListener(MovieModel movie) {
-        if(isTwoPane){
+        if (isTwoPane) {
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            DetailsMovieFragment fragment = DetailsMovieFragment.newInstance(Util.getUserUidFromSharedPreference(this),movie);
-            fragmentTransaction.replace(R.id.details_layout,fragment, DETAILS_FRAG_TAG);
+            DetailsMovieFragment fragment = DetailsMovieFragment.newInstance(Util.getUserUidFromSharedPreference(this), movie);
+            fragmentTransaction.replace(R.id.details_layout, fragment, DETAILS_FRAG_TAG);
             fragmentTransaction.commit();
-        }
-        else{
-            Intent intent = new Intent(this,MovieDetailsActivity.class);
-            intent.putExtra(ShowActivity.MOVIE_NAME,movie);
+        } else {
+            Intent intent = new Intent(this, MovieDetailsActivity.class);
+            intent.putExtra(ShowActivity.MOVIE_NAME, movie);
             startActivity(intent);
         }
     }
 
     @Override
     public void tvShowItemClickListener(TvShowModel tvShowModel) {
-        if(isTwoPane){
+        if (isTwoPane) {
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            DetailsTvShowFragment fragment = DetailsTvShowFragment.newInstance(Util.getUserUidFromSharedPreference(this),tvShowModel);
-            fragmentTransaction.replace(R.id.details_layout,fragment,DETAILS_FRAG_TAG);
+            DetailsTvShowFragment fragment = DetailsTvShowFragment.newInstance(Util.getUserUidFromSharedPreference(this), tvShowModel);
+            fragmentTransaction.replace(R.id.details_layout, fragment, DETAILS_FRAG_TAG);
             fragmentTransaction.commit();
-        }
-        else{
-            Intent intent = new Intent(this,TvShowDetailActivity.class);
-            intent.putExtra(ShowActivity.TVSHOW_NAME,tvShowModel);
+        } else {
+            Intent intent = new Intent(this, TvShowDetailActivity.class);
+            intent.putExtra(ShowActivity.TVSHOW_NAME, tvShowModel);
             startActivity(intent);
         }
     }

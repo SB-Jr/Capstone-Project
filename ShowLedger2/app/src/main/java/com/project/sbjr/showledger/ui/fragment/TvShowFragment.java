@@ -13,16 +13,16 @@ import com.project.sbjr.showinfodatabase.model.TvShowModel;
 import com.project.sbjr.showledger.R;
 import com.project.sbjr.showledger.adapter.ShowViewPagerAdapter;
 
-public class TvShowFragment extends Fragment implements ShowFragment.onTvShowFragmentInteractionListener,WatchedListFragment.OnTvShowWatchedFragmentInteractionListener,WishListFragment.OnTvShowWishListFragmentInteractionListener,IncompleteListFragment.OnIncompleteFragmentInteractionListener{
+public class TvShowFragment extends Fragment implements ShowFragment.onTvShowFragmentInteractionListener, WatchedListFragment.OnTvShowWatchedFragmentInteractionListener, WishListFragment.OnTvShowWishListFragmentInteractionListener, IncompleteListFragment.OnIncompleteFragmentInteractionListener {
 
     public static final String TVSHOW_TAG = "tv_show";
 
     private static final String USER_UID = "user_uid";
 
-    private final static String mShowFragmentKey="com.project.sbjr.showledger.ui.fragment.MovieFragment.showfrag";
-    private final static String mWatchedListFragmentKey="com.project.sbjr.showledger.ui.fragment.MovieFragment.watchlistfrag";
-    private final static String mWishListFragmentKey="com.project.sbjr.showledger.ui.fragment.MovieFragment.wishlistfrag";
-    private final static String mIncompleteListFragmentKey="com.project.sbjr.showledger.ui.fragment.MovieFragment.incompletelistfrag";
+    private final static String mShowFragmentKey = "com.project.sbjr.showledger.ui.fragment.MovieFragment.showfrag";
+    private final static String mWatchedListFragmentKey = "com.project.sbjr.showledger.ui.fragment.MovieFragment.watchlistfrag";
+    private final static String mWishListFragmentKey = "com.project.sbjr.showledger.ui.fragment.MovieFragment.wishlistfrag";
+    private final static String mIncompleteListFragmentKey = "com.project.sbjr.showledger.ui.fragment.MovieFragment.incompletelistfrag";
 
     private String userUid;
 
@@ -53,16 +53,16 @@ public class TvShowFragment extends Fragment implements ShowFragment.onTvShowFra
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(savedInstanceState!=null){
+        if (savedInstanceState != null) {
             userUid = savedInstanceState.getString(USER_UID);
         }
         if (getArguments() != null) {
             userUid = getArguments().getString(USER_UID);
         }
-        mShowFragment = ShowFragment.newInstance(userUid,TVSHOW_TAG);
-        mWishListFragment = WishListFragment.newInstance(userUid,TVSHOW_TAG);
-        mWatchedListFragment = WatchedListFragment.newInstance(userUid,TVSHOW_TAG);
-        mIncompleteListFragment = IncompleteListFragment.newInstance(userUid,TVSHOW_TAG);
+        mShowFragment = ShowFragment.newInstance(userUid, TVSHOW_TAG);
+        mWishListFragment = WishListFragment.newInstance(userUid, TVSHOW_TAG);
+        mWatchedListFragment = WatchedListFragment.newInstance(userUid, TVSHOW_TAG);
+        mIncompleteListFragment = IncompleteListFragment.newInstance(userUid, TVSHOW_TAG);
         mShowFragment.initListener(this);
         mWatchedListFragment.initListener(this);
         mWishListFragment.initListener(this);
@@ -71,18 +71,18 @@ public class TvShowFragment extends Fragment implements ShowFragment.onTvShowFra
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putString(USER_UID,userUid);
+        outState.putString(USER_UID, userUid);
         super.onSaveInstanceState(outState);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view =  inflater.inflate(R.layout.fragment_tv_show, container, false);
-        mTabLayout = (TabLayout)view.findViewById(R.id.tab_layout);
+        View view = inflater.inflate(R.layout.fragment_tv_show, container, false);
+        mTabLayout = (TabLayout) view.findViewById(R.id.tab_layout);
         mViewPager = (ViewPager) view.findViewById(R.id.view_pager);
         initViewPager();
-        mTabLayout.setupWithViewPager(mViewPager,false);
+        mTabLayout.setupWithViewPager(mViewPager, false);
         return view;
     }
 
@@ -98,12 +98,12 @@ public class TvShowFragment extends Fragment implements ShowFragment.onTvShowFra
     }
 
 
-    public void initViewPager(){
+    public void initViewPager() {
         ShowViewPagerAdapter adapter = new ShowViewPagerAdapter(getChildFragmentManager());
-        adapter.addFragment(mShowFragment,getString(R.string.show_tvshow));
-        adapter.addFragment(mWishListFragment,getString(R.string.show_wish));
-        adapter.addFragment(mWatchedListFragment,getString(R.string.show_watched));
-        adapter.addFragment(mIncompleteListFragment,getString(R.string.show_incomplete));
+        adapter.addFragment(mShowFragment, getString(R.string.show_tvshow));
+        adapter.addFragment(mWishListFragment, getString(R.string.show_wish));
+        adapter.addFragment(mWatchedListFragment, getString(R.string.show_watched));
+        adapter.addFragment(mIncompleteListFragment, getString(R.string.show_incomplete));
         mViewPager.setAdapter(adapter);
         mViewPager.setOffscreenPageLimit(3);
     }

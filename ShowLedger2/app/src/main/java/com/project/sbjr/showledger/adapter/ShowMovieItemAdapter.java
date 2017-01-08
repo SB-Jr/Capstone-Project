@@ -19,7 +19,7 @@ import java.util.ArrayList;
  * Created by sbjr on 26/12/16.
  */
 
-public class ShowMovieItemAdapter extends RecyclerView.Adapter<ShowMovieItemAdapter.ShowItemViewHolder>{
+public class ShowMovieItemAdapter extends RecyclerView.Adapter<ShowMovieItemAdapter.ShowItemViewHolder> {
 
     private ArrayList<MovieModel> mMovieList = new ArrayList<>();
 
@@ -33,8 +33,8 @@ public class ShowMovieItemAdapter extends RecyclerView.Adapter<ShowMovieItemAdap
     @Override
     public ShowItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
-        View view = LayoutInflater.from(context).inflate(R.layout.show_detail_list_item,parent,false);
-        return new ShowItemViewHolder(context,view,mListener);
+        View view = LayoutInflater.from(context).inflate(R.layout.show_detail_list_item, parent, false);
+        return new ShowItemViewHolder(context, view, mListener);
     }
 
     @Override
@@ -47,15 +47,15 @@ public class ShowMovieItemAdapter extends RecyclerView.Adapter<ShowMovieItemAdap
         return mMovieList.size();
     }
 
-    class ShowItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    class ShowItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private TextView mTitleTextView,mRatingTextView;
+        private TextView mTitleTextView, mRatingTextView;
         private ImageView mImageView;
         private ShowMovieItemAdapterInteractionListener mListener;
         MovieModel mMovie;
         private Context mContext;
 
-        public ShowItemViewHolder(Context context,View itemView,ShowMovieItemAdapterInteractionListener listener) {
+        public ShowItemViewHolder(Context context, View itemView, ShowMovieItemAdapterInteractionListener listener) {
             super(itemView);
             mContext = context;
             mTitleTextView = (TextView) itemView.findViewById(R.id.title);
@@ -65,12 +65,12 @@ public class ShowMovieItemAdapter extends RecyclerView.Adapter<ShowMovieItemAdap
             itemView.setOnClickListener(this);
         }
 
-        public void fillData(MovieModel movieModel){
+        public void fillData(MovieModel movieModel) {
             mMovie = movieModel;
             mTitleTextView.setText(mMovie.getTitle());
-            mRatingTextView.setText(mMovie.getVote_average()+"");
+            mRatingTextView.setText(mMovie.getVote_average() + "");
             Picasso.with(mContext)
-                    .load("https://image.tmdb.org/t/p/w185"+movieModel.getPoster_path())
+                    .load("https://image.tmdb.org/t/p/w185" + movieModel.getPoster_path())
                     .placeholder(Util.getRandomColor())
                     .fit()
                     .into(mImageView);

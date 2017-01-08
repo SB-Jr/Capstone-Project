@@ -3,11 +3,11 @@ package com.project.sbjr.showledger.ui.activity;
 import android.content.ContentValues;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,9 +19,6 @@ import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.project.sbjr.showinfodatabase.HighOnShow;
 import com.project.sbjr.showinfodatabase.handler.ShowHandler;
 import com.project.sbjr.showinfodatabase.model.Cast;
@@ -36,26 +33,26 @@ import com.squareup.picasso.Picasso;
 
 public class MovieDetailsActivity extends AppCompatActivity {
 
-    private static final String MOVIE_MODEL_KEY="com.project.sbjr.showledger.ui.activity.MovieDetailsActivity.mMovieModel";
+    private static final String MOVIE_MODEL_KEY = "com.project.sbjr.showledger.ui.activity.MovieDetailsActivity.mMovieModel";
 
     private MovieModel mMovieModel;
     private String userUid;
 
     private TextView mDirectorTextView,
-                     mMusicTextView,
-                     mCastTextView,
-                     mProducedTextView,
-                     mReleaseTextView,
-                     mRatingTextView,
-                     mOverviewTextView;
+            mMusicTextView,
+            mCastTextView,
+            mProducedTextView,
+            mReleaseTextView,
+            mRatingTextView,
+            mOverviewTextView;
 
     private LinearLayout mDirectorContainer,
-                         mMusicContainer,
-                         mProducedContainer,
-                         mCastContainer,
-                         mRatingContainer,
-                         mReleaseContainer,
-                         mOverviewContainer;
+            mMusicContainer,
+            mProducedContainer,
+            mCastContainer,
+            mRatingContainer,
+            mReleaseContainer,
+            mOverviewContainer;
     private ImageView mImageView;
 
     private Toolbar mToolbar;
@@ -77,10 +74,9 @@ public class MovieDetailsActivity extends AppCompatActivity {
         mAdView.loadAd(adRequest);
 
 
-        if(savedInstanceState!=null){
+        if (savedInstanceState != null) {
             mMovieModel = savedInstanceState.getParcelable(MOVIE_MODEL_KEY);
-        }
-        else {
+        } else {
             mMovieModel = getIntent().getParcelableExtra(ShowActivity.MOVIE_NAME);
         }
         userUid = Util.getUserUidFromSharedPreference(this);
@@ -122,11 +118,11 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
         mOverviewTextView.setText(mMovieModel.getOverview());
         mReleaseTextView.setText(mMovieModel.getRelease_date());
-        mRatingTextView.setText(mMovieModel.getVote_average()+"");
+        mRatingTextView.setText(mMovieModel.getVote_average() + "");
 
 
         Picasso.with(MovieDetailsActivity.this)
-                .load("https://image.tmdb.org/t/p/w300"+mMovieModel.getBackdrop_path())
+                .load("https://image.tmdb.org/t/p/w300" + mMovieModel.getBackdrop_path())
                 .fit()
                 .into(mImageView);
 
@@ -134,50 +130,44 @@ public class MovieDetailsActivity extends AppCompatActivity {
         movie.getMovieCredits(mMovieModel.getId(), mContainerLinearLayout, mProgressBar, mErrorTextView, new ShowHandler<CreditResponse>() {
             @Override
             public void onResult(CreditResponse result) {
-                String producers="";
-                String actors="";
-                String music="";
-                String directors="";
-                for(Cast cast : result.getCast()){
-                    if(cast.getOrder()<=3){
-                        actors+=","+cast.getName();
+                String producers = "";
+                String actors = "";
+                String music = "";
+                String directors = "";
+                for (Cast cast : result.getCast()) {
+                    if (cast.getOrder() <= 3) {
+                        actors += "," + cast.getName();
                     }
                 }
 
-                for(Crew crew: result.getCrew()){
-                    if(crew.getJob().equalsIgnoreCase("Director")){
-                        directors+=","+crew.getName();
-                    }
-                    else if(crew.getJob().equalsIgnoreCase("Music")){
-                        music+=","+crew.getName();
-                    }
-                    else if(crew.getJob().equalsIgnoreCase("Producer")){
-                        producers+=","+crew.getName();
+                for (Crew crew : result.getCrew()) {
+                    if (crew.getJob().equalsIgnoreCase("Director")) {
+                        directors += "," + crew.getName();
+                    } else if (crew.getJob().equalsIgnoreCase("Music")) {
+                        music += "," + crew.getName();
+                    } else if (crew.getJob().equalsIgnoreCase("Producer")) {
+                        producers += "," + crew.getName();
                     }
                 }
 
-                if(actors.length()==0){
+                if (actors.length() == 0) {
                     mCastContainer.setVisibility(View.GONE);
-                }
-                else {
+                } else {
                     mCastTextView.setText(actors.substring(1));
                 }
-                if(directors.length()==0){
+                if (directors.length() == 0) {
                     mDirectorContainer.setVisibility(View.GONE);
-                }
-                else {
+                } else {
                     mDirectorTextView.setText(directors.substring(1));
                 }
-                if(producers.length()==0){
+                if (producers.length() == 0) {
                     mProducedContainer.setVisibility(View.GONE);
-                }
-                else {
+                } else {
                     mProducedTextView.setText(producers.substring(1));
                 }
-                if(music.length()==0){
+                if (music.length() == 0) {
                     mMusicContainer.setVisibility(View.GONE);
-                }
-                else {
+                } else {
                     mMusicTextView.setText(music.substring(1));
                 }
             }
@@ -191,24 +181,25 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putParcelable(MOVIE_MODEL_KEY,mMovieModel);
+        outState.putParcelable(MOVIE_MODEL_KEY, mMovieModel);
         super.onSaveInstanceState(outState);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_movie_detail,menu);
+        getMenuInflater().inflate(R.menu.menu_movie_detail, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.done:
                 addMovieToWatchedList();
                 break;
-            case R.id.watch_later: addMovieToWatchLaterList();
+            case R.id.watch_later:
+                addMovieToWatchLaterList();
                 break;
             case R.id.home:
                 onBackPressed();
@@ -226,12 +217,12 @@ public class MovieDetailsActivity extends AppCompatActivity {
             }
         });*/
         ContentValues values = new ContentValues();
-        values.put(DatabaseContract.TABLE_SHOW_ID,mMovieModel.getId());
-        getContentResolver().insert(Uri.parse(ProviderContract.CONTENT_AUTHORITY+ProviderContract.URI_MATCH_MOVIE_WATCHED),values);
-        Snackbar.make(mCoordinatorLayout,getString(R.string.snack_bar_watch_list),Snackbar.LENGTH_SHORT).show();
+        values.put(DatabaseContract.TABLE_SHOW_ID, mMovieModel.getId());
+        getContentResolver().insert(Uri.parse(ProviderContract.CONTENT_AUTHORITY + ProviderContract.URI_MATCH_MOVIE_WATCHED), values);
+        Snackbar.make(mCoordinatorLayout, getString(R.string.snack_bar_watch_list), Snackbar.LENGTH_SHORT).show();
     }
 
-    private void addMovieToWatchLaterList(){
+    private void addMovieToWatchLaterList() {
         /*DatabaseReference reference = FirebaseDatabase.getInstance().getReference(Util.FireBaseConstants.USER).child(userUid).child(Util.FireBaseConstants.MOVIE).child(Util.FireBaseConstants.WISHLIST);
         reference.child(mMovieModel.getId() + "").setValue(mMovieModel.getId(), new DatabaseReference.CompletionListener() {
             @Override
@@ -240,9 +231,9 @@ public class MovieDetailsActivity extends AppCompatActivity {
             }
         });*/
         ContentValues values = new ContentValues();
-        values.put(DatabaseContract.TABLE_SHOW_ID,mMovieModel.getId());
-        getContentResolver().insert(Uri.parse(ProviderContract.CONTENT_AUTHORITY+ProviderContract.URI_MATCH_MOVIE_WISH),values);
-        Snackbar.make(mCoordinatorLayout,getString(R.string.snack_bar_wish_list),Snackbar.LENGTH_SHORT).show();
+        values.put(DatabaseContract.TABLE_SHOW_ID, mMovieModel.getId());
+        getContentResolver().insert(Uri.parse(ProviderContract.CONTENT_AUTHORITY + ProviderContract.URI_MATCH_MOVIE_WISH), values);
+        Snackbar.make(mCoordinatorLayout, getString(R.string.snack_bar_wish_list), Snackbar.LENGTH_SHORT).show();
     }
 
 }

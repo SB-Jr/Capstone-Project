@@ -1,8 +1,8 @@
 package com.project.sbjr.showledger.service;
 
 import android.app.IntentService;
-import android.content.Intent;
 import android.content.Context;
+import android.content.Intent;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -24,14 +24,14 @@ public class SyncService extends IntentService {
     }
 
     public static void startSync(Context context, String showType, String showListType, ArrayList<Integer> showIds) {
-        if(mContext==null){
-            mContext=context;
+        if (mContext == null) {
+            mContext = context;
         }
         Intent intent = new Intent(context, SyncService.class);
         intent.putExtra(SHOW_TYPE, showType);
         intent.putExtra(SHOW_LIST_TYPE, showListType);
         intent.putExtra(USER_UID, Util.getUserUidFromSharedPreference(context));
-        intent.putExtra(SHOW_IDS,showIds);
+        intent.putExtra(SHOW_IDS, showIds);
         mContext.startService(intent);
     }
 
@@ -42,12 +42,12 @@ public class SyncService extends IntentService {
             final String showType = intent.getStringExtra(SHOW_TYPE);
             final String showTypeList = intent.getStringExtra(SHOW_LIST_TYPE);
             final ArrayList<Integer> showIds = intent.getIntegerArrayListExtra(SHOW_IDS);
-            handleActionFoo(userUid, showType,showTypeList,showIds);
+            handleActionFoo(userUid, showType, showTypeList, showIds);
         }
     }
 
-    private void handleActionFoo(String useruid, String showType,String showListType,ArrayList<Integer> showIds) {
-        for(int i:showIds){
+    private void handleActionFoo(String useruid, String showType, String showListType, ArrayList<Integer> showIds) {
+        for (int i : showIds) {
             DatabaseReference reference = FirebaseDatabase.getInstance().getReference(Util.FireBaseConstants.USER).child(useruid).child(showType).child(showListType);
             reference.child(i + "").setValue(i);
         }

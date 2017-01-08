@@ -30,39 +30,39 @@ public class LatestAppWidget extends AppWidgetProvider {
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
-        Log.d("data fetch","onReceive()");
-        if(intent.getAction().equals(AppWidgetManager.ACTION_APPWIDGET_UPDATE)){
+        Log.d("data fetch", "onReceive()");
+        if (intent.getAction().equals(AppWidgetManager.ACTION_APPWIDGET_UPDATE)) {
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
             ComponentName thisAppWidget = new ComponentName(context.getPackageName(), LatestAppWidget.class.getName());
             int[] appWidgetIds = appWidgetManager.getAppWidgetIds(thisAppWidget);
-            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds,R.id.list);
+            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.list);
         }
     }
 
     @Override
     public void onUpdate(final Context context, final AppWidgetManager appWidgetManager, final int[] appWidgetIds) {
         // There may be multiple widgets active, so update all of them
-        super.onUpdate(context,appWidgetManager,appWidgetIds);
+        super.onUpdate(context, appWidgetManager, appWidgetIds);
 
-        Log.d("data fetch","onUpdate()");
+        Log.d("data fetch", "onUpdate()");
         for (final int appWidgetId : appWidgetIds) {
 
-            final RemoteViews rv = new RemoteViews(context.getPackageName(),R.layout.latest_app_widget);
+            final RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.latest_app_widget);
 
             new HighOnShow(context.getString(R.string.api_key)).initMovie().getUpcomingMovies(null, null, null, new ShowHandler<MovieResponse>() {
                 @Override
                 public void onResult(MovieResponse result) {
                     ArrayList<String> listItems = new ArrayList<>();
 
-                    Intent mIntent = new Intent(context,ListWidgetService.class);
+                    Intent mIntent = new Intent(context, ListWidgetService.class);
                     mIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetIds);
                     mIntent.setData(Uri.parse(mIntent.toUri(Intent.URI_INTENT_SCHEME)));
 
-                    for(MovieModel model: result.getResults()){
+                    for (MovieModel model : result.getResults()) {
                         listItems.add(model.getTitle());
                     }
 
-                    listItems.add(0,context.getString(R.string.navigation_movies));
+                    listItems.add(0, context.getString(R.string.navigation_movies));
                     final ArrayList<String> movieListItems = new ArrayList<>(listItems);
 
                     //mIntent.putExtra(CONTENT_DATA, movieListItems);
@@ -74,24 +74,24 @@ public class LatestAppWidget extends AppWidgetProvider {
 
                             ArrayList<String> listItems = new ArrayList<>();
 
-                            Intent finalIntent = new Intent(context,ListWidgetService.class);
+                            Intent finalIntent = new Intent(context, ListWidgetService.class);
                             finalIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetIds);
                             finalIntent.setData(Uri.parse(finalIntent.toUri(Intent.URI_INTENT_SCHEME)));
 
-                            for(TvShowModel model:result.getResults()){
+                            for (TvShowModel model : result.getResults()) {
                                 listItems.add(model.getName());
                             }
-                            listItems.add(0,context.getString(R.string.navigation_tvshows));
+                            listItems.add(0, context.getString(R.string.navigation_tvshows));
 
-                            listItems.addAll(0,movieListItems);
+                            listItems.addAll(0, movieListItems);
 
-                            finalIntent.putExtra(CONTENT_DATA,listItems);
+                            finalIntent.putExtra(CONTENT_DATA, listItems);
 
-                            Log.d("data fetch",listItems.size()+" by populateTvShow()");
+                            Log.d("data fetch", listItems.size() + " by populateTvShow()");
 
-                            AppWidgetManager.getInstance(context).notifyAppWidgetViewDataChanged(appWidgetId,R.id.list);
+                            AppWidgetManager.getInstance(context).notifyAppWidgetViewDataChanged(appWidgetId, R.id.list);
 
-                            rv.setEmptyView(R.id.list,R.id.empty_view);
+                            rv.setEmptyView(R.id.list, R.id.empty_view);
                             rv.setRemoteAdapter(R.id.list, finalIntent);
 
                             appWidgetManager.updateAppWidget(appWidgetId, rv);

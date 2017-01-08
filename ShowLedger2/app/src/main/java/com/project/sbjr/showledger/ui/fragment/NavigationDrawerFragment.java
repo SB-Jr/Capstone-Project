@@ -17,7 +17,7 @@ import com.project.sbjr.showledger.R;
 import com.project.sbjr.showledger.Util;
 import com.project.sbjr.showledger.adapter.NavigationDrawerAdapter;
 
-public class NavigationDrawerFragment extends Fragment implements NavigationDrawerAdapter.NavigationDrawerItemClickListener{
+public class NavigationDrawerFragment extends Fragment implements NavigationDrawerAdapter.NavigationDrawerItemClickListener {
     private static final String CURRENT_SELECTION = "current_selection";
 
     private int mCurrentSelection;
@@ -64,7 +64,7 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
         mAdView.loadAd(adRequest);*/
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.contents);
-        NavigationDrawerAdapter adapter = new NavigationDrawerAdapter(getContext(),this);
+        NavigationDrawerAdapter adapter = new NavigationDrawerAdapter(getContext(), this);
         mRecyclerView.setAdapter(adapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mUserGreetTextView = (TextView) view.findViewById(R.id.user_greeting);
@@ -76,7 +76,6 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
 
 
         if (context instanceof OnNavigationDrawerFragmentListener) {
@@ -99,10 +98,10 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
     }
 
 
-    public void init(DrawerLayout drawerLayout, final Toolbar toolbar){
+    public void init(DrawerLayout drawerLayout, final Toolbar toolbar) {
         mDrawerLayout = drawerLayout;
         mToolbar = toolbar;
-        mActionBarDrawerToggle = new ActionBarDrawerToggle(getActivity(),drawerLayout,toolbar,R.string.description_navigation_drawer_open,R.string.description_navigation_drawer_close){
+        mActionBarDrawerToggle = new ActionBarDrawerToggle(getActivity(), drawerLayout, toolbar, R.string.description_navigation_drawer_open, R.string.description_navigation_drawer_close) {
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);

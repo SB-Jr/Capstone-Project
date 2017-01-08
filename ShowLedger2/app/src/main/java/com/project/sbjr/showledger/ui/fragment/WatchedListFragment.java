@@ -18,16 +18,16 @@ import android.widget.TextView;
 import com.project.sbjr.showinfodatabase.model.MovieModel;
 import com.project.sbjr.showinfodatabase.model.TvShowModel;
 import com.project.sbjr.showledger.R;
-import com.project.sbjr.showledger.service.SyncService;
 import com.project.sbjr.showledger.Util;
 import com.project.sbjr.showledger.adapter.UserListMovieAdapter;
 import com.project.sbjr.showledger.adapter.UserListTvShowAdapter;
 import com.project.sbjr.showledger.provider.ProviderContract;
+import com.project.sbjr.showledger.service.SyncService;
 
 import java.util.ArrayList;
 
 
-public class WatchedListFragment extends Fragment implements UserListMovieAdapter.UserListMovieAdapterInteraction,UserListTvShowAdapter.UserListTvShowAdapterInteraction{
+public class WatchedListFragment extends Fragment implements UserListMovieAdapter.UserListMovieAdapterInteraction, UserListTvShowAdapter.UserListTvShowAdapterInteraction {
     private static final String USER_UID = "user_uid";
     private static final String SHOW_TYPE = "show_type";
 
@@ -42,7 +42,7 @@ public class WatchedListFragment extends Fragment implements UserListMovieAdapte
     private TextView mErrorTextView;
     private TextView mEmptyTextView;
 
-    private Loader<Cursor> mMovieLoader=null;
+    private Loader<Cursor> mMovieLoader = null;
     private Loader<Cursor> mTvLoader = null;
 
     public WatchedListFragment() {
@@ -63,11 +63,10 @@ public class WatchedListFragment extends Fragment implements UserListMovieAdapte
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(savedInstanceState!=null){
+        if (savedInstanceState != null) {
             userUid = savedInstanceState.getString(USER_UID);
             showType = savedInstanceState.getString(SHOW_TYPE);
-        }
-        else if (getArguments() != null) {
+        } else if (getArguments() != null) {
             userUid = getArguments().getString(USER_UID);
             showType = getArguments().getString(SHOW_TYPE);
         }
@@ -75,8 +74,8 @@ public class WatchedListFragment extends Fragment implements UserListMovieAdapte
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putString(USER_UID,userUid);
-        outState.putString(SHOW_TYPE,showType);
+        outState.putString(USER_UID, userUid);
+        outState.putString(SHOW_TYPE, showType);
         super.onSaveInstanceState(outState);
     }
 
@@ -90,12 +89,12 @@ public class WatchedListFragment extends Fragment implements UserListMovieAdapte
         mErrorTextView = (TextView) view.findViewById(R.id.error_text);
         mEmptyTextView = (TextView) view.findViewById(R.id.empty_text);
 
-        if(!Util.isInternetConnected(getContext())){
+        if (!Util.isInternetConnected(getContext())) {
             toggleVisibility(mErrorTextView);
             return view;
         }
 
-        if(showType.equalsIgnoreCase(MovieFragment.MOVIE_TAG)){
+        if (showType.equalsIgnoreCase(MovieFragment.MOVIE_TAG)) {
 
             toggleVisibility(mProgressBar);
 
@@ -103,7 +102,7 @@ public class WatchedListFragment extends Fragment implements UserListMovieAdapte
                 @Override
                 public Loader<Cursor> onCreateLoader(int id, Bundle args) {
                     CursorLoader loader = new CursorLoader(getContext(),
-                            Uri.parse(ProviderContract.CONTENT_AUTHORITY +ProviderContract.URI_MATCH_MOVIE_WATCHED),
+                            Uri.parse(ProviderContract.CONTENT_AUTHORITY + ProviderContract.URI_MATCH_MOVIE_WATCHED),
                             null,
                             null,
                             null,
@@ -120,21 +119,21 @@ public class WatchedListFragment extends Fragment implements UserListMovieAdapte
                         cursor.moveToFirst();
                         do {
                             movies.add(cursor.getInt(0));
-                        }while (cursor.moveToNext());
+                        } while (cursor.moveToNext());
 
-                        if(movies.isEmpty()){
+                        if (movies.isEmpty()) {
                             toggleVisibility(mEmptyTextView);
                             return;
                         }
 
-                        SyncService.startSync(getContext(),Util.FireBaseConstants.MOVIE,Util.FireBaseConstants.WATCHED,movies);
+                        SyncService.startSync(getContext(), Util.FireBaseConstants.MOVIE, Util.FireBaseConstants.WATCHED, movies);
 
                         toggleVisibility(mRecyclerView);
 
-                        UserListMovieAdapter adapter = new UserListMovieAdapter(getContext(),WatchedListFragment.this,movies);
+                        UserListMovieAdapter adapter = new UserListMovieAdapter(getContext(), WatchedListFragment.this, movies);
                         mRecyclerView.setAdapter(adapter);
-                        mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(),2));
-                    }else{
+                        mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+                    } else {
                         toggleVisibility(mEmptyTextView);
                     }
                 }
@@ -190,8 +189,7 @@ public class WatchedListFragment extends Fragment implements UserListMovieAdapte
                     toggleVisibility(mErrorTextView);
                 }
             });*/
-        }
-        else{
+        } else {
 
             toggleVisibility(mProgressBar);
 
@@ -199,7 +197,7 @@ public class WatchedListFragment extends Fragment implements UserListMovieAdapte
                 @Override
                 public Loader<Cursor> onCreateLoader(int id, Bundle args) {
                     CursorLoader loader = new CursorLoader(getContext(),
-                            Uri.parse(ProviderContract.CONTENT_AUTHORITY +ProviderContract.URI_MATCH_TV_WATCHED),
+                            Uri.parse(ProviderContract.CONTENT_AUTHORITY + ProviderContract.URI_MATCH_TV_WATCHED),
                             null,
                             null,
                             null,
@@ -216,21 +214,21 @@ public class WatchedListFragment extends Fragment implements UserListMovieAdapte
                         cursor.moveToFirst();
                         do {
                             tvshows.add(cursor.getInt(0));
-                        }while (cursor.moveToNext());
+                        } while (cursor.moveToNext());
 
-                        if(tvshows.isEmpty()){
+                        if (tvshows.isEmpty()) {
                             toggleVisibility(mEmptyTextView);
                             return;
                         }
 
-                        SyncService.startSync(getContext(),Util.FireBaseConstants.TVSHOW,Util.FireBaseConstants.WATCHED,tvshows);
+                        SyncService.startSync(getContext(), Util.FireBaseConstants.TVSHOW, Util.FireBaseConstants.WATCHED, tvshows);
 
                         toggleVisibility(mRecyclerView);
 
-                        UserListTvShowAdapter adapter = new UserListTvShowAdapter(getContext(),WatchedListFragment.this,tvshows);
+                        UserListTvShowAdapter adapter = new UserListTvShowAdapter(getContext(), WatchedListFragment.this, tvshows);
                         mRecyclerView.setAdapter(adapter);
-                        mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(),2));
-                    }else{
+                        mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+                    } else {
                         toggleVisibility(mEmptyTextView);
                     }
                 }
@@ -290,16 +288,15 @@ public class WatchedListFragment extends Fragment implements UserListMovieAdapte
         return view;
     }
 
-    public void initListener(Fragment fragment){
-        if(showType.equalsIgnoreCase(MovieFragment.MOVIE_TAG)) {
+    public void initListener(Fragment fragment) {
+        if (showType.equalsIgnoreCase(MovieFragment.MOVIE_TAG)) {
             if (fragment instanceof OnMovieWatchedFragmentInteractionListener) {
                 mMovieListener = (OnMovieWatchedFragmentInteractionListener) fragment;
             } else {
                 throw new RuntimeException(fragment.toString()
                         + " must implement OnMovieWatchedFragmentInteractionListener");
             }
-        }
-        else {
+        } else {
             if (fragment instanceof OnTvShowWatchedFragmentInteractionListener) {
                 mTvListener = (OnTvShowWatchedFragmentInteractionListener) fragment;
             } else {
@@ -309,7 +306,7 @@ public class WatchedListFragment extends Fragment implements UserListMovieAdapte
         }
     }
 
-    public void toggleVisibility(View v){
+    public void toggleVisibility(View v) {
         mRecyclerView.setVisibility(View.GONE);
         mErrorTextView.setVisibility(View.GONE);
         mProgressBar.setVisibility(View.GONE);

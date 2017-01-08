@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 /**
  * factory class providing data to populate list
- * */
+ */
 public class ListWidgetViewFactory implements RemoteViewsService.RemoteViewsFactory {
 
     private Context context;
@@ -34,12 +34,12 @@ public class ListWidgetViewFactory implements RemoteViewsService.RemoteViewsFact
 
     @Override
     public void onCreate() {
-        Log.d("data fetch","onCreate()");
+        Log.d("data fetch", "onCreate()");
     }
 
     @Override
     public void onDataSetChanged() {
-        Log.d("data fetch","onDataSetChanged()");
+        Log.d("data fetch", "onDataSetChanged()");
     }
 
     @Override
@@ -53,18 +53,17 @@ public class ListWidgetViewFactory implements RemoteViewsService.RemoteViewsFact
 
     @Override
     public RemoteViews getViewAt(int position) {
-        Log.d("data fetch","getViewAt() for "+position+" == "+listItems.get(position));
-        RemoteViews rv = new RemoteViews(context.getPackageName(),R.layout.widget_list_item);
-        rv.setTextViewText(R.id.content,listItems.get(position));
-        if(listItems.get(position).equalsIgnoreCase(context.getString(R.string.navigation_movies))||listItems.get(position).equalsIgnoreCase(context.getString(R.string.navigation_tvshows))){
+        Log.d("data fetch", "getViewAt() for " + position + " == " + listItems.get(position));
+        RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.widget_list_item);
+        rv.setTextViewText(R.id.content, listItems.get(position));
+        if (listItems.get(position).equalsIgnoreCase(context.getString(R.string.navigation_movies)) || listItems.get(position).equalsIgnoreCase(context.getString(R.string.navigation_tvshows))) {
             SpannableString s = new SpannableString(listItems.get(position));
-            s.setSpan(new StyleSpan(Typeface.BOLD),0,listItems.get(position).length(),0);
-            s.setSpan(new RelativeSizeSpan(1.5f),0,listItems.get(position).length(),0);
-            s.setSpan(new ForegroundColorSpan(Color.WHITE),0,listItems.get(position).length(),0);
+            s.setSpan(new StyleSpan(Typeface.BOLD), 0, listItems.get(position).length(), 0);
+            s.setSpan(new RelativeSizeSpan(1.5f), 0, listItems.get(position).length(), 0);
+            s.setSpan(new ForegroundColorSpan(Color.WHITE), 0, listItems.get(position).length(), 0);
             rv.setTextViewText(R.id.content, s);
             rv.setInt(R.id.content, "setBackgroundColor", context.getResources().getColor(R.color.colorPrimary));
-        }
-        else{
+        } else {
             rv.setInt(R.id.content, "setBackgroundColor", Color.WHITE);
         }
         return rv;
@@ -72,7 +71,7 @@ public class ListWidgetViewFactory implements RemoteViewsService.RemoteViewsFact
 
     @Override
     public RemoteViews getLoadingView() {
-        return new RemoteViews(context.getPackageName(),R.layout.widget_loading_layout);
+        return new RemoteViews(context.getPackageName(), R.layout.widget_loading_layout);
     }
 
     @Override

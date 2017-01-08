@@ -5,11 +5,11 @@ import android.widget.RemoteViewsService;
 
 /**
  * service providing factor object for widget list view
- * */
+ */
 public class ListWidgetService extends RemoteViewsService {
 
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
-        return new ListWidgetViewFactory(this,intent);
+        return new ListWidgetViewFactory(this, intent);
     }
 }

@@ -21,31 +21,31 @@ import java.util.ArrayList;
  * Created by sbjr on 1/1/17.
  */
 
-public class UserListTvShowAdapter extends RecyclerView.Adapter<UserListTvShowAdapter.UserListItemHolder>{
+public class UserListTvShowAdapter extends RecyclerView.Adapter<UserListTvShowAdapter.UserListItemHolder> {
 
     private ArrayList<TvShowModel> tvShowModels;
     private Context mContext;
     private UserListTvShowAdapterInteraction mListener;
 
-    public UserListTvShowAdapter(Context mContext, UserListTvShowAdapterInteraction mListener,ArrayList<Integer> tvShows) {
+    public UserListTvShowAdapter(Context mContext, UserListTvShowAdapterInteraction mListener, ArrayList<Integer> tvShows) {
         this.mContext = mContext;
         this.mListener = mListener;
         tvShowModels = new ArrayList<>();
-        for(int t:tvShows){
+        for (int t : tvShows) {
             TvShowModel tvShowModel = new TvShowModel();
             tvShowModel.setId(t);
             tvShowModels.add(tvShowModel);
         }
     }
 
-    public class UserListItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class UserListItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private TextView mNameTextView,mRatingTextView;
+        private TextView mNameTextView, mRatingTextView;
         private ImageView mImageView;
         private TvShowModel tvShowModel;
         private UserListTvShowAdapterInteraction mListener;
 
-        public UserListItemHolder(View itemView,UserListTvShowAdapterInteraction listener) {
+        public UserListItemHolder(View itemView, UserListTvShowAdapterInteraction listener) {
             super(itemView);
             itemView.setOnClickListener(this);
             mListener = listener;
@@ -53,12 +53,13 @@ public class UserListTvShowAdapter extends RecyclerView.Adapter<UserListTvShowAd
             mRatingTextView = (TextView) itemView.findViewById(R.id.rating);
             mImageView = (ImageView) itemView.findViewById(R.id.image_view);
         }
-        public void setData(TvShowModel tvShowModel){
+
+        public void setData(TvShowModel tvShowModel) {
             this.tvShowModel = tvShowModel;
             mNameTextView.setText(tvShowModel.getName());
-            mRatingTextView.setText(tvShowModel.getVote_average()+"");
+            mRatingTextView.setText(tvShowModel.getVote_average() + "");
             Picasso.with(mContext)
-                    .load("https://image.tmdb.org/t/p/w185"+tvShowModel.getPoster_path())
+                    .load("https://image.tmdb.org/t/p/w185" + tvShowModel.getPoster_path())
                     .placeholder(Util.getRandomColor())
                     .fit()
                     .into(mImageView);
@@ -73,8 +74,8 @@ public class UserListTvShowAdapter extends RecyclerView.Adapter<UserListTvShowAd
 
     @Override
     public UserListItemHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.show_detail_list_item,parent,false);
-        return new UserListTvShowAdapter.UserListItemHolder(view,mListener);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.show_detail_list_item, parent, false);
+        return new UserListTvShowAdapter.UserListItemHolder(view, mListener);
     }
 
     @Override
@@ -96,7 +97,7 @@ public class UserListTvShowAdapter extends RecyclerView.Adapter<UserListTvShowAd
                 tvShowModel.setNetworks(result.getNetworks());
                 tvShowModel.setNumber_of_seasons(result.getNumber_of_seasons());
                 tvShowModel.setVote_average(result.getVote_average());
-                tvShowModels.set(holder.getAdapterPosition(),tvShowModel);
+                tvShowModels.set(holder.getAdapterPosition(), tvShowModel);
                 holder.setData(tvShowModel);
             }
 

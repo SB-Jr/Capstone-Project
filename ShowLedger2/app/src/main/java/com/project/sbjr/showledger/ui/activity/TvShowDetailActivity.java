@@ -5,12 +5,12 @@ import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -42,7 +42,7 @@ import java.util.HashMap;
 
 public class TvShowDetailActivity extends AppCompatActivity {
 
-    private final static String TV_SHOW_MODEL_KEY="com.project.sbjr.showledger.ui.activity.TvShowDetailActivity.tvshowmodel";
+    private final static String TV_SHOW_MODEL_KEY = "com.project.sbjr.showledger.ui.activity.TvShowDetailActivity.tvshowmodel";
 
     private String userUid;
     private TvShowModel mTvShowModel;
@@ -50,16 +50,16 @@ public class TvShowDetailActivity extends AppCompatActivity {
     private TextView mCreatedByTextView,
             mGenreTextView,
             mNetworksTextView,
-            /*mProducedTextView,*/
-            mFirstAirDateTextView,
+    /*mProducedTextView,*/
+    mFirstAirDateTextView,
             mRatingTextView,
             mNumberOfSeasonsTextView,
             mOverviewTextView;
 
     private LinearLayout mCreatedByContainer,
             mGenreContainer,
-            /*mProducedContainer,*/
-            mNetworksContainer,
+    /*mProducedContainer,*/
+    mNetworksContainer,
             mRatingContainer,
             mFirstAirDateContainer,
             mNumberOfSeaonsContainer,
@@ -79,10 +79,9 @@ public class TvShowDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_tv_show_detail);
 
 
-        if(savedInstanceState!=null){
+        if (savedInstanceState != null) {
             mTvShowModel = savedInstanceState.getParcelable(TV_SHOW_MODEL_KEY);
-        }
-        else {
+        } else {
             mTvShowModel = getIntent().getParcelableExtra(ShowActivity.TVSHOW_NAME);
         }
         userUid = Util.getUserUidFromSharedPreference(this);
@@ -91,7 +90,6 @@ public class TvShowDetailActivity extends AppCompatActivity {
                 .addTestDevice("D26C335A1E231CBAA6BF6FCF0777F14B")
                 .build();
         mAdView.loadAd(adRequest);
-
 
 
         mCreatedByTextView = (TextView) findViewById(R.id.created_by);
@@ -131,10 +129,10 @@ public class TvShowDetailActivity extends AppCompatActivity {
 
         mOverviewTextView.setText(mTvShowModel.getOverview());
         mFirstAirDateTextView.setText(mTvShowModel.getFirst_air_date());
-        mRatingTextView.setText(mTvShowModel.getVote_average()+"");
+        mRatingTextView.setText(mTvShowModel.getVote_average() + "");
 
         Picasso.with(TvShowDetailActivity.this)
-                .load("https://image.tmdb.org/t/p/w300"+mTvShowModel.getBackdrop_path())
+                .load("https://image.tmdb.org/t/p/w300" + mTvShowModel.getBackdrop_path())
                 .fit()
                 .into(mImageView);
 
@@ -144,27 +142,25 @@ public class TvShowDetailActivity extends AppCompatActivity {
 
                 mTvShowModel = result;
 
-                String genre="";
-                String network="";
-                String createdBy="";
-                for(Genre genre1 : result.getGenres()){
-                    genre+=","+genre1.getName();
+                String genre = "";
+                String network = "";
+                String createdBy = "";
+                for (Genre genre1 : result.getGenres()) {
+                    genre += "," + genre1.getName();
                 }
 
-                for(TvShowNetwork network1 : result.getNetworks()){
-                    network+=","+network1.getName();
+                for (TvShowNetwork network1 : result.getNetworks()) {
+                    network += "," + network1.getName();
                 }
 
-                if(genre.length()==0){
+                if (genre.length() == 0) {
                     mGenreContainer.setVisibility(View.GONE);
-                }
-                else {
+                } else {
                     mGenreTextView.setText(genre.substring(1));
                 }
-                if(createdBy.length()==0){
+                if (createdBy.length() == 0) {
                     mCreatedByContainer.setVisibility(View.GONE);
-                }
-                else {
+                } else {
                     mCreatedByTextView.setText(createdBy.substring(1));
                 }
                 /*if(producers.length()==0){
@@ -173,14 +169,13 @@ public class TvShowDetailActivity extends AppCompatActivity {
                 else {
                     mProducedTextView.setText(producers.substring(1));
                 }*/
-                if(network.length()==0){
+                if (network.length() == 0) {
                     mNetworksContainer.setVisibility(View.GONE);
-                }
-                else {
+                } else {
                     mNetworksTextView.setText(network.substring(1));
                 }
 
-                mNumberOfSeasonsTextView.setText(result.getNumber_of_seasons()+"");
+                mNumberOfSeasonsTextView.setText(result.getNumber_of_seasons() + "");
             }
 
             @Override
@@ -193,18 +188,21 @@ public class TvShowDetailActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_tv_show_detail,menu);
+        getMenuInflater().inflate(R.menu.menu_tv_show_detail, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.done: addShowToWatchedList();
+        switch (item.getItemId()) {
+            case R.id.done:
+                addShowToWatchedList();
                 break;
-            case R.id.watch_later: addShowToWatchLaterList();
+            case R.id.watch_later:
+                addShowToWatchLaterList();
                 break;
-            case R.id.incomplete: addShowToIncompleteList();
+            case R.id.incomplete:
+                addShowToIncompleteList();
                 break;
             case R.id.home:
                 onBackPressed();
@@ -217,12 +215,12 @@ public class TvShowDetailActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
 
-        outState.putParcelable(TV_SHOW_MODEL_KEY,mTvShowModel);
+        outState.putParcelable(TV_SHOW_MODEL_KEY, mTvShowModel);
 
         super.onSaveInstanceState(outState);
     }
 
-    private void addShowToWatchedList(){
+    private void addShowToWatchedList() {
        /* DatabaseReference reference = FirebaseDatabase.getInstance().getReference(Util.FireBaseConstants.USER).child(userUid).child(Util.FireBaseConstants.TVSHOW).child(Util.FireBaseConstants.WATCHED);
         reference.child(mTvShowModel.getId() + "").setValue(mTvShowModel.getId(), new DatabaseReference.CompletionListener() {
             @Override
@@ -231,12 +229,12 @@ public class TvShowDetailActivity extends AppCompatActivity {
             }
         });*/
         ContentValues values = new ContentValues();
-        values.put(DatabaseContract.TABLE_SHOW_ID,mTvShowModel.getId());
-        getContentResolver().insert(Uri.parse(ProviderContract.CONTENT_AUTHORITY+ProviderContract.URI_MATCH_TV_WATCHED),values);
-        Snackbar.make(mCoordinatorLayout,getString(R.string.snack_bar_watch_list),Snackbar.LENGTH_SHORT).show();
+        values.put(DatabaseContract.TABLE_SHOW_ID, mTvShowModel.getId());
+        getContentResolver().insert(Uri.parse(ProviderContract.CONTENT_AUTHORITY + ProviderContract.URI_MATCH_TV_WATCHED), values);
+        Snackbar.make(mCoordinatorLayout, getString(R.string.snack_bar_watch_list), Snackbar.LENGTH_SHORT).show();
     }
 
-    private void addShowToWatchLaterList(){
+    private void addShowToWatchLaterList() {
         /*DatabaseReference reference = FirebaseDatabase.getInstance().getReference(Util.FireBaseConstants.USER).child(userUid).child(Util.FireBaseConstants.TVSHOW).child(Util.FireBaseConstants.WISHLIST);
         reference.child(mTvShowModel.getId() + "").setValue(mTvShowModel.getId(), new DatabaseReference.CompletionListener() {
             @Override
@@ -245,26 +243,26 @@ public class TvShowDetailActivity extends AppCompatActivity {
             }
         });*/
         ContentValues values = new ContentValues();
-        values.put(DatabaseContract.TABLE_SHOW_ID,mTvShowModel.getId());
-        getContentResolver().insert(Uri.parse(ProviderContract.CONTENT_AUTHORITY+ProviderContract.URI_MATCH_TV_WISH),values);
-        Snackbar.make(mCoordinatorLayout,getString(R.string.snack_bar_wish_list),Snackbar.LENGTH_SHORT).show();
+        values.put(DatabaseContract.TABLE_SHOW_ID, mTvShowModel.getId());
+        getContentResolver().insert(Uri.parse(ProviderContract.CONTENT_AUTHORITY + ProviderContract.URI_MATCH_TV_WISH), values);
+        Snackbar.make(mCoordinatorLayout, getString(R.string.snack_bar_wish_list), Snackbar.LENGTH_SHORT).show();
     }
 
-    private void addShowToIncompleteList(){
+    private void addShowToIncompleteList() {
         buildDialog();
     }
 
 
-    public void buildDialog(){
-        if(mTvShowModel.getSeasons()==null){
-            Snackbar.make(mCoordinatorLayout,getString(R.string.snack_bar_wait),Snackbar.LENGTH_LONG).show();
+    public void buildDialog() {
+        if (mTvShowModel.getSeasons() == null) {
+            Snackbar.make(mCoordinatorLayout, getString(R.string.snack_bar_wait), Snackbar.LENGTH_LONG).show();
             return;
         }
         Dialog dialog;
         ArrayList<TvShowSeason> seasons = mTvShowModel.getSeasons();
-        final String[] items = new String[seasons.size()-1];
-        for(int i=1;i<seasons.size();i++){
-            items[i-1] = getString(R.string.season)+" "+i;
+        final String[] items = new String[seasons.size() - 1];
+        for (int i = 1; i < seasons.size(); i++) {
+            items[i - 1] = getString(R.string.season) + " " + i;
         }
         final ArrayList itemsSelected = new ArrayList();
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -286,15 +284,15 @@ public class TvShowDetailActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int id) {
 
                         ContentValues values = new ContentValues();
-                        values.put(DatabaseContract.TABLE_SHOW_ID,mTvShowModel.getId());
-                        getContentResolver().insert(Uri.parse(ProviderContract.CONTENT_AUTHORITY+ProviderContract.URI_MATCH_TV_INCOMPLETE),values);
+                        values.put(DatabaseContract.TABLE_SHOW_ID, mTvShowModel.getId());
+                        getContentResolver().insert(Uri.parse(ProviderContract.CONTENT_AUTHORITY + ProviderContract.URI_MATCH_TV_INCOMPLETE), values);
 
                         HashMap<String, String> seasons = new HashMap<String, String>();
                         DatabaseReference reference = FirebaseDatabase.getInstance().getReference(Util.FireBaseConstants.USER).child(userUid).child(Util.FireBaseConstants.TVSHOW).child(Util.FireBaseConstants.INCOMPLETE);
                         reference.child(mTvShowModel.getId() + "").setValue(itemsSelected, new DatabaseReference.CompletionListener() {
                             @Override
                             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                                Snackbar.make(mCoordinatorLayout,getString(R.string.snack_bar_incomplete_list),Snackbar.LENGTH_SHORT).show();
+                                Snackbar.make(mCoordinatorLayout, getString(R.string.snack_bar_incomplete_list), Snackbar.LENGTH_SHORT).show();
                             }
                         });
 

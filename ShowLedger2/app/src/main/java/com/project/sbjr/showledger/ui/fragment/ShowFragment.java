@@ -11,14 +11,13 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.project.sbjr.showinfodatabase.HighOnShow;
 import com.project.sbjr.showinfodatabase.handler.ShowHandler;
+import com.project.sbjr.showinfodatabase.model.MovieModel;
 import com.project.sbjr.showinfodatabase.model.TvShowModel;
 import com.project.sbjr.showinfodatabase.response.MovieResponse;
 import com.project.sbjr.showinfodatabase.response.TvResponse;
 import com.project.sbjr.showledger.R;
-
-import com.project.sbjr.showinfodatabase.HighOnShow;
-import com.project.sbjr.showinfodatabase.model.MovieModel;
 import com.project.sbjr.showledger.adapter.ShowMovieItemAdapter;
 import com.project.sbjr.showledger.adapter.ShowTvItemAdapter;
 
@@ -26,10 +25,10 @@ import java.util.ArrayList;
 
 /**
  * created by sbjr
- *
+ * <p>
  * fragment which shows the show grid based on which fragment called it
- * */
-public class ShowFragment extends Fragment implements ShowMovieItemAdapter.ShowMovieItemAdapterInteractionListener,ShowTvItemAdapter.ShowTvItemAdapterInteractionListener {
+ */
+public class ShowFragment extends Fragment implements ShowMovieItemAdapter.ShowMovieItemAdapterInteractionListener, ShowTvItemAdapter.ShowTvItemAdapterInteractionListener {
     private static final String USER_UID = "user_uid";
     private static final String SHOW_TYPE = "show_type";
 
@@ -62,7 +61,7 @@ public class ShowFragment extends Fragment implements ShowMovieItemAdapter.ShowM
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(savedInstanceState!=null){
+        if (savedInstanceState != null) {
             userUid = savedInstanceState.getString(USER_UID);
             showType = savedInstanceState.getString(SHOW_TYPE);
         }
@@ -74,20 +73,20 @@ public class ShowFragment extends Fragment implements ShowMovieItemAdapter.ShowM
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putString(USER_UID,userUid);
-        outState.putString(SHOW_TYPE,showType);
+        outState.putString(USER_UID, userUid);
+        outState.putString(SHOW_TYPE, showType);
         super.onSaveInstanceState(outState);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view =  inflater.inflate(R.layout.fragment_show, container, false);
+        View view = inflater.inflate(R.layout.fragment_show, container, false);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.contents);
         mProgressBar = (ProgressBar) view.findViewById(R.id.progress);
         mErrorTextView = (TextView) view.findViewById(R.id.error_text);
         mFrameLayout = (FrameLayout) view.findViewById(R.id.sudo_coordinator_layout);
 
-        if(savedInstanceState!=null){
+        if (savedInstanceState != null) {
             userUid = savedInstanceState.getString(USER_UID);
             showType = savedInstanceState.getString(SHOW_TYPE);
         }
@@ -97,7 +96,7 @@ public class ShowFragment extends Fragment implements ShowMovieItemAdapter.ShowM
         }
 
 
-        if(showType.equalsIgnoreCase(MovieFragment.MOVIE_TAG)) {
+        if (showType.equalsIgnoreCase(MovieFragment.MOVIE_TAG)) {
             new HighOnShow(getString(R.string.api_key)).initMovie().getUpcomingMovies(mRecyclerView, mProgressBar, mErrorTextView, new ShowHandler<MovieResponse>() {
                 @Override
                 public void onResult(MovieResponse result) {
@@ -112,14 +111,13 @@ public class ShowFragment extends Fragment implements ShowMovieItemAdapter.ShowM
                     //Snackbar.make(mFrameLayout,getString(R.string.snack_bar_error),Snackbar.LENGTH_SHORT).show();
                 }
             });
-        }
-        else{
+        } else {
             new HighOnShow(getString(R.string.api_key)).initTvShow().getTvShowOnAir(mRecyclerView, mProgressBar, mErrorTextView, new ShowHandler<TvResponse>() {
                 @Override
                 public void onResult(TvResponse result) {
                     ArrayList<TvShowModel> tvShowModels = result.getResults();
-                    ShowTvItemAdapter adapter = new ShowTvItemAdapter(tvShowModels,ShowFragment.this);
-                    mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(),2));
+                    ShowTvItemAdapter adapter = new ShowTvItemAdapter(tvShowModels, ShowFragment.this);
+                    mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
                     mRecyclerView.setAdapter(adapter);
                 }
 
@@ -132,17 +130,16 @@ public class ShowFragment extends Fragment implements ShowMovieItemAdapter.ShowM
         return view;
     }
 
-    public void initListener(Fragment fragment){
+    public void initListener(Fragment fragment) {
 
-        if(showType.equalsIgnoreCase(MovieFragment.MOVIE_TAG)) {
+        if (showType.equalsIgnoreCase(MovieFragment.MOVIE_TAG)) {
             if (fragment instanceof OnMovieShowFragmentInteractionListener) {
                 mMovieListener = (OnMovieShowFragmentInteractionListener) fragment;
             } else {
                 throw new RuntimeException(fragment.toString()
                         + " must implement OnMovieShowFragmentInteractionListener");
             }
-        }
-        else{
+        } else {
             if (fragment instanceof onTvShowFragmentInteractionListener) {
                 mTvListener = (onTvShowFragmentInteractionListener) fragment;
             } else {
@@ -162,7 +159,7 @@ public class ShowFragment extends Fragment implements ShowMovieItemAdapter.ShowM
         void onMovieShowFragmentItemSelectListener(MovieModel movieModel);
     }
 
-    public interface onTvShowFragmentInteractionListener{
+    public interface onTvShowFragmentInteractionListener {
         void onTvShowFragmentItemSelectListener(TvShowModel tvShowModel);
     }
 

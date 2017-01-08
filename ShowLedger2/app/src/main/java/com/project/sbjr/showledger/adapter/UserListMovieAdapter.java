@@ -21,7 +21,7 @@ import java.util.ArrayList;
  * Created by sbjr on 31/12/16.
  */
 
-public class UserListMovieAdapter extends RecyclerView.Adapter<UserListMovieAdapter.UserListItemHolder>{
+public class UserListMovieAdapter extends RecyclerView.Adapter<UserListMovieAdapter.UserListItemHolder> {
 
     private ArrayList<MovieModel> movieModels;
     private Context mContext;
@@ -31,21 +31,21 @@ public class UserListMovieAdapter extends RecyclerView.Adapter<UserListMovieAdap
         mContext = context;
         mListener = listener;
         movieModels = new ArrayList<>();
-        for(int id:movies){
+        for (int id : movies) {
             MovieModel model = new MovieModel();
             model.setId(id);
             movieModels.add(model);
         }
     }
 
-    public class UserListItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class UserListItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private TextView mTitleTextView,mRatingTextView;
+        private TextView mTitleTextView, mRatingTextView;
         private ImageView mImageView;
         private MovieModel movieModel;
         private UserListMovieAdapterInteraction mListener;
 
-        public UserListItemHolder(View itemView,UserListMovieAdapterInteraction listener) {
+        public UserListItemHolder(View itemView, UserListMovieAdapterInteraction listener) {
             super(itemView);
             itemView.setOnClickListener(this);
             mListener = listener;
@@ -53,12 +53,13 @@ public class UserListMovieAdapter extends RecyclerView.Adapter<UserListMovieAdap
             mRatingTextView = (TextView) itemView.findViewById(R.id.rating);
             mImageView = (ImageView) itemView.findViewById(R.id.image_view);
         }
-        public void setData(MovieModel movieModel){
+
+        public void setData(MovieModel movieModel) {
             this.movieModel = movieModel;
             mTitleTextView.setText(movieModel.getTitle());
-            mRatingTextView.setText(movieModel.getVote_average()+"");
+            mRatingTextView.setText(movieModel.getVote_average() + "");
             Picasso.with(mContext)
-                    .load("https://image.tmdb.org/t/p/w185"+movieModel.getPoster_path())
+                    .load("https://image.tmdb.org/t/p/w185" + movieModel.getPoster_path())
                     .placeholder(Util.getRandomColor())
                     .fit()
                     .into(mImageView);
@@ -72,8 +73,8 @@ public class UserListMovieAdapter extends RecyclerView.Adapter<UserListMovieAdap
 
     @Override
     public UserListItemHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.show_detail_list_item,parent,false);
-        return new UserListItemHolder(view,mListener);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.show_detail_list_item, parent, false);
+        return new UserListItemHolder(view, mListener);
     }
 
     @Override
@@ -93,7 +94,7 @@ public class UserListMovieAdapter extends RecyclerView.Adapter<UserListMovieAdap
                 /*movieModels.remove(holder.getAdapterPosition());
                 movieModels.add(holder.getAdapterPosition(),model);
                 */
-                movieModels.set(holder.getAdapterPosition(),model);
+                movieModels.set(holder.getAdapterPosition(), model);
                 holder.setData(model);
             }
 

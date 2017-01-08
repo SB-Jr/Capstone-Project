@@ -2,8 +2,6 @@ package com.project.sbjr.showledger.database;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
-import android.content.pm.ProviderInfo;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -16,8 +14,8 @@ import java.util.ArrayList;
 
 public class ShowTableHelper extends SQLiteOpenHelper {
 
-    private final static int DATABASE_VERSION=1;
-    private final static String DATABASE_NAME="ShowLedger.db";
+    private final static int DATABASE_VERSION = 1;
+    private final static String DATABASE_NAME = "ShowLedger.db";
 
     public ShowTableHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -45,36 +43,36 @@ public class ShowTableHelper extends SQLiteOpenHelper {
     @Override
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         super.onDowngrade(db, oldVersion, newVersion);
-        onUpgrade(db,oldVersion,newVersion);
+        onUpgrade(db, oldVersion, newVersion);
     }
 
-    private String createTable(String TableName){
-        return "CREATE TABLE "+TableName+" ("
-                +DatabaseContract.TABLE_SHOW_ID+" INTEGER PRIMARY KEY,"
-                +DatabaseContract.TABLE_SHOW_NAME+" TEXT)";
+    private String createTable(String TableName) {
+        return "CREATE TABLE " + TableName + " ("
+                + DatabaseContract.TABLE_SHOW_ID + " INTEGER PRIMARY KEY,"
+                + DatabaseContract.TABLE_SHOW_NAME + " TEXT)";
     }
 
-    private String delteTable(String TableName){
-        return "DROP TABLE IF EXISTS "+TableName;
+    private String delteTable(String TableName) {
+        return "DROP TABLE IF EXISTS " + TableName;
     }
 
-    public long insertEntry(String TableName,int showID,String showName){
+    public long insertEntry(String TableName, int showID, String showName) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(DatabaseContract.TABLE_SHOW_ID,showID);
-        contentValues.put(DatabaseContract.TABLE_SHOW_NAME,showName);
-        long rows =  db.insert(TableName,null,contentValues);
+        contentValues.put(DatabaseContract.TABLE_SHOW_ID, showID);
+        contentValues.put(DatabaseContract.TABLE_SHOW_NAME, showName);
+        long rows = db.insert(TableName, null, contentValues);
         db.close();
         return rows;
     }
 
-    public void insertEntryusingContentValues(String TableName,ContentValues contentValues){
+    public void insertEntryusingContentValues(String TableName, ContentValues contentValues) {
         SQLiteDatabase db = getWritableDatabase();
-        db.insert(TableName,null,contentValues);
+        db.insert(TableName, null, contentValues);
         db.close();
     }
 
-    public Cursor getShowIds(String TableName){
+    public Cursor getShowIds(String TableName) {
         SQLiteDatabase db = getReadableDatabase();
 
         return db.query(
@@ -89,10 +87,10 @@ public class ShowTableHelper extends SQLiteOpenHelper {
                 null);
     }
 
-    public ArrayList<String> getShowNames(String TableName){
+    public ArrayList<String> getShowNames(String TableName) {
         ArrayList<String> showids = new ArrayList<>();
         SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor =db.query(
+        Cursor cursor = db.query(
                 true,
                 TableName,
                 new String[]{DatabaseContract.TABLE_SHOW_NAME},
@@ -104,7 +102,7 @@ public class ShowTableHelper extends SQLiteOpenHelper {
                 null);
 
         int pos = cursor.getColumnIndex(DatabaseContract.TABLE_SHOW_NAME);
-        while (cursor.moveToNext()){
+        while (cursor.moveToNext()) {
             String v = cursor.getString(pos);
             showids.add(v);
         }
@@ -113,10 +111,10 @@ public class ShowTableHelper extends SQLiteOpenHelper {
         return showids;
     }
 
-    public int deleteEntry(String TableName,int showId){
+    public int deleteEntry(String TableName, int showId) {
         SQLiteDatabase db = getWritableDatabase();
         String id = Integer.toString(showId);
-        int r = db.delete(TableName,DatabaseContract.TABLE_SHOW_ID+"?",new String[]{id});
+        int r = db.delete(TableName, DatabaseContract.TABLE_SHOW_ID + "?", new String[]{id});
         db.close();
         return r;
     }

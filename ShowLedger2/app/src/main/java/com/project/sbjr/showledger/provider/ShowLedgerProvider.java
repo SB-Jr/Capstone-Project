@@ -16,43 +16,44 @@ public class ShowLedgerProvider extends ContentProvider {
     private ShowTableHelper dbHelper;
 
     static {
-        sUriMatcher.addURI(ProviderContract.AUTHORITY,ProviderContract.URI_MATCH_MOVIE_WATCHED,1);
-        sUriMatcher.addURI(ProviderContract.AUTHORITY,ProviderContract.URI_MATCH_MOVIE_WISH,2);
+        sUriMatcher.addURI(ProviderContract.AUTHORITY, ProviderContract.URI_MATCH_MOVIE_WATCHED, 1);
+        sUriMatcher.addURI(ProviderContract.AUTHORITY, ProviderContract.URI_MATCH_MOVIE_WISH, 2);
 
-        sUriMatcher.addURI(ProviderContract.AUTHORITY,ProviderContract.URI_MATCH_TV_WATCHED,3);
-        sUriMatcher.addURI(ProviderContract.AUTHORITY,ProviderContract.URI_MATCH_TV_WISH,4);
-        sUriMatcher.addURI(ProviderContract.AUTHORITY,ProviderContract.URI_MATCH_TV_INCOMPLETE,5);
+        sUriMatcher.addURI(ProviderContract.AUTHORITY, ProviderContract.URI_MATCH_TV_WATCHED, 3);
+        sUriMatcher.addURI(ProviderContract.AUTHORITY, ProviderContract.URI_MATCH_TV_WISH, 4);
+        sUriMatcher.addURI(ProviderContract.AUTHORITY, ProviderContract.URI_MATCH_TV_INCOMPLETE, 5);
     }
 
 
-    public ShowLedgerProvider() { }
+    public ShowLedgerProvider() {
+    }
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) throws IllegalArgumentException {
         String tableName = getTableName(uri);
-        if(tableName==null){
+        if (tableName == null) {
             throw new IllegalArgumentException();
         }
         int id = Integer.parseInt(uri.getLastPathSegment());
-        return dbHelper.deleteEntry(tableName,id);
+        return dbHelper.deleteEntry(tableName, id);
     }
 
     @Override
     public String getType(Uri uri) {
-        return ContentResolver.CURSOR_ITEM_BASE_TYPE+getVnd(uri);
+        return ContentResolver.CURSOR_ITEM_BASE_TYPE + getVnd(uri);
     }
 
 
     @Override
-    public Uri insert(Uri uri, ContentValues values) throws IllegalArgumentException{
+    public Uri insert(Uri uri, ContentValues values) throws IllegalArgumentException {
         String tableName = getTableName(uri);
-        if(tableName==null){
+        if (tableName == null) {
             throw new IllegalArgumentException();
             //return null;
         }
-        dbHelper.insertEntryusingContentValues(tableName,values);
+        dbHelper.insertEntryusingContentValues(tableName, values);
         getContext().getContentResolver().notifyChange(uri, null);
-        Uri uri1 =  Uri.parse(getUriFromTableName(getTableName(uri))+"/"+values.getAsString(DatabaseContract.TABLE_SHOW_ID));
+        Uri uri1 = Uri.parse(getUriFromTableName(getTableName(uri)) + "/" + values.getAsString(DatabaseContract.TABLE_SHOW_ID));
         return uri1;
     }
 
@@ -64,13 +65,13 @@ public class ShowLedgerProvider extends ContentProvider {
     }
 
     @Override
-    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder)throws IllegalArgumentException {
+    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) throws IllegalArgumentException {
         String tableName = getTableName(uri);
-        if(tableName==null){
+        if (tableName == null) {
             throw new IllegalArgumentException();
         }
         Cursor cursor = dbHelper.getShowIds(tableName);
-        cursor.setNotificationUri(getContext().getContentResolver(),uri);
+        cursor.setNotificationUri(getContext().getContentResolver(), uri);
         return cursor;
     }
 
@@ -81,63 +82,74 @@ public class ShowLedgerProvider extends ContentProvider {
     }
 
 
-    public String getTableName(Uri uri){
+    public String getTableName(Uri uri) {
         String tableName;
-        switch (sUriMatcher.match(uri)){
-            case 1:tableName = DatabaseContract.MOVIE_WATCHED_LIST_TABLE;
+        switch (sUriMatcher.match(uri)) {
+            case 1:
+                tableName = DatabaseContract.MOVIE_WATCHED_LIST_TABLE;
                 break;
-            case 2:tableName = DatabaseContract.MOVIE_WISH_LIST_TABLE;
+            case 2:
+                tableName = DatabaseContract.MOVIE_WISH_LIST_TABLE;
                 break;
-            case 3:tableName = DatabaseContract.TV_SHOW_WATCHED_LIST_TABLE;
+            case 3:
+                tableName = DatabaseContract.TV_SHOW_WATCHED_LIST_TABLE;
                 break;
-            case 4:tableName = DatabaseContract.TV_SHOW_WISH_LIST_TABLE;
+            case 4:
+                tableName = DatabaseContract.TV_SHOW_WISH_LIST_TABLE;
                 break;
-            case 5:tableName = DatabaseContract.TV_SHOW_INCOMPLETE_LIST_TABLE;
+            case 5:
+                tableName = DatabaseContract.TV_SHOW_INCOMPLETE_LIST_TABLE;
                 break;
-            default:tableName = null;
+            default:
+                tableName = null;
         }
         return tableName;
     }
 
-    private Uri getUriFromTableName(String tableName){
-        if(tableName==null){
+    private Uri getUriFromTableName(String tableName) {
+        if (tableName == null) {
             return null;
-        }
-        else{
+        } else {
             Uri uri = null;
-            if(tableName.equalsIgnoreCase(DatabaseContract.MOVIE_WATCHED_LIST_TABLE)){
-                uri = Uri.parse(ProviderContract.CONTENT_AUTHORITY +ProviderContract.URI_MATCH_MOVIE_WATCHED);
+            if (tableName.equalsIgnoreCase(DatabaseContract.MOVIE_WATCHED_LIST_TABLE)) {
+                uri = Uri.parse(ProviderContract.CONTENT_AUTHORITY + ProviderContract.URI_MATCH_MOVIE_WATCHED);
             }
-            if(tableName.equalsIgnoreCase(DatabaseContract.MOVIE_WISH_LIST_TABLE)){
-                uri = Uri.parse(ProviderContract.CONTENT_AUTHORITY +ProviderContract.URI_MATCH_MOVIE_WISH);
+            if (tableName.equalsIgnoreCase(DatabaseContract.MOVIE_WISH_LIST_TABLE)) {
+                uri = Uri.parse(ProviderContract.CONTENT_AUTHORITY + ProviderContract.URI_MATCH_MOVIE_WISH);
             }
-            if(tableName.equalsIgnoreCase(DatabaseContract.TV_SHOW_WATCHED_LIST_TABLE)){
-                uri = Uri.parse(ProviderContract.CONTENT_AUTHORITY +ProviderContract.URI_MATCH_TV_WATCHED);
+            if (tableName.equalsIgnoreCase(DatabaseContract.TV_SHOW_WATCHED_LIST_TABLE)) {
+                uri = Uri.parse(ProviderContract.CONTENT_AUTHORITY + ProviderContract.URI_MATCH_TV_WATCHED);
             }
-            if(tableName.equalsIgnoreCase(DatabaseContract.TV_SHOW_WISH_LIST_TABLE)){
-                uri = Uri.parse(ProviderContract.CONTENT_AUTHORITY +ProviderContract.URI_MATCH_TV_WISH);
+            if (tableName.equalsIgnoreCase(DatabaseContract.TV_SHOW_WISH_LIST_TABLE)) {
+                uri = Uri.parse(ProviderContract.CONTENT_AUTHORITY + ProviderContract.URI_MATCH_TV_WISH);
             }
-            if(tableName.equalsIgnoreCase(DatabaseContract.TV_SHOW_INCOMPLETE_LIST_TABLE)){
-                uri = Uri.parse(ProviderContract.CONTENT_AUTHORITY +ProviderContract.URI_MATCH_TV_INCOMPLETE);
+            if (tableName.equalsIgnoreCase(DatabaseContract.TV_SHOW_INCOMPLETE_LIST_TABLE)) {
+                uri = Uri.parse(ProviderContract.CONTENT_AUTHORITY + ProviderContract.URI_MATCH_TV_INCOMPLETE);
             }
             return uri;
         }
     }
 
-    private String getVnd(Uri uri) throws IllegalArgumentException{
+    private String getVnd(Uri uri) throws IllegalArgumentException {
         String vnd;
-        switch (sUriMatcher.match(uri)){
-            case 1:vnd = ProviderContract.VND_STRING+ProviderContract.VND_MOVIE_WATCHED;
+        switch (sUriMatcher.match(uri)) {
+            case 1:
+                vnd = ProviderContract.VND_STRING + ProviderContract.VND_MOVIE_WATCHED;
                 break;
-            case 2:vnd = ProviderContract.VND_STRING+ProviderContract.VND_MOVIE_WISH;
+            case 2:
+                vnd = ProviderContract.VND_STRING + ProviderContract.VND_MOVIE_WISH;
                 break;
-            case 3:vnd = ProviderContract.VND_STRING+ProviderContract.VND_TV_WATCHED;
+            case 3:
+                vnd = ProviderContract.VND_STRING + ProviderContract.VND_TV_WATCHED;
                 break;
-            case 4:vnd = ProviderContract.VND_STRING+ProviderContract.VND_TV_WISH;
+            case 4:
+                vnd = ProviderContract.VND_STRING + ProviderContract.VND_TV_WISH;
                 break;
-            case 5:vnd = ProviderContract.VND_STRING+ProviderContract.VND_TV_INCOMPLETE;
+            case 5:
+                vnd = ProviderContract.VND_STRING + ProviderContract.VND_TV_INCOMPLETE;
                 break;
-            default:vnd = null;
+            default:
+                vnd = null;
                 throw new IllegalArgumentException();
 
         }

@@ -1,12 +1,12 @@
 package com.project.sbjr.showledger.ui.activity;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -29,10 +29,10 @@ import static com.project.sbjr.showledger.Util.setUserNameInSharedPreference;
 public class RegisterActivity extends AppCompatActivity {
 
 
-    private final static String mUserNameEditTextKey="com.project.sbjr.showledger.ui.activity.RegisterActivity.username";
-    private final static String mEmailIdEditTextKey="com.project.sbjr.showledger.ui.activity.RegisterActivity.emailid";
-    private final static String mPasswordEditTextKey="com.project.sbjr.showledger.ui.activity.RegisterActivity.password";
-    private final static String mRetypePasswordEditTextKey="com.project.sbjr.showledger.ui.activity.RegisterActivity.retypepassword";
+    private final static String mUserNameEditTextKey = "com.project.sbjr.showledger.ui.activity.RegisterActivity.username";
+    private final static String mEmailIdEditTextKey = "com.project.sbjr.showledger.ui.activity.RegisterActivity.emailid";
+    private final static String mPasswordEditTextKey = "com.project.sbjr.showledger.ui.activity.RegisterActivity.password";
+    private final static String mRetypePasswordEditTextKey = "com.project.sbjr.showledger.ui.activity.RegisterActivity.retypepassword";
 
     private EditText mUserNameEditText;
     private EditText mEmailIdEditText;
@@ -64,7 +64,7 @@ public class RegisterActivity extends AppCompatActivity {
         mRegisterButton = (Button) findViewById(R.id.register);
         mProgressBar = (ProgressBar) findViewById(R.id.progress);
 
-        if(savedInstanceState!=null){
+        if (savedInstanceState != null) {
             mEmailIdEditText.setText(savedInstanceState.getString(mEmailIdEditTextKey));
             mUserNameEditText.setText(savedInstanceState.getString(mUserNameEditTextKey));
             mPasswordEditText.setText(savedInstanceState.getString(mPasswordEditTextKey));
@@ -78,7 +78,7 @@ public class RegisterActivity extends AppCompatActivity {
         mRetypePasswordTextInputLaout.setErrorEnabled(true);
 
 
-        checkInternet(this,mCoordinatorLayout);
+        checkInternet(this, mCoordinatorLayout);
 
 
         mRegisterButton.setOnClickListener(new View.OnClickListener() {
@@ -88,7 +88,7 @@ public class RegisterActivity extends AppCompatActivity {
                 final String userid = mEmailIdEditText.getText().toString();
                 String pass = mPasswordEditText.getText().toString();
 
-                if(!checkCred()){
+                if (!checkCred()) {
                     return;
                 }
 
@@ -109,8 +109,8 @@ public class RegisterActivity extends AppCompatActivity {
                                             @Override
                                             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
                                                 mProgressBar.setVisibility(View.GONE);
-                                                setUserNameInSharedPreference(RegisterActivity.this,mUserNameEditText.getText().toString());
-                                                Intent intent = new Intent(RegisterActivity.this,ShowActivity.class);
+                                                setUserNameInSharedPreference(RegisterActivity.this, mUserNameEditText.getText().toString());
+                                                Intent intent = new Intent(RegisterActivity.this, ShowActivity.class);
                                                 startActivity(intent);
                                             }
                                         });
@@ -121,7 +121,7 @@ public class RegisterActivity extends AppCompatActivity {
                         .addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                Snackbar.make(mCoordinatorLayout,getString(R.string.register_error),Snackbar.LENGTH_SHORT).show();
+                                Snackbar.make(mCoordinatorLayout, getString(R.string.register_error), Snackbar.LENGTH_SHORT).show();
                                 mProgressBar.setVisibility(View.GONE);
                             }
                         });
@@ -132,15 +132,15 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
 
-        outState.putString(mPasswordEditTextKey,mPasswordEditText.getText().toString());
-        outState.putString(mEmailIdEditTextKey,mEmailIdEditText.getText().toString());
-        outState.putString(mRetypePasswordEditTextKey,mRetypePasswordEditText.getText().toString());
-        outState.putString(mUserNameEditTextKey,mUserNameEditText.getText().toString());
+        outState.putString(mPasswordEditTextKey, mPasswordEditText.getText().toString());
+        outState.putString(mEmailIdEditTextKey, mEmailIdEditText.getText().toString());
+        outState.putString(mRetypePasswordEditTextKey, mRetypePasswordEditText.getText().toString());
+        outState.putString(mUserNameEditTextKey, mUserNameEditText.getText().toString());
 
         super.onSaveInstanceState(outState);
     }
 
-    public boolean checkCred(){
+    public boolean checkCred() {
         boolean success = true;
 
         mUserNameTextInputLaout.setErrorEnabled(false);
@@ -153,23 +153,23 @@ public class RegisterActivity extends AppCompatActivity {
         String repass = mRetypePasswordEditText.getText().toString();
         String user = mUserNameEditText.getText().toString();
 
-        if(user.length()==0){
+        if (user.length() == 0) {
             mUserNameTextInputLaout.setError(getString(R.string.user_name_error_empty));
             success = false;
         }
-        if(userid.length()==0){
+        if (userid.length() == 0) {
             mEmailIdTextInputLaout.setError(getString(R.string.user_id_error_empty));
             success = false;
         }
-        if(!Patterns.EMAIL_ADDRESS.matcher(userid).matches()){
+        if (!Patterns.EMAIL_ADDRESS.matcher(userid).matches()) {
             mEmailIdTextInputLaout.setError(getString(R.string.user_id_error_invalid));
             success = false;
         }
-        if(pass.length()<6){
+        if (pass.length() < 6) {
             mPasswordTextInputLaout.setError(getString(R.string.password_error_length));
             success = false;
         }
-        if(!pass.equals(repass)){
+        if (!pass.equals(repass)) {
             mRetypePasswordTextInputLaout.setError(getString(R.string.retype_password_error_not_match));
             success = false;
         }
